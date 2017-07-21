@@ -6,28 +6,40 @@ chrome.runtime.onMessage.addListener(
       var xhr = new XMLHttpRequest();
       xhr.open('GET', "//tags.bluekai.com/registry?js=1&fg=58595b&fpfg=7d7d7d&font=arial&size=11&fpfont=arial&fpsize=9&lo=1", true);
       xhr.send();
+
+      var xhr1 = new XMLHttpRequest();
+      xhr1.open('GET', "//loadus.exelator.com/load/segmentChoiceEx.php", true);
+      xhr1.send();
        
       xhr.onreadystatechange = processRequest;
-      function processRequest(e) {
-          if (xhr.readyState == 4 && xhr.status == 200) {
-              var response = xhr.responseText;
+      xhr1.onreadystatechange = processRequest;
+      
+      function processRequest(e) {      
+        if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
+            var response = e.currentTarget.responseText;
+            if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1){ //code for exelate
+              var data = [];
+              console.log(e.currentTarget.responseURL)
+              var p = response.split("mainDivText += '';")
+              if (p.length > 1){
+                y = p[1].split('mainDivText')
+                for(i = 0; i< y.length;i++){
+                  if(y[i].indexOf('checked="checked"') !== -1){
+                    z = y[i].split('/>');
+                    q = z[1].replace("</span><br","")
+                    data.push(q)
+                  }
+                }
+                console.log(data)
+              }  
+            }
+            else{
               console.log(response)
-              chrome.runtime.sendMessage({"message": "ALL DONE"});
-              //alert(response.ip);
-          }
+            }
+            
+            chrome.runtime.sendMessage({"message": "ALL DONE"});
+        }
       }
-
-     // var firstHref = $("a[href^='http']").eq(0).attr("href");
-     //console.log('hello from the content side')
-      //console.log(firstHref);
-      /*x = document.getElementsByClassName('item')
-      for(i = 0; i<x.length;i++){
-      	p = x[i].getElementsByTagName('img')
-      	console.log(p[0].src)
-      	console.log(p[1].src)
-      	console.log(i)
-      }*/
-      //console.log('somebody editted the tab')
     }
   }
 );
