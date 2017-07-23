@@ -82,7 +82,7 @@ chrome.runtime.onMessage.addListener(
     if( request.message === "ALL DONE") {
       responses++;
     }
-    if (responses === 1) { //need to set this threshold
+    if (responses === 2) { //need to set this threshold
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         console.log("ALL DONE. Updated collection time to "+GetDate())  
         chrome.tabs.onUpdated.removeListener(dummy);

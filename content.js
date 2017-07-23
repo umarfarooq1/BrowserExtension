@@ -10,16 +10,21 @@ chrome.runtime.onMessage.addListener(
       var xhr1 = new XMLHttpRequest();
       xhr1.open('GET', "//loadus.exelator.com/load/segmentChoiceEx.php", true);
       xhr1.send();
+
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open('GET', "//adssettings.google.com/u/0/authenticated", true);
+      xhr2.send();
        
       xhr.onreadystatechange = processRequest;
       xhr1.onreadystatechange = processRequest;
+      xhr2.onreadystatechange = processRequest;
       
       function processRequest(e) {      
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
             var response = e.currentTarget.responseText;
             if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1){ //code for exelate
               var data = [];
-              console.log(e.currentTarget.responseURL)
+              //console.log(e.currentTarget.responseURL)
               var p = response.split("mainDivText += '';")
               if (p.length > 1){
                 y = p[1].split('mainDivText')
@@ -30,8 +35,27 @@ chrome.runtime.onMessage.addListener(
                     data.push(q)
                   }
                 }
-                console.log(data)
+                //console.log(data)
               }  
+            }
+            else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1){
+              var data = [];
+              //console.log(e.currentTarget.responseURL)
+              //console.log(response)
+              var p = response.split('<div class="G4Kqbb">')
+              if (p.length > 1){
+                for(i = 1; i< p.length;i++){
+                  y = p[i].split('</div>')
+                  if(y.length>1){
+                    q = y[0]
+                    if(q.indexOf('&amp;')!== -1){
+                      q = q.replace('&amp;', 'and')
+                    }
+                    data.push(q)
+                  }
+                }
+                //console.log(data)
+              }
             }
             else{
               console.log(response)
