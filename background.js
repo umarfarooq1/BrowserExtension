@@ -76,15 +76,29 @@ chrome.runtime.onStartup.addListener(function() {
   chrome.tabs.onUpdated.addListener(dummy);
 });
 
-
+var BrowsingHist = new Promise (function(resolve,reject) {
+  var dateCurrent= new Date() 
+  var correction = dateCurrent.getTimezoneOffset()*60*1000;
+  var dN = Date.now() 
+  var d1 = dN%86400000
+  var b = correction + dN - d1
+  var a = b - 86400000;
+  if (timeGap!==0){
+    var a = b - timeGap*86400000;
+  }
+  chrome.history.search({text: '', startTime: a, endTime:b,maxResults: 100000}, function(data) {
+    resolve(data)
+  });
+})
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponsse) {
     if( request.message === "ALL DONE") {
       responses++;
     }
-    if (responses === 2) { //need to set this threshold
+    if (responses === 2) { //need to set this threshold,currently waiting for three responses.
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-        console.log("ALL DONE. Updated collection time to "+GetDate())  
+        BrowsingHist.then(function(data){console.log(data)})
+        console.log("ALL DONE. Updated collection time to "+GetDate())
         chrome.tabs.onUpdated.removeListener(dummy);
         checker = false;
       });
