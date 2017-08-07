@@ -14,10 +14,15 @@ chrome.runtime.onMessage.addListener(
       var xhr2 = new XMLHttpRequest();
       xhr2.open('GET', "//adssettings.google.com/u/0/authenticated", true);
       xhr2.send();
-       
+      
+      var xhr3 = new XMLHttpRequest();
+      xhr3.open('POST', "//myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
+      xhr3.send();
+
       xhr.onreadystatechange = processRequest;
       xhr1.onreadystatechange = processRequest;
       xhr2.onreadystatechange = processRequest;
+      xhr3.onreadystatechange = processRequest;
       
       function processRequest(e) {      
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
@@ -36,6 +41,7 @@ chrome.runtime.onMessage.addListener(
                   }
                 }
                 //console.log(data)
+                chrome.runtime.sendMessage({"message": "ALL DONE","data":data, "type":"exelate"});
               }  
             }
             else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1){
@@ -55,13 +61,18 @@ chrome.runtime.onMessage.addListener(
                   }
                 }
                 //console.log(data)
+                chrome.runtime.sendMessage({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               }
             }
-            else{
-              console.log(response)
+            else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1){
+              response = response.replace(")]}',","")
+              console.log(response);
+              chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"googleSearchTerms"});
             }
-            
-            chrome.runtime.sendMessage({"message": "ALL DONE"});
+            else{
+              //console.log(response)
+              chrome.runtime.sendMessage({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
+            }
         }
       }
     }

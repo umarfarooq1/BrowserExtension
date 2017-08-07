@@ -3,6 +3,7 @@
 var checker = true;
 var timeGap = 0; //ensure this is set to the desired value before the extension is deployed
 var responses = 0;
+var toServer = {}
 function GetDate(){
   var dateObj = new Date();
   var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -94,11 +95,15 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponsse) {
     if( request.message === "ALL DONE") {
       responses++;
+      toServer[request.type] = request.data
     }
-    if (responses === 2) { //need to set this threshold,currently waiting for three responses.
+    if (responses === 3) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-        BrowsingHist.then(function(data){console.log(data)})
-        console.log("ALL DONE. Updated collection time to "+GetDate())
+        BrowsingHist.then(function(data){
+          toServer['BrowsingHistory'] = data;
+          console.log(toServer)
+          console.log("ALL DONE. Updated collection time to "+GetDate())
+        })
         chrome.tabs.onUpdated.removeListener(dummy);
         checker = false;
       });
