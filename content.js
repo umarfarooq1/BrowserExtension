@@ -1,5 +1,9 @@
 // content.js
 GOOGLE_SEARCH = []
+check1 = true
+check2 = true
+check3 = true
+check4 = true
 NumberofDaysToGoBackForGoogleSearch = 6
 function GetDate(){
   var dateObj = new Date();
@@ -20,6 +24,7 @@ function GetDiff(d1){
 }
 
 function update_GoogleSearch(all){
+  var arr = [];
   for (var i=0; i <all.length ; i++) {
     var sub = all[i][1];
     for (var x=0; x<sub.length ; x++) {
@@ -36,6 +41,9 @@ function update_GoogleSearch(all){
       }
     }
   }
+  //console.log(arr)
+  //GOOGLE_SEARCH.push(arr);
+  //console.log("bye")
 }
 function sendMore(ct){
   var xhr = new XMLHttpRequest();
@@ -61,6 +69,7 @@ function processGoogleSearchRequest(e) {
     }       
   }
 }
+chrome.runtime.sendMessage({ text: "what is my tab_id?" });
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "clicked_browser_action" ) {
@@ -89,7 +98,7 @@ chrome.runtime.onMessage.addListener(
       function processRequest(e) {      
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
             var response = e.currentTarget.responseText;
-            if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1){ //code for exelate
+            if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1 && check1){ //code for exelate
               //console.log("i should be here once")
               var data = [];
               //console.log(e.currentTarget.responseURL)
@@ -105,9 +114,10 @@ chrome.runtime.onMessage.addListener(
                 }
                 //console.log(data)
                 chrome.runtime.sendMessage({"message": "ALL DONE","data":data, "type":"exelate"});
+                check1 = false
               }  
             }
-            else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1){
+            else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1 && check2){
               //console.log("i should be here once")
               var data = [];
               //console.log(e.currentTarget.responseURL)
@@ -126,21 +136,25 @@ chrome.runtime.onMessage.addListener(
                 }
                 //console.log(data)
                 chrome.runtime.sendMessage({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
+                check2 = false
               }
             }
-            else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1){
+            else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1 && check3){
               response = response.split("\n")[1]
               var tmp = response//.slice(6);
               var ar = eval(tmp);
               var all = ar[0];
               update_GoogleSearch(all)
-              //console.log("i should be here once")
+
+              //console.log("i should be here exactly once")
+              check3 = false
               sendMore(ar[1]);
             }
-            else{
+            else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
               //console.log(response)
               //console.log("i should be here once")
               chrome.runtime.sendMessage({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
+              check4 = false;
             }
         }
       }

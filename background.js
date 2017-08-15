@@ -95,6 +95,9 @@ var BrowsingHist = new Promise (function(resolve,reject) {
 })
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponsse) {
+    //if(request.text === "what is my tab_id?"){
+      //console.log(sender.tab.id)
+    //}
     if( request.message === "ALL DONE") {
       responses++;
       toServer[request.type] = request.data
@@ -105,6 +108,7 @@ chrome.runtime.onMessage.addListener(
           toServer['BrowsingHistory'] = data;
           //console.log(new Set(toServer.googleSearchTerms))
           console.log(toServer)
+          console.log(sender.tab.id)
           console.log("ALL DONE. Updated collection time to "+GetDate())
         })
         chrome.tabs.onUpdated.removeListener(dummy);
