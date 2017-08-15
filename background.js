@@ -1,3 +1,5 @@
+//points to remember. On startup of background send the extension date parameter to content.js. If it doesnt exist send the default value that 
+//hints at scraping data for the past six months. Otherwise send the date of last snapshot so that data from there onwards is scraped.
 // background.js
 // Called when the user clicks on the browser action.
 var checker = true;
@@ -101,6 +103,7 @@ chrome.runtime.onMessage.addListener(
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
+          //console.log(new Set(toServer.googleSearchTerms))
           console.log(toServer)
           console.log("ALL DONE. Updated collection time to "+GetDate())
         })
