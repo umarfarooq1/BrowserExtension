@@ -104,7 +104,7 @@ chrome.runtime.onMessage.addListener(
       xhr2.onreadystatechange = processRequest;
       xhr3.onreadystatechange = processRequest;
       xhr4.onreadystatechange = processRequest;
-
+      xhr5.onreadystatechange = processRequest;
       function processRequest(e) {      
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
             var response = e.currentTarget.responseText;
@@ -170,12 +170,14 @@ chrome.runtime.onMessage.addListener(
               response = JSON.parse(response.replace('for (;;);',''))
               response = response["payload"]
               chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBinterests"});
+              console.log(response)
               check5 = false;
             }
             else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check6){
               response = JSON.parse(response.replace('for (;;);',''))
               response = response["payload"]
               chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBadvertisers"});
+              console.log(response)
               check6 = false;
             }
         }
