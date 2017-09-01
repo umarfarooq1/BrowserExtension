@@ -4,6 +4,8 @@ check1 = true
 check2 = true
 check3 = true
 check4 = true
+check5 = true
+check6 = true
 NumberofDaysToGoBackForGoogleSearch = 6
 function GetDate(){
   var dateObj = new Date();
@@ -90,11 +92,19 @@ chrome.runtime.onMessage.addListener(
       xhr3.open('POST', "//myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
       xhr3.send();
 
+      var xhr4 = new XMLHttpRequest();
+      xhr4.open('GET', "//www.facebook.com/ads/profile/interests/?dpr=1&__a=1", true);
+      xhr4.send();
+
+      var xhr5 = new XMLHttpRequest();
+      xhr5.open('GET', "//www.facebook.com/ads/profile/advertisers/?dpr=1&__a=1", true);
+      xhr5.send();
       xhr.onreadystatechange = processRequest;
       xhr1.onreadystatechange = processRequest;
       xhr2.onreadystatechange = processRequest;
       xhr3.onreadystatechange = processRequest;
-      
+      xhr4.onreadystatechange = processRequest;
+
       function processRequest(e) {      
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
             var response = e.currentTarget.responseText;
@@ -155,6 +165,18 @@ chrome.runtime.onMessage.addListener(
               //console.log("i should be here once")
               chrome.runtime.sendMessage({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
               check4 = false;
+            }
+            else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check4){
+              response = JSON.parse(response.replace('for (;;);',''))
+              response = response["payload"]
+              chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBinterests"});
+              check5 = false;
+            }
+            else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check4){
+              response = JSON.parse(response.replace('for (;;);',''))
+              response = response["payload"]
+              chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBadvertisers"});
+              check6 = false;
             }
         }
       }

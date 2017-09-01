@@ -102,7 +102,7 @@ chrome.runtime.onMessage.addListener(
       responses++;
       toServer[request.type] = request.data
     }
-    if (responses === 3) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
+    if (responses === 5) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
