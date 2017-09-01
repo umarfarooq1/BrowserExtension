@@ -166,13 +166,13 @@ chrome.runtime.onMessage.addListener(
               chrome.runtime.sendMessage({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
               check4 = false;
             }
-            else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check4){
+            else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check5){
               response = JSON.parse(response.replace('for (;;);',''))
               response = response["payload"]
               chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBinterests"});
               check5 = false;
             }
-            else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check4){
+            else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check6){
               response = JSON.parse(response.replace('for (;;);',''))
               response = response["payload"]
               chrome.runtime.sendMessage({"message": "ALL DONE","data":response, "type":"FBadvertisers"});
