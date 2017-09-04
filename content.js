@@ -1,5 +1,7 @@
 // content.js
 GOOGLE_SEARCH = []
+a = 0;
+b = 0;
 check1 = true
 check2 = true
 check3 = true
@@ -25,27 +27,49 @@ function GetDiff(d1){
   return diffDays;
 }
 
+function update_GoogleSearchBUNDLES(all){
+  var arr = [];
+  for (var i=0; i <all.length ; i++) {
+    sub = all[i][9]
+    //console.log(sub)
+    GOOGLE_SEARCH.push(sub)  
+  }
+  b++;
+  if(a===b){
+      chrome.runtime.sendMessage({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
+  }
+}
+function sendMoreBundles(bundle){
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', "https://myactivity.google.com/bundle-details?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=2&jspb=1", true);
+  xhr.send(JSON.stringify({"bundle":bundle}));
+  xhr.onreadystatechange = processGoogleSearchRequestBundles;
+  //b++;
+  //console.log(b)
+}
+function processGoogleSearchRequestBundles(e) {   
+
+  if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
+    var response = e.currentTarget.responseText;
+    if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1){
+       response = response.split("\n")[1]
+       var tmp = response//.slice(6);
+       var ar = eval(tmp);
+       var all = ar[0];
+       update_GoogleSearchBUNDLES(all)
+    }       
+  }
+}
 function update_GoogleSearch(all){
   var arr = [];
   for (var i=0; i <all.length ; i++) {
     var sub = all[i][1];
     for (var x=0; x<sub.length ; x++) {
       var sub1 = sub[x][1][2];
-      if(sub1 === null){
-        continue;
-      }
-      for (var j=0; j<sub1.length ; j++) {
-        for (var k=0; k<sub1[j].length ; k++) {
-          if(sub1[j][k] !== null && sub1[j][k].length === 4){
-            GOOGLE_SEARCH.push(sub1[j][k])
-          }
-        }
-      }
+      sendMoreBundles(sub[x][1][3])
+      a++;
     }
   }
-  //console.log(arr)
-  //GOOGLE_SEARCH.push(arr);
-  //console.log("bye")
 }
 function sendMore(ct){
   var xhr = new XMLHttpRequest();
@@ -63,8 +87,7 @@ function processGoogleSearchRequest(e) {
        var all = ar[0];
        update_GoogleSearch(all)
        if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
-          chrome.runtime.sendMessage({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
-          console.log('trying to send google search terms')
+         console.log("pokerface")
        }
        else{
         sendMore(ar[1]);
