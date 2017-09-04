@@ -64,6 +64,7 @@ function processGoogleSearchRequest(e) {
        update_GoogleSearch(all)
        if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
           chrome.runtime.sendMessage({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
+          console.log('trying to send google search terms')
        }
        else{
         sendMore(ar[1]);
