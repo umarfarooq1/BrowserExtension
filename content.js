@@ -2,13 +2,15 @@
 GOOGLE_SEARCH = []
 a = 0;
 b = 0;
+complete = false;
 check1 = true
 check2 = true
 check3 = true
 check4 = true
 check5 = true
 check6 = true
-NumberofDaysToGoBackForGoogleSearch = 6
+NumberofDaysToGoBackForGoogleSearch = 30 //collects a month worth of data. Problem is that sendmore doesnt break precisely on the 30th day mark, 
+                                        //can end on 40th day. Since response received in bulk
 function GetDate(){
   var dateObj = new Date();
   var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -35,7 +37,7 @@ function update_GoogleSearchBUNDLES(all){
     GOOGLE_SEARCH.push(sub)  
   }
   b++;
-  if(a===b){
+  if(a===b && complete == true){
       chrome.runtime.sendMessage({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
   }
 }
@@ -88,6 +90,7 @@ function processGoogleSearchRequest(e) {
        update_GoogleSearch(all)
        if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
          console.log("pokerface")
+         complete = true
        }
        else{
         sendMore(ar[1]);
