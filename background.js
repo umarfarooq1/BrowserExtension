@@ -9,14 +9,38 @@ var toServer = {}
 var firstTime = false
 var firstTab = false
 var complete = false
+var myPopUp = 0;
 //var startUp = false
-chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-  if (result.extensionDate === undefined) {
-      chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
-      firstTime = true
-      console.log("I have installed the extension for the first time")
-  }
-})
+
+chrome.runtime.onInstalled.addListener(function(){
+  chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
+    if (result.extensionDate === undefined) {
+        chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
+        firstTime = true
+        console.log("I have installed the extension for the first time")
+    }
+  })
+// create survey tab
+  chrome.tabs.create({
+    url: chrome.extension.getURL('sur.html'),
+    active: true
+  }, function(tab) {
+      chrome.windows.create({
+        tabId: tab.id,
+        // width: 400, height: 200,
+        state: 'maximized',
+        type: 'popup',
+        focused: true
+                 // incognito, top, left, ...
+      });
+      myPopUp = tab.id;
+    });
+// get data via content.js
+  chrome.tabs.onUpdated.addListener(dummy);
+//set time gap to regular 7 days
+  //timeGap = 7 
+});
+
 function GetDate(){
   var dateObj = new Date();
   var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -115,6 +139,7 @@ var BrowsingHist = new Promise (function(resolve,reject) {
     resolve(data)
   });
 })
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponsse) {
     //if(request.text === "what is my tab_id?"){
@@ -123,7 +148,9 @@ chrome.runtime.onMessage.addListener(
     if(complete === false){
       if( request.message === "ALL DONE" && toServer[request.type] === undefined) {
       responses++;
-      toServer[request.type] = request.data
+      toServer[request.type] = request.data;
+      // send this data to survey page
+      chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
       }
       if (responses === 6) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
