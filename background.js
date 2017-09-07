@@ -36,7 +36,8 @@ chrome.runtime.onInstalled.addListener(function(){
       myPopUp = tab.id;
     });
 // get data via content.js
-  chrome.tabs.onUpdated.addListener(dummy);
+  // chrome.tabs.onUpdated.addListener(dummy);
+  dummy(0, {}, {});
 //set time gap to regular 7 days
   //timeGap = 7 
 });
@@ -93,22 +94,22 @@ handler = function(details) {
 
 var dummy = function(tabId, changeInfo, tab){
   chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-    /*console.log(result)
+    // console.log(result)
     console.log('I am inside dummy')
     console.log(tab)
     console.log(tabId)
-    console.log(changeInfo)*/
+    console.log(changeInfo)
     if (GetDiff(result.extensionDate) >= timeGap && checker){ //&& win_list.length === 1
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var activeTab = tabs[0];
-        //console.log(activeTab);
+        console.log(activeTab);
         chrome.webRequest.onBeforeSendHeaders.addListener(handler, requestFilter, extraInfoSpec);
         if(activeTab !==undefined){
-          if(activeTab.status ==="complete"){
-            //console.log('i made it here')
+          // if(activeTab.status ==="complete"){
+            console.log('i made it here')
             //console.log(activeTab)
             chrome.tabs.sendMessage(activeTab.id, {"message": "clicked_browser_action"});  
-          }  
+          // }  
         }
       });
    }

@@ -136,7 +136,7 @@ chrome.runtime.onMessage.addListener(
         if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
             var response = e.currentTarget.responseText;
             if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1 && check1){ //code for exelate
-              //console.log("i should be here once")
+              console.log("i should be here once")
               var data = [];
               //console.log(e.currentTarget.responseURL)
               var p = response.split("mainDivText += '';")
@@ -155,7 +155,7 @@ chrome.runtime.onMessage.addListener(
               }  
             }
             else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1 && check2){
-              //console.log("i should be here once")
+              console.log("i should be here once")
               var data = [];
               //console.log(e.currentTarget.responseURL)
               //console.log(response)
@@ -183,13 +183,13 @@ chrome.runtime.onMessage.addListener(
               var all = ar[0];
               update_GoogleSearch(all)
 
-              //console.log("i should be here exactly once")
+              console.log("i should be here exactly once")
               check3 = false
               sendMore(ar[1]);
             }
             else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
               //console.log(response)
-              //console.log("i should be here once")
+              console.log("i should be here once")
               chrome.runtime.sendMessage({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
               check4 = false;
             }
