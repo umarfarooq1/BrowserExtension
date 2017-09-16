@@ -266,7 +266,12 @@ function Start(request) {
           sendMore(ar[1]);
         }
         else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
-          Finalize({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"});
+          try{
+            Finalize({"message": "ALL DONE","data":JSON.parse(response), "type":"BlueKai"}); 
+          }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":response,"Error":exception, "type":"BlueKai"});  
+          }
           check4 = false;
         }
         else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check5){
@@ -291,7 +296,12 @@ function Finalize(request) {
   if(complete === false){
     if( request.message === "ALL DONE" && toServer[request.type] === undefined) {
     responses++;
-    toServer[request.type] = request.data;
+    if(request.Error === undefined){
+      toServer[request.type] = request.data;  
+    }
+    else {
+     toServer[request.type] = {"Response":request.data,"Error":request.Error}; 
+    }
     // send this data to survey page
     chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
     }
