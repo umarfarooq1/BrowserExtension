@@ -23,6 +23,38 @@ check5 = true
 check6 = true
 NumberofDaysToGoBackForGoogleSearch = 30 //collects a month worth of data. Problem is that sendmore doesnt break precisely on the 30th day mark, 
                                         //can end on 40th day. Since response received in bulk
+var requestFilter = {
+    urls: ["<all_urls>"]
+},
+
+extraInfoSpec = ['requestHeaders', 'blocking'],
+handler = function(details) {
+  var isRefererSet = false;
+  var headers = details.requestHeaders,
+      blockingResponse = {};
+
+  for (var i = 0, l = headers.length; i < l; ++i) {
+      if (headers[i].name == 'Referer') {
+          headers[i].value = "http://www.bluekai.com/registry";
+          isRefererSet = true;
+          break;
+      }
+  }
+
+  if (!isRefererSet) {
+      headers.push({
+          name: "Referer",
+          value: "http://www.bluekai.com/registry"
+      });
+  }
+
+  blockingResponse.requestHeaders = headers;
+  return blockingResponse;
+};
+
+
+chrome.webRequest.onBeforeSendHeaders.addListener(handler, requestFilter, extraInfoSpec);
+      
 function update_GoogleSearchBUNDLES(all){
   var arr = [];
   for (var i=0; i <all.length ; i++) {
@@ -90,13 +122,9 @@ function processGoogleSearchRequest(e) {
   }
 }
 chrome.runtime.onInstalled.addListener(function(){
-  chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-    if (result.extensionDate === undefined) {
-        chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
-        firstTime = true
-        console.log("I have installed the extension for the first time")
-    }
-  })
+  chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
+  firstTime = true
+  console.log("I have installed the extension for the first time")
   chrome.tabs.create({
     url: chrome.extension.getURL('sur.html'),
     active: true
@@ -109,8 +137,8 @@ chrome.runtime.onInstalled.addListener(function(){
         focused: true
       });
       myPopUp = tab.id;
+      Start({"message": "clicked_browser_action"});
     });
-  //dummy(0, {}, {});
 });
 
 function GetDate(){
@@ -131,41 +159,12 @@ function GetDiff(d1){
   return diffDays;
 }
 
-var requestFilter = {
-    urls: ["<all_urls>"]
-},
-
-extraInfoSpec = ['requestHeaders', 'blocking'],
-handler = function(details) {
-  var isRefererSet = false;
-  var headers = details.requestHeaders,
-      blockingResponse = {};
-
-  for (var i = 0, l = headers.length; i < l; ++i) {
-      if (headers[i].name == 'Referer') {
-          headers[i].value = "http://www.bluekai.com/registry";
-          isRefererSet = true;
-          break;
-      }
-  }
-
-  if (!isRefererSet) {
-      headers.push({
-          name: "Referer",
-          value: "http://www.bluekai.com/registry"
-      });
-  }
-
-  blockingResponse.requestHeaders = headers;
-  return blockingResponse;
-};
-
 
 chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-  if (GetDiff(result.extensionDate) >= timeGap && checker){ //&& win_list.length === 1
+  if (GetDiff(result.extensionDate) >= timeGap && checker && !firstTime){ //&& win_list.length === 1
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       var activeTab = tabs[0];
-      chrome.webRequest.onBeforeSendHeaders.addListener(handler, requestFilter, extraInfoSpec);
+      console.log("This should be your weekly snapshot")
       if(activeTab !==undefined){
         Start({"message": "clicked_browser_action"});  
       }
@@ -173,13 +172,6 @@ chrome.storage.sync.get('extensionDate', function(result){ //need to add excepti
   }
 })
 
-chrome.runtime.onStartup.addListener(function() {
-  console.log('this is startup..')
-  if (firstTab === false){
-    //chrome.tabs.onUpdated.addListener(dummy);
-    firstTab = true
-  }
-});
 
 var BrowsingHist = new Promise (function(resolve,reject) {
   var dateCurrent= new Date() 
