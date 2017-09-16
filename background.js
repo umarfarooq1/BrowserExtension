@@ -223,38 +223,51 @@ function Start(request) {
       if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
         var response = e.currentTarget.responseText;
         if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1 && check1){ //code for exelate
-          var data = [];
-          var p = response.split("mainDivText += '';")
-          if (p.length > 1){
-            y = p[1].split('mainDivText')
-            for(i = 0; i< y.length;i++){
-              if(y[i].indexOf('checked="checked"') !== -1){
-                z = y[i].split('/>');
-                q = z[1].replace("</span><br","")
-                data.push(q)
+          try{
+            var data = [];
+            var p = response.split("mainDivText += '';")
+            if (p.length > 1){
+              y = p[1].split('mainDivText')
+              for(i = 0; i< y.length;i++){
+                if(y[i].indexOf('checked="checked"') !== -1){
+                  z = y[i].split('/>');
+                  q = z[1].replace("</span><br","")
+                  data.push(q)
+                }
               }
-            }
-            Finalize({"message": "ALL DONE","data":data, "type":"exelate"});
+              Finalize({"message": "ALL DONE","data":data, "type":"exelate"});
+              check1 = false
+            }  
+          }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":response,"Error":exception,"type":"exelate"});
             check1 = false
-          }  
+          }
+            
         }
         else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1 && check2){
-          var data = [];
-          var p = response.split('<div class="G4Kqbb">')
-          if (p.length > 1){
-            for(i = 1; i< p.length;i++){
-              y = p[i].split('</div>')
-              if(y.length>1){
-                q = y[0]
-                if(q.indexOf('&amp;')!== -1){
-                  q = q.replace('&amp;', 'and')
+          try{
+            var data = [];
+            var p = response.split('<div class="G4Kqbb">')
+            if (p.length > 1){
+              for(i = 1; i< p.length;i++){
+                y = p[i].split('</div>')
+                if(y.length>1){
+                  q = y[0]
+                  if(q.indexOf('&amp;')!== -1){
+                    q = q.replace('&amp;', 'and')
+                  }
+                  data.push(q)
                 }
-                data.push(q)
               }
-            }
-            Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
-            check2 = false
+              Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
+              check2 = false
+            }  
           }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":response, "Error":exception,"type":"googleAdSettings"});
+            check2 = false
+          }     
         }
         else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1 && check3){
           response = response.split("\n")[1]
@@ -275,16 +288,29 @@ function Start(request) {
           check4 = false;
         }
         else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check5){
-          response = JSON.parse(response.replace('for (;;);',''))
-          response = response["payload"]
-          Finalize({"message": "ALL DONE","data":response, "type":"FBinterests"});
-          check5 = false;
+          try{
+            response = JSON.parse(response.replace('for (;;);',''))
+            response = response["payload"]
+            Finalize({"message": "ALL DONE","data":response, "type":"FBinterests"});
+            check5 = false;  
+          }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":response,"Error":exception,"type":"FBinterests"});
+            check5 = false;  
+          }
+          
         }
         else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check6){
-          response = JSON.parse(response.replace('for (;;);',''))
-          response = response["payload"]
-          Finalize({"message": "ALL DONE","data":response, "type":"FBadvertisers"});
-          check6 = false;
+          try{
+            response = JSON.parse(response.replace('for (;;);',''))
+            response = response["payload"]
+            Finalize({"message": "ALL DONE","data":response, "type":"FBadvertisers"});
+            check6 = false;  
+          }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":response,"Error":exception,"type":"FBadvertisers"});
+            check6 = false;
+          } 
         }
       }
     }
