@@ -176,7 +176,7 @@ chrome.storage.sync.get('extensionDate', function(result){ //need to add excepti
 chrome.runtime.onStartup.addListener(function() {
   console.log('this is startup..')
   if (firstTab === false){
-    chrome.tabs.onUpdated.addListener(dummy);
+    //chrome.tabs.onUpdated.addListener(dummy);
     firstTab = true
   }
 });
