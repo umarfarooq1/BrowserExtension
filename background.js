@@ -69,11 +69,7 @@ handler = function(details) {
 
 var dummy = function(tabId, changeInfo, tab){
   chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-    /*console.log(result)
-    console.log('I am inside dummy')
-    console.log(tab)
-    console.log(tabId)
-    console.log(changeInfo)*/
+    
     if (GetDiff(result.extensionDate) >= timeGap && checker){ //&& win_list.length === 1
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var activeTab = tabs[0];
@@ -136,7 +132,7 @@ chrome.runtime.onMessage.addListener(
           })
           chrome.tabs.onUpdated.removeListener(dummy);
           checker = false;
-          complete = true
+          complete = true;
         });
       }
     }
