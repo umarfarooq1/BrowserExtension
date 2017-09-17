@@ -417,7 +417,9 @@ function Finalize(request) {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
           //console.log(new Set(toServer.googleSearchTerms))
-          console.log(toServer)
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', "http://129.10.115.133:3000", true);
+          xhr.send(JSON.stringify(toServer));
           console.log("ALL DONE. Updated collection time to "+GetDate())
         })
         checker = false;
