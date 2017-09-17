@@ -9,7 +9,10 @@ var toServer = {}
 var firstTime = false
 var firstTab = false
 var complete = false
-var myPopUp = 0;
+
+var myPopUp = -1;
+loggedInfb = false;
+loggedInGoogle = false;
 //var startUp = false
 GOOGLE_SEARCH = []
 a = 0;
@@ -17,7 +20,7 @@ b = 0;
 Googlecomplete = false;
 check1 = true
 check2 = true
-check3 = true
+check3 = false
 check4 = true
 check5 = true
 check6 = true
@@ -121,6 +124,62 @@ function processGoogleSearchRequest(e) {
     }       
   }
 }
+
+chrome.cookies.onChanged.addListener(function(info) {
+  var cookie1 = JSON.stringify(info)
+  // checking if signed into google
+     if(cookie1.indexOf("accounts.google.com") !== -1 && cookie1.indexOf("LSID") !== -1){
+        // console.log(cookie1);
+    // console.log()
+        if(info.removed === true){
+            loggedInGoogle = false;
+            // console.log("naay  G :(");
+        } else {
+            loggedInGoogle = true;
+            // console.log("yaay G");
+            if(myPopUp !== -1)
+              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});      
+        }
+    }
+    // checking if signed into fb 
+    if(cookie1.indexOf("facebook.com") !== -1 && cookie1.indexOf("c_user") !== -1){
+        // console.log(cookie1);
+        if(info.removed === true){
+            loggedInfb = false;
+            // console.log("naay  fb :(");
+        } else {
+            loggedInfb = true;
+            // console.log("yaay fb");
+            if(myPopUp !== -1)
+              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
+        } 
+    }
+});
+
+function logStatus(){
+  chrome.cookies.get({url:'https://accounts.google.com', name:'LSID'}, function(cookie) {
+    if (cookie) {
+        // console.log('Sign-in cookie:', cookie);
+        loggedInGoogle = true;
+    }
+    else{
+        // console.log("not signed in")
+        loggedInGoogle = false;
+    }
+  });
+  chrome.cookies.get({url:'https://facebook.com', name:'c_user'}, function(cookie) {
+    if (cookie) {
+        // console.log('Sign-in cookie:', cookie);
+        loggedInfb = true;
+    }
+    else{
+        // console.log("not signed in")
+        loggedInfb = false;
+    }
+  });
+  chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
+}
+
 chrome.runtime.onInstalled.addListener(function(){
   chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
   firstTime = true
@@ -137,9 +196,27 @@ chrome.runtime.onInstalled.addListener(function(){
         focused: true
       });
       myPopUp = tab.id;
-      Start({"message": "clicked_browser_action"});
+      logStatus();
+      // console.log(myPopUp);
+      // chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
+  // Start({"message": "clicked_browser_action"});
     });
 });
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if(request.type == "init"){
+      chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
+    }
+    if(request.type == "dataCollection"){
+      Start({"message": "clicked_browser_action"}); 
+    }
+
+    // console.log("gg" + loggedInGoogle);
+    // console.log("fb" + loggedInfb);
+});
+// add listener here. only when signed into fb and google
+// then go into Start
 
 function GetDate(){
   var dateObj = new Date();
@@ -161,11 +238,12 @@ function GetDiff(d1){
 
 
 chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-  if (GetDiff(result.extensionDate) >= timeGap && checker && !firstTime){ //&& win_list.length === 1
+  if (GetDiff(result.extensionDate) >= 7 && checker && !firstTime){ //&& win_list.length === 1
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       var activeTab = tabs[0];
       console.log("This should be your weekly snapshot")
       if(activeTab !==undefined){
+        // i should ping first and prompt user to sign in.
         Start({"message": "clicked_browser_action"});  
       }
     });
@@ -262,19 +340,22 @@ function Start(request) {
               }
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               check2 = false
+              console.log(data)
             }  
           }
           catch(exception){
+            console.log(data)
+            console.log(exception)
             Finalize({"message": "ALL DONE","data":response, "Error":exception,"type":"googleAdSettings"});
             check2 = false
           }     
         }
         else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1 && check3){
-          response = response.split("\n")[1]
-          var tmp = response//.slice(6);
+          response = response.split("\n")[1];
+          var tmp = response;//.slice(6);
           var ar = eval(tmp);
           var all = ar[0];
-          update_GoogleSearch(all)
+          update_GoogleSearch(all);
           check3 = false
           sendMore(ar[1]);
         }

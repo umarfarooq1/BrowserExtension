@@ -1,5 +1,9 @@
 console.log("loading")
 
+var loggedInfb = false;
+var loggedInGoogle = false;
+
+chrome.runtime.sendMessage({type:'init', data:'making sure that this content script has been injected'});
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -13,8 +17,18 @@ chrome.runtime.onMessage.addListener(
   		var x = survey.getQuestionByName("dyn1", true)
   		x.title = "are you interested in Shopping?";
   		x.visible = true;
-		survey.render();	
-  	}  	
+		  survey.render();	
+  	} 
+    if(request.type == "logStatus"){
+      console.log("#################################33")
+      loggedInfb = request.msgfb;
+      loggedInGoogle = request.msgg;
+    } 	
+    console.log("gg: " + loggedInGoogle);
+    console.log("fb: " + loggedInfb);
+    if(loggedInGoogle === true && loggedInfb === true){
+      chrome.runtime.sendMessage({type:'dataCollection'}); 
+    }
 });
 
 
@@ -24,8 +38,31 @@ Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
 window.survey = new Survey.Model({
 
-    title: "Our Survey", showProgressBar: "bottom", goNextPageAutomatic: true, showNavigationButtons: false,
+    title: "Our Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true,
     pages: [
+        // {
+        //   //title for welcome message. welcome to the study
+
+        // }
+        // {
+        //   //informed consent
+        //   // i agree - checkbox
+        // }
+        // {
+        //   // get info from background, whether user logged in. filhaal false.
+        //   // if logged in. shaaba click next (invisible 1)
+        //   // if not logged in. click button to go to google (invisible 2) - standard
+        //   // iss button ka dekhna pare ga!****
+        //   // two invisible questions 
+        //   // when we get cookieupdated from bg, change visibility of questions
+
+        // }
+        // {
+        //   // same for fb
+        // }
+        // {
+
+        // }
         { questions: [
              { type: "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
              { type: "radiogroup",  name: "age", title: "Please select your age range:", choices: ["1-10", "11-20", "21-30", "30-40", "40 above"], isRequired: true},
