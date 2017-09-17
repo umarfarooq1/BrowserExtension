@@ -24,14 +24,16 @@ server = http.createServer( function(req, res) {
 			    // success case, the file was saved
 			    console.log('Lyric saved!');
 			});
-        	
         });
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end('post received');
     }
+    else{
+	    res.end("not now")
+    }
 });
 
 port = 3000;
-host = '127.0.0.1';
+host = '129.10.115.133';
 server.listen(port, host);
 console.log('Listening at http://' + host + ':' + port);
