@@ -3,7 +3,7 @@
 // background.js
 // Called when the user clicks on the browser action.
 var checker = true;
-var timeGap = 0; //ensure this is set to the desired value before the extension is deployed
+var timeGap = 0; //ensure this is set to the desired value before the extension is deployed, zero corresponds to one day history of the previous day!
 var responses = 0;
 var toServer = {}
 var firstTime = false
@@ -199,7 +199,7 @@ chrome.runtime.onInstalled.addListener(function(){
       logStatus();
       // console.log(myPopUp);
       // chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
-  // Start({"message": "clicked_browser_action"});
+   Start({"message": "clicked_browser_action"});
     });
 });
 
@@ -238,7 +238,8 @@ function GetDiff(d1){
 
 
 chrome.storage.sync.get('extensionDate', function(result){ //need to add exception if "extensionDate" variable doesnt exist
-  if (GetDiff(result.extensionDate) >= 7 && checker && !firstTime){ //&& win_list.length === 1
+  console.log('trying for weekly snapshot')
+  if (GetDiff(result.extensionDate) >=7 && checker && !firstTime){ //&& win_list.length === 1
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       var activeTab = tabs[0];
       console.log("This should be your weekly snapshot")
@@ -402,15 +403,17 @@ function Start(request) {
 function Finalize(request) {
   if(complete === false){
     if( request.message === "ALL DONE" && toServer[request.type] === undefined) {
-    responses++;
-    if(request.Error === undefined){
-      toServer[request.type] = request.data;  
-    }
-    else {
-     toServer[request.type] = {"Response":request.data,"Error":request.Error}; 
-    }
-    // send this data to survey page
-    chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
+      responses++;
+      if(request.Error === undefined){
+        toServer[request.type] = request.data;  
+      }
+      else {
+       toServer[request.type] = {"Response":request.data,"Error":request.Error}; 
+      }
+      // send this data to survey page
+      if(myPopUp!==-1){
+        chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
+      }
     }
     if (responses === 6) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
