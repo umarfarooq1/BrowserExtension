@@ -20,7 +20,7 @@ b = 0;
 Googlecomplete = false;
 check1 = true
 check2 = true
-check3 = false
+check3 = true
 check4 = true
 check5 = true
 check6 = true
@@ -340,7 +340,7 @@ function Start(request) {
               }
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               check2 = false
-              console.log(data)
+              //console.log(data)
             }  
           }
           catch(exception){

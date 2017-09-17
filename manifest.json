@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "When Integrated",
+  "name": "Testing",
   "version": "0.1",
   "permissions": ["tabs","storage","cookies","webRequest","webRequestBlocking","history","<all_urls>"],
   "background": {
