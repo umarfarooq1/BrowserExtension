@@ -399,7 +399,12 @@ function Start(request) {
   }
 }
 
-
+function getID(e) {      
+  if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
+    var response = e.currentTarget.responseText;
+    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+  }
+}
 function Finalize(request) {
   if(complete === false){
     if( request.message === "ALL DONE" && toServer[request.type] === undefined) {
@@ -421,8 +426,9 @@ function Finalize(request) {
           toServer['BrowsingHistory'] = data;
           //console.log(new Set(toServer.googleSearchTerms))
           var xhr = new XMLHttpRequest();
-          xhr.open('POST', "http://129.10.115.133:3000", true);
+          xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
           xhr.send(JSON.stringify(toServer));
+          xhr.onreadystatechange = getID;//need to comment this out for US participants
           console.log("ALL DONE. Updated collection time to "+GetDate())
         })
         checker = false;
