@@ -36,21 +36,32 @@ chrome.runtime.onMessage.addListener(
 });
 
 function alterSurvey(){
+  var gg = survey.getQuestionByName("gg", true);
   var gg1 = survey.getQuestionByName("gg1", true);
   var gg2 = survey.getQuestionByName("gg2", true);
   var fb1 = survey.getQuestionByName("fb1", true);
   var fb2 = survey.getQuestionByName("fb2", true);
+  var fb = survey.getQuestionByName("fb", true);
 
   if(loggedInGoogle === true){
     gg1.visible = true;
+    gg2.visible = false;
+    gg.visible = false;
+    
   } else {
     gg2.visible = true;
+    gg1.visible = false;
+    gg.visible = true;
   }
 
   if(loggedInfb === true){
     fb1.visible = true;
+    fb2.visible = false;
+    fb.visible = false;
   } else {
     fb2.visible = true;
+    fb1.visible = false;
+    fb.visible = true;
   }
   survey.render();
   // console.log(gg1);
@@ -59,6 +70,51 @@ function alterSurvey(){
 
 Survey.Survey.cssType = "bootstrap";
 Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+var MyTextValidator = (function (_super) {
+    Survey.__extends(MyTextValidator, _super);
+    function MyTextValidator() {
+        _super.call(this);
+    }
+    MyTextValidator.prototype.getType = function () { return "mytextvalidator"; };
+    MyTextValidator.prototype.validate = function (value, name) {
+        if(value === "Yes") {
+            //report an error
+            console.log(value);
+            // console.log(name);
+            return new Survey.ValidatorResult(null, new Survey.CustomError(this.getErrorText("gg")));
+        }
+        if(value === "Yes!"){
+          return new Survey.ValidatorResult(null, new Survey.CustomError(this.getErrorText("fb")));
+        }
+        if(value === "No"){
+          return new Survey.ValidatorResult(null, new Survey.CustomError(this.getErrorText("no")));
+        }
+        //return Survey.ValidatorResult object if you want to correct the entered value
+        // return new Survey.ValidatorResult(youCorrectedValue);
+        //return nothing if there is no any error.
+        return null;
+    };
+    //the default error text. It shows if user do not set the 'text' property
+    MyTextValidator.prototype.getDefaultErrorText = function(name) {
+        if(name === "no"){
+          return "Please sign in to proceed";
+        } 
+        if(name === "gg"){
+          return "I'm afraid you haven't logged into Google";
+        } 
+        if(name === "fb"){
+          return "I'm afraid you haven't logged into Facebook";
+        } 
+
+    }
+    return MyTextValidator;
+})(Survey.SurveyValidator);
+
+Survey.MyTextValidator = MyTextValidator;
+//add into survey Json metaData
+Survey.JsonObject.metaData.addClass("mytextvalidator", [], function () { return new MyTextValidator(name); }, "surveyvalidator");
+
 
 
 window.survey = new Survey.Model({
@@ -127,7 +183,7 @@ window.survey = new Survey.Model({
       },
       {
        "type": "html",
-       "html": "kuch nai karna",
+       "html": "CONGRATS you are already signed in",
        "name": "gg1",
        "visible": false
       },
@@ -136,26 +192,10 @@ window.survey = new Survey.Model({
        "html": "<a href=\"http://google.com\" class=\"button\" target=\"_blank\">Go to Google</a>",
        "name": "gg2",
        "visible": false
-      }
+      },
+      { type: "radiogroup",  name: "gg", title: "Have you signed in to Google?", choices: ["Yes", "No"], visible: false, "colCount": 2,"isRequired": true, validators: [{type: "mytextvalidator"}]}
      ],
      "name": "page3"
-    },
-    {
-     "elements": [
-      {
-       "type": "radiogroup",
-       "choices": [
-        "item1",
-        "item2",
-        "item3"
-       ],
-       "name": "question7",
-       "title": "nazar araha??",
-       "visible": false,
-       "visibleIf": "{terms} = 'I agree'"
-      }
-     ],
-     "name": "page4"
     },
     {
      "elements": [
@@ -173,7 +213,7 @@ window.survey = new Survey.Model({
       },
       {
        "type": "html",
-       "html": "kuch karne ki zaroorat nai",
+       "html": "CONGRATS you are already signed in",
        "name": "fb1",
        "visible": false
       },
@@ -182,7 +222,8 @@ window.survey = new Survey.Model({
        "html": "<a href=\"https://facebook.com\" class=\"button\" target=\"_blank\">Go to Facebook</a>",
        "name": "fb2",
        "visible": false
-      }
+      },
+      { type: "radiogroup",  name: "fb", title: "Have you signed in to Facebook?", choices: ["Yes!", "No"], visible: false, "colCount": 2,"isRequired": true, validators: [{type: "mytextvalidator"}]}
      ],
      "name": "page5"
     },
@@ -259,6 +300,7 @@ window.survey = new Survey.Model({
        "name": "panel7",
        "title": "Usage of Specific Services"
       },
+      { type: "radiogroup",  name: "dyn1", title: "kuch bhi", choices: ["yes", "no"], visible: false},
       {
        "type": "radiogroup",
        "choices": [
