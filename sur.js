@@ -12,25 +12,50 @@ chrome.runtime.onMessage.addListener(
   		console.log(request.msg);
 
   		//do processing on data
-  		survey.showProgressBar = "top";
+  		// survey.showProgressBar = "top";
   		console.log(survey.getQuestionByName("dyn1", true));
   		var x = survey.getQuestionByName("dyn1", true)
   		x.title = "are you interested in Shopping?";
   		x.visible = true;
-		  survey.render();	
-  	} 
+      survey.render();	
+  	}
+
     if(request.type == "logStatus"){
-      console.log("#################################33")
+      // console.log("#################################")
       loggedInfb = request.msgfb;
       loggedInGoogle = request.msgg;
+      alterSurvey();
     } 	
+
     console.log("gg: " + loggedInGoogle);
     console.log("fb: " + loggedInfb);
+    
     if(loggedInGoogle === true && loggedInfb === true){
       chrome.runtime.sendMessage({type:'dataCollection'}); 
     }
 });
 
+function alterSurvey(){
+  var gg1 = survey.getQuestionByName("gg1", true);
+  var gg2 = survey.getQuestionByName("gg2", true);
+  var fb1 = survey.getQuestionByName("fb1", true);
+  var fb2 = survey.getQuestionByName("fb2", true);
+
+  if(loggedInGoogle === true){
+    gg1.visible = true;
+  } else {
+    gg2.visible = true;
+  }
+
+  if(loggedInfb === true){
+    fb1.visible = true;
+  } else {
+    fb2.visible = true;
+  }
+  survey.render();
+  // console.log(gg1);
+  // console.log(fb2);
+}
 
 Survey.Survey.cssType = "bootstrap";
 Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
@@ -38,46 +63,236 @@ Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
 window.survey = new Survey.Model({
 
-    title: "Our Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true,
-    pages: [
-        // {
-        //   //title for welcome message. welcome to the study
+  title: "Our Survey", showProgressBar: "top", goNextPageAutomatic: false, showNavigationButtons: true,
+    
+   "pages": [
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "elements": [
+        {
+         "type": "html",
+         "html": "<heading> Welcome to our Survey </heading>",
+         "name": "question2"
+        }
+       ],
+       "name": "panel3",
+       "title": "Welcome"
+      }
+     ],
+     "name": "page1"
+    },
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "elements": [
+        {
+         "type": "html",
+         "html": "<heading>We would like to invite you to participate in a research study. The goal of the study is to understand how people’s online behavior impacts the advertisements that they see on the web and in smartphone apps. </heading>",
+         "name": "consent"
+        },
+        {
+         "type": "radiogroup",
+         "choices": [
+          "I agree",
+          " I do not Agree"
+         ],
+         "colCount": 2,
+         "isRequired": true,
+         "name": "terms",
+         "title": "Do you agree to the terms and Conditions"
+        }
+       ],
+       "name": "panel2",
+       "title": "Informed Consent"
+      }
+     ],
+     "name": "page2"
+    },
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "elements": [
+        {
+         "type": "html",
+         "html": "To proceed with our survey you must have a Google account and be logged-in to it.\n",
+         "name": "question3"
+        }
+       ],
+       "name": "panel1",
+       "title": "Google Login"
+      },
+      {
+       "type": "html",
+       "html": "kuch nai karna",
+       "name": "gg1",
+       "visible": false
+      },
+      {
+       "type": "html",
+       "html": "<a href=\"http://google.com\" class=\"button\" target=\"_blank\">Go to Google</a>",
+       "name": "gg2",
+       "visible": false
+      }
+     ],
+     "name": "page3"
+    },
+    {
+     "elements": [
+      {
+       "type": "radiogroup",
+       "choices": [
+        "item1",
+        "item2",
+        "item3"
+       ],
+       "name": "question7",
+       "title": "nazar araha??",
+       "visible": false,
+       "visibleIf": "{terms} = 'I agree'"
+      }
+     ],
+     "name": "page4"
+    },
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "elements": [
+        {
+         "type": "html",
+         "html": "To proceed with our survey you must have a Facebook account and be logged-in to it.\n",
+         "name": "question6"
+        }
+       ],
+       "name": "panel4",
+       "title": "Facebook Login"
+      },
+      {
+       "type": "html",
+       "html": "kuch karne ki zaroorat nai",
+       "name": "fb1",
+       "visible": false
+      },
+      {
+       "type": "html",
+       "html": "<a href=\"https://facebook.com\" class=\"button\" target=\"_blank\">Go to Facebook</a>",
+       "name": "fb2",
+       "visible": false
+      }
+     ],
+     "name": "page5"
+    },
+    {
+     "elements": [
+      {
+       "type": "radiogroup",
+       "choices": [
+        "United States",
+        "Pakistan"
+       ],
+       "isRequired": true,
+       "name": "loc",
+       "title": "Where are you from?"
+      }
+     ],
+     "name": "page6"
+    },
 
-        // }
-        // {
-        //   //informed consent
-        //   // i agree - checkbox
-        // }
-        // {
-        //   // get info from background, whether user logged in. filhaal false.
-        //   // if logged in. shaaba click next (invisible 1)
-        //   // if not logged in. click button to go to google (invisible 2) - standard
-        //   // iss button ka dekhna pare ga!****
-        //   // two invisible questions 
-        //   // when we get cookieupdated from bg, change visibility of questions
+    {
+     "elements": [
+      {
+       "type": "panel","elements": [
+        {
+         "type": "html",
+         "html": "First, we would like to know a bit about you. Remember, your answers to these questions are confidential so please be honest.\n",
+         "name": "question1"
+        }
+       ],
+       "name": "panel5",
+       "title": "Basic Demographics"
+      },
 
-        // }
-        // {
-        //   // same for fb
-        // }
-        // {
+      // {"type": "radiogroup","choices": ["item1","item2","item3"],"name": "question4", isRequired: true, "visibleIf" : "{loc}='United States'" },
+      {"type": "radiogroup",  name: "age", title: "How old are you?", choices: ["18-24", "25-44", "45-64", "65+"], isRequired: true},
+      { "type": "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
+      {"type": "checkbox","name": "ethnicity", title:"What is your race or ethnicity (check all that apply)?", "choices": ["White/Caucasian", "Black/African American", "Native American/Alaska Native/Hawaii Native", "Latino/Hispanic", "Asian", "Other"], isRequired: true, "visibleIf" : "{loc}='United States'" },
+      { "type": "radiogroup",  name: "ed", title: "What is the highest level of education you have completed?", choices: ["None", "High School", "College", "some graduate school", "Masters", "doctoral"], isRequired: true}
+      // {"type": "radiogroup","name": "question4", "choices": ["item1","item2","item3"], isRequired: true, "visibleIf" : "{loc}='Pakistan'" }                
+     ],
+     "name": "page7"
+    },
 
-        // }
-        { questions: [
-             { type: "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
-             { type: "radiogroup",  name: "age", title: "Please select your age range:", choices: ["1-10", "11-20", "21-30", "30-40", "40 above"], isRequired: true},
-             { type:"text", name:"loc", title: "Please enter the country you currently reside in:", placeHolder:"Oman", isRequired: true},
-             { type: "radiogroup",  name: "income", title: "Please select you income:", choices: ["no income", "$1-$100", "$100-$10,000", "$10,000 above"], isRequired: true},
-             { type: "radiogroup",  name: "ed", title: "Please select your level of education:", choices: ["High School", "Bachelors", "Masters", "PhD", "post-doctorate"], isRequired: true}
-        ]},
-         { questions: [ 
-            { type: "radiogroup",  name: "libertyordeath", title: "More random questionss", choicesOrder: "random", choices: ["John Hancock", "James Madison", "Patrick Henry", "Samuel Adams"]}
-         ]},
-         {questions: [
-         	{ type: "radiogroup",  name: "dyn", title: "kuch bhi", choices: ["yes", "no"]},
-            { type: "radiogroup",  name: "dyn1", title: "kuch bhi", choices: ["yes", "no"], visible: false}
-        ]}
-    ],
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "elements": [
+        {
+         "type": "html",
+         "html": "We would like to know about your usage of the internet in general.\n",
+         "name": "question5"
+        }
+       ],
+       "name": "panel6",
+       "title": "General internet and web usage"
+      },
+      {
+       "type": "radiogroup",
+       "choices": [
+        "item1",
+        "item2",
+        "item3"
+       ],
+       "name": "question8"
+      }
+     ],
+     "name": "page8"
+    },
+    {
+     "elements": [
+      {
+       "type": "panel",
+       "name": "panel7",
+       "title": "Usage of Specific Services"
+      },
+      {
+       "type": "radiogroup",
+       "choices": [
+        "item1",
+        "item2",
+        "item3"
+       ],
+       "name": "question9"
+      }
+     ],
+     "name": "page9"
+    }
+   ],
+   "triggers": [
+    {
+     "type": "complete",
+     "operator": "equal",
+     "value": " I do not Agree",
+     "name": "terms"
+    }
+   ]  
+    //     { 
+    //       questions: [
+    //          { type: "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
+    //          { type: "radiogroup",  name: "age", title: "Please select your age range:", choices: ["1-10", "11-20", "21-30", "30-40", "40 above"], isRequired: true},
+    //          { type:"text", name:"loc", title: "Please enter the country you currently reside in:", placeHolder:"Oman", isRequired: true},
+    //          { type: "radiogroup",  name: "income", title: "Please select you income:", choices: ["no income", "$1-$100", "$100-$10,000", "$10,000 above"], isRequired: true},
+    //          { type: "radiogroup",  name: "ed", title: "Please select your level of education:", choices: ["High School", "Bachelors", "Masters", "PhD", "post-doctorate"], isRequired: true}
+    //     ]},
+    //      {questions: [
+    //      	{ type: "radiogroup",  name: "dyn", title: "kuch bhi", choices: ["yes", "no"]},
+    //       { type: "radiogroup",  name: "dyn1", title: "kuch bhi", choices: ["yes", "no"], visible: false}
+    //     ]}
+    // ],
     // completedHtml: "<p>Your anwers are:</p><p>When was the Civil War?: <b>{civilwar}</b>. The correct is: <b>1850-1900</b></p><p>Who said 'Give me liberty or give me death?': <b>{libertyordeath}</b>. The correct is: <b>Patrick Henry</b></p><p>What is the Magna Carta?: <b>{magnacarta}</b>. The correct is: <b>The foundation of the British parliamentary system</b></p>"
 });
 
@@ -86,15 +301,8 @@ survey.onComplete.add(function(result) {
     //send result back to bg!
 });
 
-// const setState = page => {
-// 	Object.assign(state, page)
-// 	console.log(`j1`)
-// 	ReactDOM.render(< Survey.Survey model = {survey} />, 
-// 		document.getElementById("surveyElement"));
-// 	// ReactDOM.render(React.createElement(Root,state), document.getElementById('root'))	
-// }
 
-	ReactDOM.render(< Survey.Survey model = {survey} />, 
+ReactDOM.render(< Survey.Survey model = {survey} />, 
 		document.getElementById("surveyElement"));
 
 

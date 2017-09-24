@@ -189,18 +189,18 @@ chrome.runtime.onInstalled.addListener(function(){
     url: chrome.extension.getURL('sur.html'),
     active: true
   }, function(tab) {
-      chrome.windows.create({
-        tabId: tab.id,
+      // chrome.windows.create({
+        // tabId: tab.id,
         // width: 400, height: 200,
-        state: 'maximized',
-        type: 'popup',
-        focused: true
-      });
+        // state: 'maximized',
+        // type: 'popup',
+        // focused: true
+      // });
       myPopUp = tab.id;
       logStatus();
       // console.log(myPopUp);
       // chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
-   Start({"message": "clicked_browser_action"});
+   // Start({"message": "clicked_browser_action"});
     });
 });
 
