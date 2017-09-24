@@ -62,7 +62,8 @@ function update_GoogleSearchBUNDLES(all){
   var arr = [];
   for (var i=0; i <all.length ; i++) {
     sub = all[i][9]
-    //console.log(sub)
+    sub.push(all[i][4])
+    var date1 = new Date(all[i][4]); //consider timezone, for pakistan this becomes GMT+05:00
     GOOGLE_SEARCH.push(sub)  
   }
   b++;
@@ -424,7 +425,6 @@ function Finalize(request) {
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
-          //console.log(new Set(toServer.googleSearchTerms))
           var xhr = new XMLHttpRequest();
           xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
           xhr.send(JSON.stringify(toServer));
