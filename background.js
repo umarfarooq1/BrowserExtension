@@ -62,8 +62,7 @@ function update_GoogleSearchBUNDLES(all){
   var arr = [];
   for (var i=0; i <all.length ; i++) {
     sub = all[i][9]
-    sub.push(all[i][4])
-    var date1 = new Date(all[i][4]); //consider timezone, for pakistan this becomes GMT+05:00
+    sub.push(all[i][4]); //consider timezone, for pakistan this becomes GMT+05:00
     GOOGLE_SEARCH.push(sub)  
   }
   b++;
@@ -353,13 +352,18 @@ function Start(request) {
           }     
         }
         else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1 && check3){
-          response = response.split("\n")[1];
-          var tmp = response;//.slice(6);
-          var ar = eval(tmp);
-          var all = ar[0];
-          update_GoogleSearch(all);
-          check3 = false
-          sendMore(ar[1]);
+          try{
+            response = response.split("\n")[1];
+            var tmp = response;//.slice(6);
+            var ar = eval(tmp);
+            var all = ar[0];
+            update_GoogleSearch(all);
+            check3 = false
+            sendMore(ar[1]);  
+          }
+          catch(exception){
+            Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":response, "type":"googleSearchTerms"});
+          }
         }
         else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
           try{
@@ -425,6 +429,7 @@ function Finalize(request) {
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
+          console.log(toServer)
           var xhr = new XMLHttpRequest();
           xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
           xhr.send(JSON.stringify(toServer));
