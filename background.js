@@ -213,7 +213,12 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "dataCollection"){
       Start({"message": "clicked_browser_action"}); 
     }
-
+    if(request.type == "surveyResult"){
+      console.log("sab survey ki info");
+      toServer['survey'] = request.data;
+      // console.log(toServer);
+    }
+    
     // console.log("gg" + loggedInGoogle);
     // console.log("fb" + loggedInfb);
 });

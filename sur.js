@@ -354,6 +354,7 @@ window.survey = new Survey.Model({
 
 survey.onComplete.add(function(result) {
     document.querySelector('#surveyResult').innerHTML = "result: " + JSON.stringify(result.data);
+    chrome.runtime.sendMessage({type:'surveyResult', data:result.data});
     //send result back to bg!
 });
 
