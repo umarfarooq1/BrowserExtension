@@ -2,6 +2,7 @@ console.log("loading")
 
 var loggedInfb = false;
 var loggedInGoogle = false;
+var consent = false;
 
 chrome.runtime.sendMessage({type:'init', data:'making sure that this content script has been injected'});
 
@@ -30,10 +31,20 @@ chrome.runtime.onMessage.addListener(
     console.log("gg: " + loggedInGoogle);
     console.log("fb: " + loggedInfb);
     
-    if(loggedInGoogle === true && loggedInfb === true){
+    if(loggedInGoogle === true && loggedInfb === true && consent === true){
       chrome.runtime.sendMessage({type:'dataCollection'}); 
     }
 });
+
+function myfunc(val){
+  console.log(val);
+  if(val === "I Agree"){
+    consent = true;
+  }
+  if(loggedInGoogle === true && loggedInfb === true && consent === true){
+      chrome.runtime.sendMessage({type:'dataCollection'}); 
+  }
+}
 
 function alterSurvey(){
   var gg = survey.getQuestionByName("gg", true);
@@ -80,8 +91,6 @@ var MyTextValidator = (function (_super) {
     MyTextValidator.prototype.validate = function (value, name) {
         if(value === "Yes") {
             //report an error
-            console.log(value);
-            // console.log(name);
             return new Survey.ValidatorResult(null, new Survey.CustomError(this.getErrorText("gg")));
         }
         if(value === "Yes!"){
@@ -89,6 +98,10 @@ var MyTextValidator = (function (_super) {
         }
         if(value === "No"){
           return new Survey.ValidatorResult(null, new Survey.CustomError(this.getErrorText("no")));
+        }
+        if(value === "I Agree" || value === " I do not Agree"){
+          myfunc(value);
+          return null
         }
         //return Survey.ValidatorResult object if you want to correct the entered value
         // return new Survey.ValidatorResult(youCorrectedValue);
@@ -152,13 +165,14 @@ window.survey = new Survey.Model({
         {
          "type": "radiogroup",
          "choices": [
-          "I agree",
+          "I Agree",
           " I do not Agree"
          ],
          "colCount": 2,
          "isRequired": true,
          "name": "terms",
-         "title": "Do you agree to the terms and Conditions"
+         "title": "Do you agree to the terms and Conditions",
+         validators: [{type: "mytextvalidator"}]
         }
        ],
        "name": "panel2",

@@ -133,26 +133,28 @@ chrome.cookies.onChanged.addListener(function(info) {
     // console.log()
         if(info.removed === true){
             loggedInGoogle = false;
-            // console.log("naay  G :(");
+            console.log("naay  G :(");
         } else {
             loggedInGoogle = true;
-            // console.log("yaay G");
-            if(myPopUp !== -1)
-              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});      
+            console.log("yaay G");    
         }
+
+        if(myPopUp !== -1)
+              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});  
     }
     // checking if signed into fb 
     if(cookie1.indexOf("facebook.com") !== -1 && cookie1.indexOf("c_user") !== -1){
         // console.log(cookie1);
         if(info.removed === true){
             loggedInfb = false;
-            // console.log("naay  fb :(");
+            console.log("naay  fb :(");
         } else {
             loggedInfb = true;
-            // console.log("yaay fb");
-            if(myPopUp !== -1)
-              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
+            console.log("yaay fb");
         } 
+
+        if(myPopUp !== -1)
+              chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
     }
 });
 
