@@ -66,7 +66,9 @@ function update_GoogleSearchBUNDLES(all){
     GOOGLE_SEARCH.push(sub)  
   }
   b++;
+  console.log(a,b)
   if(a===b && Googlecomplete == true){
+      console.log('i was here')
       Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
   }
 }
@@ -90,12 +92,14 @@ function processGoogleSearchRequestBundles(e) {
 }
 function update_GoogleSearch(all){
   var arr = [];
-  for (var i=0; i <all.length ; i++) {
-    var sub = all[i][1];
-    for (var x=0; x<sub.length ; x++) {
-      var sub1 = sub[x][1][2];
-      sendMoreBundles(sub[x][1][3])
-      a++;
+  if (all!==null){
+    for (var i=0; i <all.length ; i++) {
+      var sub = all[i][1];
+      for (var x=0; x<sub.length ; x++) {
+        var sub1 = sub[x][1][2];
+        sendMoreBundles(sub[x][1][3])
+        a++;
+      }
     }
   }
 }
@@ -113,13 +117,18 @@ function processGoogleSearchRequest(e) {
        var tmp = response//.slice(6);
        var ar = eval(tmp);
        var all = ar[0];
-       update_GoogleSearch(all)
-       if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
-         console.log("pokerface")
-         Googlecomplete = true
+       if(all!==null){
+        update_GoogleSearch(all)
+         if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
+           console.log("pokerface")
+           Googlecomplete = true
+         }
+         else{
+          sendMore(ar[1]);
+         }
        }
        else{
-        sendMore(ar[1]);
+        Googlecomplete = true
        }
     }       
   }
