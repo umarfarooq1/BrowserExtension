@@ -21,7 +21,7 @@ server = https.createServer(options,function(req, res) {
 	var id = ID();
         req.on('end', function () {
         	toServer = JSON.parse(body);
-        	fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'.txt', body, (err) => {
+        	fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'_'+Date.now()+'.txt', body, (err) => {
 			    // throws an error, you could also catch it here
 			    if (err) throw err;
 
