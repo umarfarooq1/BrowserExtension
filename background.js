@@ -66,9 +66,7 @@ function update_GoogleSearchBUNDLES(all){
     GOOGLE_SEARCH.push(sub)  
   }
   b++;
-  console.log(a,b)
   if(a===b && Googlecomplete == true){
-      console.log('i was here')
       Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH, "type":"googleSearchTerms"});
   }
 }
