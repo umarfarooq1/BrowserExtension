@@ -5,6 +5,11 @@ users = os.listdir(path)
 query = "INSERT INTO "
 queries = []
 
+inserted = open('/home/ufarooq/BrowserExtension/inserted.txt',"a+")
+recorded = inserted.read().split('\n')
+
+users = list(set(users) - set(recorded))
+
 cnx = mysql.connector.connect(user='root',password = 'umarfarooq',database='ExtensionData')
 cursor = cnx.cursor()
 
@@ -155,8 +160,10 @@ for i in users:
 	for q in queries:
 		print "inserting"
 		cursor.execute(q)
+	inserted.write(i+"\n")
 	queries = []
 cnx.commit()
 cursor.close()
 cnx.close()
+inserted.close()
 
