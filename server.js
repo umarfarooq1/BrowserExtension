@@ -18,19 +18,24 @@ server = https.createServer(options,function(req, res) {
         req.on('data', function (data) {
             body += data;
         });
-	var id = ID();
+	    var id = ID();
         req.on('end', function () {
         	toServer = JSON.parse(body);
-        	fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'_'+Date.now()+'.txt', body, (err) => {
-			    // throws an error, you could also catch it here
-			    if (err) throw err;
-
-			    // success case, the file was saved
-			    console.log('Lyric saved!');
-			});
+            if(toServer['identity'] === undefined){
+                fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'_'+Date.now()+'.txt', body, (err) => {
+                    if (err) throw err;
+                    console.log('Lyric saved!');
+                });
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.end(id);
+            }
+            else{
+                fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+toServer['identity']+'_'+Date.now()+'.txt', body, (err) => {
+                    if (err) throw err;
+                    console.log('Lyric saved!');
+                });
+            }
         });
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(id);
     }
     else{
 	    res.end("not now")
