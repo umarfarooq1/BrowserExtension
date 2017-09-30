@@ -172,7 +172,8 @@ window.survey = new Survey.Model({
        "colCount": 2,
        "isRequired": true,
        "name": "terms",
-       "title": "Do you agree to the terms and Conditions"
+       "title": "Do you agree to the terms and Conditions",
+       validators: [{type: "mytextvalidator"}]
       }
      ],
      "title": "Informed Consent"
@@ -216,7 +217,8 @@ window.survey = new Survey.Model({
      "isRequired": true,
      "name": "gg",
      "title": "Have you signed in to Google?",
-     "visible": false
+     "visible": false,
+      validators: [{type: "mytextvalidator"}]
     }
    ],
    "name": "page3"
@@ -257,7 +259,8 @@ window.survey = new Survey.Model({
      "isRequired": true,
      "name": "fb",
      "title": "Have you signed in to Facebook?",
-     "visible": false
+     "visible": false,
+      validators: [{type: "mytextvalidator"}]
     }
    ],
    "name": "page4"
