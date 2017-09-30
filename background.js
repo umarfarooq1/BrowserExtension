@@ -223,11 +223,19 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "surveyResult"){
       console.log("sab survey ki info");
       toServer['survey'] = request.data;
-      console.log(toServer)
       var xhr = new XMLHttpRequest();
       xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
-      xhr.send(JSON.stringify(toServer));
-      xhr.onreadystatechange = getID;//need to comment this out for US participants
+      if(firstTime){
+        xhr.send(JSON.stringify(toServer));
+        xhr.onreadystatechange = getID;//need to comment this out for US participants
+      }
+      else{
+        chrome.storage.sync.get('extensionDate', function(result){
+          toServer['identity'] = result;
+          xhr.send(JSON.stringify(toServer));
+        })  
+      }
+      console.log(toServer)
       console.log("ALL DONE. Updated collection time to "+GetDate())
       // console.log(toServer);
     }
