@@ -135,207 +135,489 @@ window.survey = new Survey.Model({
   title: "Our Survey", showProgressBar: "top", goNextPageAutomatic: false, showNavigationButtons: true,
     
    "pages": [
+  {
+   "elements": [
     {
+     "type": "panel",
+     "name": "panel3",
      "elements": [
-      {
-       "type": "panel",
-       "elements": [
-        {
-         "type": "html",
-         "html": "<heading> Welcome to our Survey </heading>",
-         "name": "question2"
-        }
-       ],
-       "name": "panel3",
-       "title": "Welcome"
-      }
-     ],
-     "name": "page1"
-    },
-    {
-     "elements": [
-      {
-       "type": "panel",
-       "elements": [
-        {
-         "type": "html",
-         "html": "<heading>We would like to invite you to participate in a research study. The goal of the study is to understand how people’s online behavior impacts the advertisements that they see on the web and in smartphone apps. </heading>",
-         "name": "consent"
-        },
-        {
-         "type": "radiogroup",
-         "choices": [
-          "I Agree",
-          " I do not Agree"
-         ],
-         "colCount": 2,
-         "isRequired": true,
-         "name": "terms",
-         "title": "Do you agree to the terms and Conditions",
-         validators: [{type: "mytextvalidator"}]
-        }
-       ],
-       "name": "panel2",
-       "title": "Informed Consent"
-      }
-     ],
-     "name": "page2"
-    },
-    {
-     "elements": [
-      {
-       "type": "panel",
-       "elements": [
-        {
-         "type": "html",
-         "html": "To proceed with our survey you must have a Google account and be logged-in to it.\n",
-         "name": "question3"
-        }
-       ],
-       "name": "panel1",
-       "title": "Google Login"
-      },
       {
        "type": "html",
-       "html": "CONGRATS you are already signed in",
-       "name": "gg1",
-       "visible": false
-      },
-      {
-       "type": "html",
-       "html": "<a href=\"http://google.com\" class=\"button\" target=\"_blank\">Go to Google</a>",
-       "name": "gg2",
-       "visible": false
-      },
-      { type: "radiogroup",  name: "gg", title: "Have you signed in to Google?", choices: ["Yes", "No"], visible: false, "colCount": 2,"isRequired": true, validators: [{type: "mytextvalidator"}]}
-     ],
-     "name": "page3"
-    },
-    {
-     "elements": [
-      {
-       "type": "panel",
-       "elements": [
-        {
-         "type": "html",
-         "html": "To proceed with our survey you must have a Facebook account and be logged-in to it.\n",
-         "name": "question6"
-        }
-       ],
-       "name": "panel4",
-       "title": "Facebook Login"
-      },
-      {
-       "type": "html",
-       "html": "CONGRATS you are already signed in",
-       "name": "fb1",
-       "visible": false
-      },
-      {
-       "type": "html",
-       "html": "<a href=\"https://facebook.com\" class=\"button\" target=\"_blank\">Go to Facebook</a>",
-       "name": "fb2",
-       "visible": false
-      },
-      { type: "radiogroup",  name: "fb", title: "Have you signed in to Facebook?", choices: ["Yes!", "No"], visible: false, "colCount": 2,"isRequired": true, validators: [{type: "mytextvalidator"}]}
-     ],
-     "name": "page5"
-    },
-    {
-     "elements": [
-      {
-       "type": "radiogroup",
-       "choices": [
-        "United States",
-        "Pakistan"
-       ],
-       "isRequired": true,
-       "name": "loc",
-       "title": "Where are you from?"
+       "html": "<heading> Welcome to our Survey </heading>",
+       "name": "question2"
       }
      ],
-     "name": "page6"
-    },
-
-    {
-     "elements": [
-      {
-       "type": "panel","elements": [
-        {
-         "type": "html",
-         "html": "First, we would like to know a bit about you. Remember, your answers to these questions are confidential so please be honest.\n",
-         "name": "question1"
-        }
-       ],
-       "name": "panel5",
-       "title": "Basic Demographics"
-      },
-
-      // {"type": "radiogroup","choices": ["item1","item2","item3"],"name": "question4", isRequired: true, "visibleIf" : "{loc}='United States'" },
-      {"type": "radiogroup",  name: "age", title: "How old are you?", choices: ["18-24", "25-44", "45-64", "65+"], isRequired: true},
-      { "type": "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
-      {"type": "checkbox","name": "ethnicity", title:"What is your race or ethnicity (check all that apply)?", "choices": ["White/Caucasian", "Black/African American", "Native American/Alaska Native/Hawaii Native", "Latino/Hispanic", "Asian", "Other"], isRequired: true, "visibleIf" : "{loc}='United States'" },
-      { "type": "radiogroup",  name: "ed", title: "What is the highest level of education you have completed?", choices: ["None", "High School", "College", "some graduate school", "Masters", "doctoral"], isRequired: true}
-      // {"type": "radiogroup","name": "question4", "choices": ["item1","item2","item3"], isRequired: true, "visibleIf" : "{loc}='Pakistan'" }                
-     ],
-     "name": "page7"
-    },
-
-    {
-     "elements": [
-      {
-       "type": "panel",
-       "elements": [
-        {
-         "type": "html",
-         "html": "We would like to know about your usage of the internet in general.\n",
-         "name": "question5"
-        }
-       ],
-       "name": "panel6",
-       "title": "General internet and web usage"
-      },
-      {
-       "type": "radiogroup",
-       "choices": [
-        "item1",
-        "item2",
-        "item3"
-       ],
-       "name": "question8"
-      }
-     ],
-     "name": "page8"
-    },
-    {
-     "elements": [
-      {
-       "type": "panel",
-       "name": "panel7",
-       "title": "Usage of Specific Services"
-      },
-      { type: "radiogroup",  name: "dyn1", title: "kuch bhi", choices: ["yes", "no"], visible: false},
-      {
-       "type": "radiogroup",
-       "choices": [
-        "item1",
-        "item2",
-        "item3"
-       ],
-       "name": "question9"
-      }
-     ],
-     "name": "page9"
+     "title": "Welcome"
     }
    ],
-   "triggers": [
+   "name": "page1"
+  },
+  {
+   "elements": [
     {
-     "type": "complete",
-     "operator": "equal",
-     "value": " I do not Agree",
-     "name": "terms"
+     "type": "panel",
+     "name": "panel2",
+     "elements": [
+      {
+       "type": "html",
+       "html": "<heading>We would like to invite you to participate in a research study. The goal of the study is to understand how people’s online behavior impacts the advertisements that they see on the web and in smartphone apps. </heading>\n<br/><br/>\nYour participation should take no longer than XXX.\n<br/><br/>\n[[Version 1: No Browsing and Search History]]\n<br/>\nIf you choose to participate, this browser extension will collect the interest profiles that five online advertisers have collected about you: Google, Facebook, Bluekai, eXelate, and Videology. You will be asked to log in to Google and Facebook so that we may temporarily access these services and collect their interest profiles. We will NOT record any other information from these services, including your username, password, name, etc. Once the study is complete, you may uninstall this extension, at which point we will no longer be able to access your Google and Facebook information. The data collected by our browser extension will be kept strictly confidential and will be used for research purposes only.\n\n<br/><br/>\n[[Version 2: No Browsing and Search History]]\n<br/>\nIf you choose to participate, this browser extension will collect the interest profiles that five online advertisers have collected about you: Google, Facebook, Bluekai, eXelate, and Videology. You will be asked to log in to Google and Facebook so that we may temporarily access these services to collect two types of information: \n<br/>\n          - The interest profiles that they have developed about you\n<br/>\n          - Your search history on Google Search\n<br/>\nWe will NOT record any other information from these services, including your username, password, name, etc. \n<br/><br/>\nAdditionally, if you choose to participate, we will collect your browsing history from your web browser. This data, as well as your search history data, will be used to analyze the correlations between your online behavior and your interest profiles.\n<br/><br/>\nOnce this study is complete, you may uninstall this extension, at which point we will no longer be able to access your Google and Facebook information, or your browsing history. The data collected by our browser extension will be kept strictly confidential and will be used for research purposes only.\n<br/><br/>\nWhile we collect your online advertising interest profiles in the background, we will ask you several questions about your demographics, web and smartphone app usage, and interactions with online advertisements. Your responses to these questions are confidential and will be used for research purposes only. We will not share your responses with anyone who is not involved in this research.\n<br/><br/>\nThe decision to participate in this research project is voluntary. You do not have to participate;  there is no penalty if you choose not to participate in this research or if you choose to stop participating at any time.\n<br/><br/>\nIf you have any questions about this research project, you may contact Professor Christo Wilson at <a href=\"mailto:cbw@ccs.neu.edu\">cbw@ccs.neu.edu</a> or (617) 373-2177. If you have any questions about your rights as a research participant, you may contact Nan Regina, director for the office of Human Subjects Research Protection at <a href=\"mailto:n.regina@neu.edu\">n.regina@neu.edu</a> or (617) 373-4588.\n<br/><br/>\nBy checking the “I agree” box below, you agree that you have read and understand the information about and voluntarily agree to participate in the survey.",
+       "name": "consent"
+      },
+      {
+       "type": "radiogroup",
+       "choices": [
+        "I Agree",
+        " I do not Agree"
+       ],
+       "colCount": 2,
+       "isRequired": true,
+       "name": "terms",
+       "title": "Do you agree to the terms and Conditions"
+      }
+     ],
+     "title": "Informed Consent"
     }
-   ]  
+   ],
+   "name": "page2"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel1",
+     "elements": [
+      {
+       "type": "html",
+       "html": "To proceed with our survey you must have a Google account and be logged-in to it.\n",
+       "name": "question3"
+      }
+     ],
+     "title": "Google Login"
+    },
+    {
+     "type": "html",
+     "html": "<br/><br/>\n<b>CONGRATS</b> you are  signed in!\n<br/><br/>",
+     "name": "gg1",
+     "visible": false
+    },
+    {
+     "type": "html",
+     "html": "<br/><br/>\n<a href=\"http://google.com\" class=\"button\" target=\"_blank\">Go to Google</a>\n<br/><br/>",
+     "name": "gg2",
+     "visible": false
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No"
+     ],
+     "colCount": 2,
+     "isRequired": true,
+     "name": "gg",
+     "title": "Have you signed in to Google?",
+     "visible": false
+    }
+   ],
+   "name": "page3"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel4",
+     "elements": [
+      {
+       "type": "html",
+       "html": "To proceed with our survey you must have a Facebook account and be logged-in to it.\n",
+       "name": "question6"
+      }
+     ],
+     "title": "Facebook Login"
+    },
+    {
+     "type": "html",
+     "html": "<br/><br/>\n<b>CONGRATS</b> you are signed in! You may proceed\n<br/><br/>",
+     "name": "fb1",
+     "visible": false
+    },
+    {
+     "type": "html",
+     "html": "<br/><br/>\n<a href=\"https://facebook.com\" class=\"button\" target=\"_blank\">Go to Facebook</a>\n<br/><br/>",
+     "name": "fb2",
+     "visible": false
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes!",
+      "No"
+     ],
+     "colCount": 2,
+     "isRequired": true,
+     "name": "fb",
+     "title": "Have you signed in to Facebook?",
+     "visible": false
+    }
+   ],
+   "name": "page4"
+  },
+  {
+   "elements": [
+    {
+     "type": "radiogroup",
+     "choices": [
+      "United States",
+      "Pakistan"
+     ],
+     "isRequired": true,
+     "name": "loc",
+     "title": "Where are you from?"
+    }
+   ],
+   "name": "page5"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel5",
+     "elements": [
+      {
+       "type": "html",
+       "html": "First, we would like to know a bit about you. Remember, your answers to these questions are confidential so please be honest.\n",
+       "name": "question1"
+      }
+     ],
+     "title": "Basic Demographics"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "18-24",
+      "25-44",
+      "45-64",
+      "65+"
+     ],
+     "isRequired": true,
+     "name": "age",
+     "title": "How old are you?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Male",
+      "Female"
+     ],
+     "hasOther": true,
+     "isRequired": true,
+     "name": "gender",
+     "title": "Please select your gender:"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "White/Caucasian",
+      "Black/African American",
+      "Native American/Alaska Native/Hawaii Native",
+      "Latino/Hispanic",
+      "Asian",
+      "Other"
+     ],
+     "isRequired": true,
+     "name": "ethnicity",
+     "title": "What is your race or ethnicity (check all that apply)?",
+     "visible": false,
+     "visibleIf": "{loc}='United States'"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "Urdu",
+      "English",
+      "Balochi",
+      "Punjabi",
+      "Sindhi",
+      "Pashtu"
+     ],
+     "isRequired": true,
+     "name": "ethnicity-pk",
+     "title": "What language do you speak (check all that apply)?",
+     "visible": false,
+     "visibleIf": "{loc}='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "None",
+      "High School",
+      "College",
+      "Some graduate school",
+      "Masters",
+      "Doctoral"
+     ],
+     "isRequired": true,
+     "name": "education",
+     "title": "What is the highest level of education you have completed?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never married",
+      "Married",
+      "Divorced",
+      "Separated",
+      "Widowed",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "marital status",
+     "title": "What is your current marital status? "
+    },
+    {
+     "type": "dropdown",
+     "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+     ],
+     "isRequired": true,
+     "name": "children",
+     "title": "How many children do you care for in your household?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes, Full-time",
+      "Yes, Part-time",
+      "No"
+     ],
+     "isRequired": true,
+     "name": "employment status",
+     "title": "Are you currently employed?\n"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Under $15,000",
+      "$15,000 to 30,000",
+      "$30,000 to 45,000",
+      "$45,000 to 60,000",
+      "$60,000 to 75,000",
+      "$75,000 to 100,000",
+      "$100,000 to 150,000",
+      "$150,000 and over",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "income",
+     "title": "What is your yearly household income? ",
+     "visible": false,
+     "visibleIf": "{loc}='United States'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Under Rs. 3,000,000",
+      "Rs. 3,000,000 to 6,000,000",
+      "Rs. 6,000,000 to 10,000,000",
+      "Rs. 10,000,000 to 15,000,000",
+      "Rs. 15,000,000 and over",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "income-pk",
+     "title": "What is your yearly household income? ",
+     "visible": false,
+     "visibleIf": "{loc}='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Pakistan People's Party (PPP)",
+      "Pakistan Muslim League (N)",
+      "Pakistan Tehreek-e-Insaf (PTI)",
+      "Awami National Party (ANP)",
+      "Jamaat-e-Islami Pakistan.",
+      "Jamiat-e-Ulema-e-Islam (F)",
+      "Muttahida Qaumi Movement (MQM)",
+      "Pakistan Awami Tehreek (PAT)",
+      "Other",
+      "Prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "politics-pk",
+     "title": "Which of the following best describes your political views?\n",
+     "visible": false,
+     "visibleIf": "loc='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Conservative",
+      "Moderate",
+      "Liberal",
+      "Other",
+      "Prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "politics",
+     "title": "Which of the following best describes your political views?\n",
+     "visible": false,
+     "visibleIf": "loc='United States'"
+    },
+    {
+     "type": "dropdown",
+     "choices": [
+      "Alabama",
+      "Alaska",
+      "Arizona",
+      "Arkansas",
+      "California",
+      "Colorado",
+      "Connecticut",
+      "Delaware",
+      "Florida",
+      "Georgia",
+      "Hawaii",
+      "Idaho",
+      "Illinois",
+      "Indiana",
+      "Iowa",
+      "Kansas",
+      "Kentucky",
+      "Louisiana",
+      "Maine",
+      "Maryland",
+      "Massachusetts",
+      "Michigan",
+      "Minnesota",
+      "Mississippi",
+      "Missouri",
+      "Montana",
+      "Nebraska",
+      "Nevada",
+      "New Hampshire",
+      "New Jersey",
+      "New Mexico",
+      "New York",
+      "North Carolina",
+      "North Dakota",
+      "Ohio",
+      "Oklahoma",
+      "Oregon",
+      "Pennsylvania",
+      "Rhode Island",
+      "South Carolina",
+      "South Dakota",
+      "Tennessee",
+      "Texas",
+      "Utah",
+      "Vermont",
+      "Virginia",
+      "Washington",
+      "West Virginia",
+      "Wisconsin",
+      "Wyoming",
+      "District of Columbia",
+      "Puerto Rico",
+      "Guam",
+      "American Samoa",
+      "U.S. Virgin Islands",
+      "Northern Mariana Islands"
+     ],
+     "isRequired": true,
+     "name": "state",
+     "title": "What state do you live in? ",
+     "visible": false,
+     "visibleIf": "loc='United States'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Urban",
+      "Suburban",
+      "Rural"
+     ],
+     "isRequired": true,
+     "name": "current place",
+     "title": "How would you describe the place where you currently live? \n"
+    }
+   ],
+   "name": "page6"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel6",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We would like to know about your usage of the internet in general.\n",
+       "name": "question5"
+      }
+     ],
+     "title": "General internet and web usage"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "item1",
+      "item2",
+      "item3"
+     ],
+     "name": "question8"
+    }
+   ],
+   "name": "page8"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel7",
+     "title": "Usage of Specific Services"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "name": "dyn1",
+     "title": "kuch bhi",
+     "visible": false
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "item1",
+      "item2",
+      "item3"
+     ],
+     "name": "question9"
+    }
+   ],
+   "name": "page9"
+  }
+ ],
+ "triggers": [
+  {
+   "type": "complete",
+   "operator": "equal",
+   "value": " I do not Agree",
+   "name": "terms"
+  }
+ ]
     //     { 
     //       questions: [
     //          { type: "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
