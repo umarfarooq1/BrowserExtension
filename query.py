@@ -24,6 +24,9 @@ for i in users:
 	survey = jsonData['survey']
 	f.close()
 	if type(exelate) is not list:
+		error = str(exelate['Response'].encode('utf-8'))
+		queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+		queries.append(queryErr)
 		print "insert in Error table"
 	else:
 		if len(exelate) != 0:
@@ -31,17 +34,23 @@ for i in users:
 			for j in exelate:
 				query1 = query1+ str((uid,str(timestamp),j))+", "
 			query1 = query1[:-2]+";"
-#			queries.append(query1)
+			queries.append(query1)
 	if type(googAd) is not list:
                 print "insert in Error table"
+		error = str(googAd['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
         else:
 		if len(googAd) != 0:
 			query2 = query+"USER_Google_ADS (USER_ID,shot_timestamp, AD_DESC) VALUES "
                         for j in googAd:
                                 query2 = query2+ str((uid,str(timestamp),str(j)))+", "
                         query2 = query2[:-2]+";"
-#			queries.append(query2)
+			queries.append(query2)
 	if type(bluekai) is not list:
+		error = str(bluekai['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
                 print "insert in Error table"
         else:
 		user_bluekai = []
@@ -54,7 +63,7 @@ for i in users:
 				user_bluekai.append(bid)
                                 query3 = query3+ str((int(bid),str(j['img']),str(j['fimg']),'NULL','NULL'))+", "
 			query3 = query3[:-2]+";"
-#			queries.append(query3)
+			queries.append(query3)
 			if len(user_bluekai)!=0:
 				query9 = query+"USER_BlueKai (USER_ID,shot_timestamp,IMAGE_ID) VALUES "
 				for q in user_bluekai:
@@ -62,6 +71,9 @@ for i in users:
 				query9 = query9[:-2]+";"
                        	queries.append(query9)
 	if type(browsingHist) is not list:
+		error = str(browsingHist['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
                 print "insert in Error table"
         else:
 		if len(browsingHist) != 0:
@@ -70,8 +82,11 @@ for i in users:
 #				print (uid,timestamp,j['id'],j['lastVisitTime'],j['title'],j['url'])
                                 query4 = query4+ str((str(uid),str(timestamp),int(j['id']),str(j['lastVisitTime']),str(j['title'].encode('utf-8')),str(j['url'])))+", "
                         query4 = query4[:-2]+";"
-#			queries.append(query4)
+			queries.append(query4)
 	if type(googSearch) is not list:
+		error = str(googSearch['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
                 print "insert in Error table"
         else:
 		if len(googSearch) != 0:
@@ -84,9 +99,12 @@ for i in users:
 				else:
 					query5 = query5+ str((uid,str(timestamp),"NULL",str(j[0]),"NULL",str(j[1])))+", "
                         query5 = query5[:-2]+";"
-#			queries.append(query5)
+			queries.append(query5)
 	try:
 		fbInterests['Error']
+		error = str(fbInterests['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
 		print "insert in Error table"
 	except KeyError:
 		query6 = query+"USER_FB_INTERESTS (USER_ID,shot_timestamp, Description, disambiguation_category, FBID, IMAGE_URL,NAME,Subtype,Topic,TYPE) VALUES "
@@ -99,9 +117,12 @@ for i in users:
                         query6 = query6+ str((uid,str(timestamp),str(j['description'].encode('utf-8')),str(j['disambiguation_category']),int(j['fbid']),str(j['image_url']),str(j['name'].encode('utf-8')),str(j['subtype']),str(j['topic'].encode('utf-8')),str(j['type'])))+", "
 		if query6 != test:
 			query6 = query6[:-2]+";"
-#			queries.append(query6)
+			queries.append(query6)
         try:
                 fbAdvert['Error']
+		error = str(fbAdvert['Response'].encode('utf-8'))
+                queryErr = query + "USER_ERROR(USER_ID,shot_timestamp,RESPONSE) VALUES "+ str((uid,str(timestamp),error))+";"
+                queries.append(queryErr)
                 print "insert in Error table"
         except KeyError:
 		query7 = query+"USER_FB_ADS (USER_ID,shot_timestamp, ca_type, FBID, IMAGE_URL,NAME,REMOVED,report_date,SOURCE_URL) VALUES "
@@ -119,7 +140,7 @@ for i in users:
                         query7 = query7+str((uid,str(timestamp),str(j['ca_type']),str(j['fbid']),str(j['image_url']),str(j['name'].encode('utf-8')),"NULL","NULL",str(j['source_url'])))+", "
 		if test!=query7:
 			query7 = query7[:-2]+";"
-#			queries.append(query7)
+			queries.append(query7)
         try:
                 survey['Error']
                 print "insert in Error table"
@@ -127,12 +148,12 @@ for i in users:
 		survey = ast.literal_eval(json.dumps(survey))
 		survey = str(survey).replace("'",'"')
 		query8 = query+"USER_SURVEY (USER_ID,shot_timestamp,SURVEY) VALUE " + str((uid,str(timestamp),survey))+";"
-#		queries.append(query8)
+		queries.append(query8)
 
 #	print len(queries)
 #	print queries
 	for q in queries:
-		print "I wash ehre"
+		print "inserting"
 		cursor.execute(q)
 	queries = []
 cnx.commit()
