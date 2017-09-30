@@ -44,15 +44,23 @@ for i in users:
 	if type(bluekai) is not list:
                 print "insert in Error table"
         else:
+		user_bluekai = []
                 if len(bluekai) != 0:
 			query3 = query+"BlueKai (IMAGE_ID, IMAGE_title_url, IMAGE_desc_url, IMAGE_title_text, IMAGE_desc_text) VALUES "
                         for j in bluekai:
 				bid = j['img']
 				bid =  bid.split('/')[-1]
 				bid = bid.split('_')[0]
+				user_bluekai.append(bid)
                                 query3 = query3+ str((int(bid),str(j['img']),str(j['fimg']),'NULL','NULL'))+", "
 			query3 = query3[:-2]+";"
 #			queries.append(query3)
+			if len(user_bluekai)!=0:
+				query9 = query+"USER_BlueKai (USER_ID,shot_timestamp,IMAGE_ID) VALUES "
+				for q in user_bluekai:
+					query9 = query9+ str((str(uid),str(timestamp),int(q)))+", "
+				query9 = query9[:-2]+";"
+                       	queries.append(query9)
 	if type(browsingHist) is not list:
                 print "insert in Error table"
         else:
