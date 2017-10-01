@@ -1,4 +1,4 @@
-import mysql.connector,os,json,ast
+import mysql.connector,os,json,ast,traceback
 
 path = '/home/ufarooq/BrowserExtension/User_Data'
 users = os.listdir(path)
@@ -13,11 +13,14 @@ users = list(set(users) - set(recorded))
 cnx = mysql.connector.connect(user='root',password = 'umarfarooq',database='ExtensionData')
 cursor = cnx.cursor()
 
+errorLog = open('/home/ufarooq/BrowserExtension/Error.txt',"a+")
 for i in users:
 	f = open(path+'/'+i)
 	data = f.read()
-	uid = i.split('1')[0][:-1]
-	timestamp = i.split('_')[2].replace('.txt','')
+	uid = i.split('ID')[0]
+	timestamp = i.split('TS')[1].replace('.txt','')
+#	print uid,timestamp
+#	break
 	jsonData = json.loads(data)
 	exelate = jsonData['exelate']
 	bluekai = jsonData['BlueKai']
@@ -159,11 +162,16 @@ for i in users:
 #	print queries
 	for q in queries:
 		print "inserting"
-		cursor.execute(q)
+		try:
+			cursor.execute(q)
+		except:
+			errorLog.write(uid+'_'+timestamp+'.txt\n'+q+'\n')
+			traceback.print_exc()
+			print q
 	inserted.write(i+"\n")
 	queries = []
 cnx.commit()
 cursor.close()
 cnx.close()
 inserted.close()
-
+errorLog.close()
