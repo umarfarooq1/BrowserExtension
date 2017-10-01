@@ -572,16 +572,115 @@ window.survey = new Survey.Model({
      "title": "General internet and web usage"
     },
     {
+     "type": "text",
+     "inputType": "number",
+     "isRequired": true,
+     "name": "years of internet",
+     "title": "How many years have you been using the internet?"
+    },
+    {
      "type": "radiogroup",
      "choices": [
-      "item1",
-      "item2",
-      "item3"
+      "30 minutes or less",
+      "30 minutes - 1 hour",
+      "1 -2 hours",
+      "2 - 4 hours",
+      "More than 4 hours"
      ],
-     "name": "question8"
+     "isRequired": true,
+     "name": "time spent on internet",
+     "title": "Approximately how much time do you spend each day browsing the web on a desktop computer or laptop? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Chrome",
+      "Firefox",
+      "Internet Explorer/Edge",
+      "Safari",
+      "Brave"
+     ],
+     "isRequired": true,
+     "name": "internet browser",
+     "title": "What Internet browser do you use most often? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Google",
+      "Bing",
+      "DuckDuckGo",
+      "Yahoo",
+      "AOL",
+      "Baidu",
+      "Other"
+     ],
+     "isRequired": true,
+     "name": "search engines",
+     "title": "Which search engines do you use most often? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "less than 10",
+      "10-50",
+      "50-100",
+      "100 or more"
+     ],
+     "isRequired": true,
+     "name": "web searches",
+     "title": "Approximately how many web searches do you conduct each day?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     "colCount": "2",
+     "isRequired": true,
+     "name": "phone",
+     "title": "Do you own a smartphone? "
+    },
+    {
+     "type": "text",
+     "inputType": "number",
+     "isRequired": true,
+     "name": "How many years have you been using smartphones? ",
+     "title": "How many years have you been using smartphones? ",
+     "visible": false,
+     "visibleIf": "{phone}= 'yes'"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "iPhone",
+      "Android",
+      "Other",
+      "I Don’t Know"
+     ],
+     "isRequired": true,
+     "name": "What kind of smartphone do you have",
+     "title": "What kind of smartphone do you have (check all that apply)? ",
+     "visibleIf": "{phone}= 'yes'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Always on smartphone",
+      "Mostly on smartphone",
+      "Slightly More on smartphone",
+      "Equally on both",
+      "Slightly more on desktop",
+      "Mostly on desktop",
+      "Always on desktop"
+     ],
+     "isRequired": true,
+     "name": "What fraction of your web browsing is done on a smartphone versus a desktop computer?",
+     "title": "What fraction of your web browsing is done on a smartphone versus a desktop computer?"
     }
    ],
-   "name": "page8"
+   "name": "page7"
   },
   {
    "elements": [
@@ -591,26 +690,345 @@ window.survey = new Survey.Model({
      "title": "Usage of Specific Services"
     },
     {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
+     "type": "matrix",
+     "columns": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
      ],
-     "name": "dyn1",
-     "title": "kuch bhi",
-     "visible": false
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "How frequently do you use the following services",
+     "rows": [
+      "Twitter ",
+      "Instagram ",
+      "Snapchat ",
+      "LinkedIn ",
+      "Pinterest",
+      "YouTube ",
+      "Gmail ",
+      "Reddit ",
+      "ESPN ",
+      "CNN ",
+      "New York Times ",
+      "CNBC ",
+      "Fox News ",
+      "Yelp ",
+      "Amazon ",
+      "Walmart ",
+      "Zillow ",
+      "WebMD ",
+      "Booking ",
+      "TripAdvisor ",
+      "Expedia ",
+      "Hotels",
+      "Kayak "
+     ],
+     "title": "How frequently do you use the following services, either via their website or via a smartphone app?\n"
+    }
+   ],
+   "name": "page8"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel5",
+     "title": "General Online Activities\n"
+    },
+    {
+     "type": "matrix",
+     "columns": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "How often do you perform the following activities online",
+     "rows": [
+      "Posting content on social media",
+      "Reading content on social media ",
+      "Sending and receiving email",
+      "Online banking and money management ",
+      "Researching health information",
+      "Reading the news",
+      "Booking airline flights, hotels, and/or rental cars ",
+      "Shopping for clothes ",
+      "Shopping for electronics ",
+      "Shopping for household items ",
+      "Shopping for movies, music, and/or books",
+      "Shopping for toys, games, or other entertainment ",
+      "Shopping for office products ",
+      "Shopping for food "
+     ],
+     "title": "How often do you perform the following activities online, either via websites or via smartphone apps?\n"
+    }
+   ],
+   "name": "page9"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We would like to know about your experiences seeing and interacting with online advertisements. \n\n",
+       "name": "q10a"
+      }
+     ],
+     "name": "panel10",
+     "title": "Online Advertising\n"
+    },
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "For these questions, please consider advertisements that you have seen on websites and in smartphone apps. We are referring to ads that look like this:\n<br/><br/>\n[screenshot of an online ad]\n<br/><br/>\n<b>Do not consider advertisements that you have seen on search engines.</b>\n",
+       "name": "question1"
+      },
+      {
+       "type": "matrix",
+       "columns": [
+        "Never",
+        "Monthly",
+        "Weekly",
+        "Daily",
+        "Multiple times a day"
+       ],
+       "isAllRowRequired": true,
+       "isRequired": true,
+       "name": "question4",
+       "rows": [
+        "See online advertisements ",
+        "See online advertisements that you find relevant",
+        "See online ads that you find annoying or intrusive ",
+        "Click on online advertisements ",
+        "Purchase a product after clicking an associated online advertisement "
+       ],
+       "title": "How frequently do you interact with online advertisements in the following ways?"
+      }
+     ],
+     "name": "panel5",
+     "title": "On Websites and Apps"
+    },
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "For these questions, please consider advertisements that you have seen on search engines. We are referring to ads that look like this:\n<br/><br/>\n[screenshot of an ad on Google]\n<br/><br/>\n<b>Do not consider advertisements that you have seen on other websites or smartphone apps.</b>\n",
+       "name": "question10b"
+      },
+      {
+       "type": "matrix",
+       "columns": [
+        "Never",
+        "Monthly",
+        "Weekly",
+        "Daily",
+        "Multiple times a day"
+       ],
+       "isAllRowRequired": true,
+       "isRequired": true,
+       "name": "How frequently do you interact with search advertisements in the following ways?",
+       "rows": [
+        "See search advertisements",
+        "See search ads that you find relevant ",
+        "See search ads that you find annoying or intrusive ",
+        "Click on search engine ads",
+        "Purchase a product after clicking an associated search ad"
+       ],
+       "title": "How frequently do you interact with search advertisements in the following ways?"
+      }
+     ],
+     "name": "panel10b",
+     "title": "On Search Engines"
+    }
+   ],
+   "name": "page10"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We have a few questions about things you may have done to block online advertisements or enhance your online privacy.\n",
+       "name": "question5"
+      }
+     ],
+     "name": "panel11",
+     "title": "Tracking and Privacy\n"
+    },
+    {
+     "type": "matrix",
+     "columns": [
+      "Yes",
+      "No ",
+      "I don't know"
+     ],
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "Do you use any of the following browser extensions?",
+     "rows": [
+      "Adblock",
+      "Adblock Plus",
+      "uBlock Origin",
+      "Ghostery",
+      "Disconnect",
+      "Privacy Badger"
+     ],
+     "title": "Do you use any of the following browser extensions?"
     },
     {
      "type": "radiogroup",
      "choices": [
-      "item1",
-      "item2",
-      "item3"
+      "Yes",
+      "No",
+      "I don't know"
      ],
-     "name": "question9"
+     "colCount": 3,
+     "isRequired": true,
+     "name": "Do you have “Do Not Track” enabled in your web browser?",
+     "title": "Do you have “Do Not Track” enabled in your web browser?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No",
+      "I don't know"
+     ],
+     "colCount": 3,
+     "isRequired": true,
+     "name": "Have you ever opted-out of online advertising or online tracking?",
+     "title": "Have you ever opted-out of online advertising or online tracking?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No",
+      "I don't know"
+     ],
+     "colCount": 3,
+     "isRequired": true,
+     "name": "Do you use a proxy, virtual private network (VPN)",
+     "title": "Do you use a proxy, virtual private network (VPN), or other anonymous web browsing service such as Tor?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "How often do you browse in private mode",
+     "title": "How often do you browse in private mode (e.g. Incognito)?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "question7",
+     "title": "How often do you clear your cookies?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "question8",
+     "title": "How often do you clear your browsing history?"
     }
    ],
-   "name": "page9"
+   "name": "page11"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel12",
+     "title": "Your Interests"
+    },
+    {
+     "type": "rating",
+     "isRequired": true,
+     "name": "dyn",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating",
+     "isRequired": true,
+     "maxRateDescription": "(very much)",
+     "minRateDescription": "(not at all)",
+     "name": "dyn1",
+     "title": "How interested are you in shopping?",
+     "visible": false
+    }
+   ],
+   "name": "page12"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "Thank you for taking our survey! You may now uninstall this browser extension.\n",
+       "name": "question13"
+      }
+     ],
+     "name": "panel13",
+     "title": "Conclusion\n"
+    }
+   ],
+   "name": "page13"
   }
  ],
  "triggers": [
