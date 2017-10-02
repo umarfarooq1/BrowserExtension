@@ -6,9 +6,10 @@ query = "INSERT INTO "
 queries = []
 
 inserted = open('/home/ufarooq/BrowserExtension/inserted.txt',"a+")
+notInserted = open('/home/ufarooq/BrowserExtension/notInserted.txt',"a+")
 recorded = inserted.read().split('\n')
-
-users = list(set(users) - set(recorded))
+notRecorded = notInserted.read().split('\n')
+users = list(set(users) - set(recorded) - set(notRecorded))
 
 cnx = mysql.connector.connect(user='root',password = 'umarfarooq',database='ExtensionData')
 cursor = cnx.cursor()
@@ -160,18 +161,21 @@ for i in users:
 
 #	print len(queries)
 #	print queries
-	for q in queries:
-		print "inserting"
-		try:
+	try:
+		for q in queries:
+			print "inserting"
 			cursor.execute(q)
-		except:
-			errorLog.write(uid+'_'+timestamp+'.txt\n'+q+'\n')
-			traceback.print_exc()
-			print q
-	inserted.write(i+"\n")
-	queries = []
+		inserted.write(i+"\n")
+		queries = []
+	except:
+		errorLog.write(uid+'_'+timestamp+'.txt\n'+q+'\n'+traceback.format_exc()+'\n')
+#		traceback.print_exc()
+#		print q
+		notInserted.write(i+"\n")
+
 cnx.commit()
 cursor.close()
 cnx.close()
 inserted.close()
 errorLog.close()
+notInserted.close()
