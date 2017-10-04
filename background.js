@@ -3,7 +3,7 @@
 // background.js
 // Called when the user clicks on the browser action.
 var checker = true;
-var timeGap = 0; //ensure this is set to the desired value before the extension is deployed, zero corresponds to one day history of the previous day!
+var timeGap = 7; //ensure this is set to the desired value before the extension is deployed, zero corresponds to one day history of the previous day!
 var responses = 0;
 var toServer = {}
 var firstTime = false
@@ -74,6 +74,9 @@ function sendMoreBundles(bundle){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://myactivity.google.com/bundle-details?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=2&jspb=1", true);
   xhr.send(JSON.stringify({"bundle":bundle}));
+  xhr.onerror = function(e){
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":e.currentTarget.responseText, "type":"googleSearchTerms"});
+  }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
 }
 function processGoogleSearchRequestBundles(e) {   
@@ -105,6 +108,9 @@ function sendMore(ct){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
   xhr.send(JSON.stringify({"ct":ct}));
+  xhr.onerror = function(e){
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":e.currentTarget.responseText, "type":"googleSearchTerms"});
+  }
   xhr.onreadystatechange = processGoogleSearchRequest;
 }
 function processGoogleSearchRequest(e) {      
@@ -225,16 +231,30 @@ chrome.runtime.onMessage.addListener(
       toServer['survey'] = request.data;
       var xhr = new XMLHttpRequest();
       xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
-      if(firstTime){
-        xhr.send(JSON.stringify(toServer));
-        xhr.onreadystatechange = getID;//need to comment this out for US participants
+      if(firstTime){  	
+        chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
+			BrowsingHist.then(function(data){
+		        toServer['BrowsingHistory'] = data;
+		        checker = false;
+		        complete = true
+		        xhr.send(JSON.stringify(toServer));
+		        xhr.onreadystatechange = getID;//need to comment this out for US participants
+	        })
+		});
       }
       else{
-        chrome.storage.sync.get('extensionDate', function(result){
-          toServer['identity'] = result;
-          xhr.send(JSON.stringify(toServer));
-        })  
+        toServer['identity'] = result;
+        chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
+			BrowsingHist.then(function(data){
+		        toServer['BrowsingHistory'] = data;
+		        checker = false;
+		        complete = true
+		        xhr.send(JSON.stringify(toServer));
+	        })
+		});
       }
+
+
       console.log(toServer)
       console.log("ALL DONE. Updated collection time to "+GetDate())
       // console.log(toServer);
@@ -453,21 +473,17 @@ function Finalize(request) {
         chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
       }
     }
-    if (responses === 6) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
+    /*if (responses >= 6) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
       chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
         BrowsingHist.then(function(data){
           toServer['BrowsingHistory'] = data;
-          /*console.log(toServer)
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
-          xhr.send(JSON.stringify(toServer));
-          xhr.onreadystatechange = getID;//need to comment this out for US participants
-          console.log("ALL DONE. Updated collection time to "+GetDate())*/
         })
         checker = false;
         complete = true
       });
-    }
+    }*/ 
   }
 }
+
+
 
