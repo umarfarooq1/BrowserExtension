@@ -75,7 +75,7 @@ function sendMoreBundles(bundle){
   xhr.open('POST', "https://myactivity.google.com/bundle-details?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=2&jspb=1", true);
   xhr.send(JSON.stringify({"bundle":bundle}));
   xhr.onerror = function(e){
-  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":e.currentTarget.responseText, "type":"googleSearchTerms"});
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
 }
@@ -109,7 +109,7 @@ function sendMore(ct){
   xhr.open('POST', "https://myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
   xhr.send(JSON.stringify({"ct":ct}));
   xhr.onerror = function(e){
-  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":e.currentTarget.responseText, "type":"googleSearchTerms"});
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequest;
 }
@@ -319,26 +319,44 @@ function Start(request) {
   if( request.message === "clicked_browser_action" ) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', "https://tags.bluekai.com/registry?js=1&fg=58595b&fpfg=7d7d7d&font=arial&size=11&fpfont=arial&fpsize=9&lo=1", true);
+    xhr.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"BlueKai"});
+    }
     xhr.send();
 
     var xhr1 = new XMLHttpRequest();
     xhr1.open('GET', "https://loadus.exelator.com/load/segmentChoiceEx.php", true);
+    xhr1.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"exelate"});
+    }
     xhr1.send();
 
     var xhr2 = new XMLHttpRequest();
     xhr2.open('GET', "https://adssettings.google.com/u/0/authenticated", true);
+    xhr2.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleAdSettings"});
+    }
     xhr2.send();
     
     var xhr3 = new XMLHttpRequest();
     xhr3.open('POST', "https://myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
+    xhr3.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
+    }
     xhr3.send();
 
     var xhr4 = new XMLHttpRequest();
     xhr4.open('GET', "https://www.facebook.com/ads/profile/interests/?dpr=1&__a=1", true);
+    xhr4.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"FBinterests"});
+    }
     xhr4.send();
 
     var xhr5 = new XMLHttpRequest();
     xhr5.open('GET', "https://www.facebook.com/ads/profile/advertisers/?dpr=1&__a=1", true);
+    xhr5.onerror = function(e){
+      Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"FBadvertisers"});
+    }
     xhr5.send();
     xhr.onreadystatechange = processRequest;
     xhr1.onreadystatechange = processRequest;
@@ -472,16 +490,7 @@ function Finalize(request) {
       if(myPopUp!==-1){
         chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
       }
-    }
-    /*if (responses >= 6) { //need to set this threshold,currently waiting for four responses. 0,1,2,3
-      chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-        BrowsingHist.then(function(data){
-          toServer['BrowsingHistory'] = data;
-        })
-        checker = false;
-        complete = true
-      });
-    }*/ 
+    } 
   }
 }
 
