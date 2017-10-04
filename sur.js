@@ -78,9 +78,10 @@ function alterSurvey(){
   // console.log(gg1);
   // console.log(fb2);
 }
-
+//abeera ki changes
 Survey.Survey.cssType = "bootstrap";
-Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+Survey.defaultBootstrapCss.navigationButton = "btn btn-blue";
+Survey.defaultBootstrapCss.progressBar = "progress-bar progress-bar-custom";
 
 var MyTextValidator = (function (_super) {
     Survey.__extends(MyTextValidator, _super);
