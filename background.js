@@ -233,25 +233,25 @@ chrome.runtime.onMessage.addListener(
       xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
       if(firstTime){  	
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-			BrowsingHist.then(function(data){
+			   BrowsingHist.then(function(data){
 		        toServer['BrowsingHistory'] = data;
 		        checker = false;
 		        complete = true
 		        xhr.send(JSON.stringify(toServer));
 		        xhr.onreadystatechange = getID;//need to comment this out for US participants
 	        })
-		});
+		    });
       }
       else{
         toServer['identity'] = result;
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-			BrowsingHist.then(function(data){
+			   BrowsingHist.then(function(data){
 		        toServer['BrowsingHistory'] = data;
 		        checker = false;
 		        complete = true
 		        xhr.send(JSON.stringify(toServer));
 	        })
-		});
+		    });
       }
 
 
@@ -259,9 +259,6 @@ chrome.runtime.onMessage.addListener(
       console.log("ALL DONE. Updated collection time to "+GetDate())
       // console.log(toServer);
     }
-    
-    // console.log("gg" + loggedInGoogle);
-    // console.log("fb" + loggedInfb);
 });
 // add listener here. only when signed into fb and google
 // then go into Start
