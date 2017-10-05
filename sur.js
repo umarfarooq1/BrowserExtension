@@ -359,7 +359,7 @@ window.survey = new Survey.Model({
      "visible": false
     },
     {
-     "type": "html",
+     "type": "html", 
      "html": "<br/><br/>\n<a href=\"https://facebook.com\" class=\"button\" target=\"_blank\">Go to Facebook</a>\n<br/><br/>",
      "name": "fb2",
      "visible": false
@@ -905,7 +905,7 @@ window.survey = new Survey.Model({
      "elements": [
       {
        "type": "html",
-       "html": "For these questions, please consider advertisements that you have seen on websites and in smartphone apps. We are referring to ads that look like this:\n<br/><br/>\n[screenshot of an online ad]\n<br/><br/>\n<b>Do not consider advertisements that you have seen on search engines.</b>\n",
+       "html": "For these questions, please consider advertisements that you have seen on websites and in smartphone apps. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"websiteAd.png\" alt = \"website\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on search engines.</b>\n",
        "name": "question1"
       },
       {
@@ -938,7 +938,7 @@ window.survey = new Survey.Model({
      "elements": [
       {
        "type": "html",
-       "html": "For these questions, please consider advertisements that you have seen on search engines. We are referring to ads that look like this:\n<br/><br/>\n[screenshot of an ad on Google]\n<br/><br/>\n<b>Do not consider advertisements that you have seen on other websites or smartphone apps.</b>\n",
+       "html": "For these questions, please consider advertisements that you have seen on search engines. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"engineAd.png\" alt = \"Search Engine\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on other websites or smartphone apps.</b>\n",
        "name": "question10b"
       },
       {
