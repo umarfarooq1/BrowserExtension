@@ -485,7 +485,7 @@ function Finalize(request) {
       }
       // send this data to survey page
       if(myPopUp!==-1){
-        chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": request.data});
+        chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": toServer});
       }
     } 
   }

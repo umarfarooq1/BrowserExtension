@@ -3,6 +3,7 @@ console.log("loading")
 var loggedInfb = false;
 var loggedInGoogle = false;
 var consent = false;
+var dynamic = ["dyn0","dyn1","dyn2","dyn3","dyn4","dyn5","dyn6","dyn7","dyn8","dyn9","dyn10","dyn11","dyn12","dyn13","dyn14","dyn15","dyn16","dyn17","dyn18","dyn19"];
 
 chrome.runtime.sendMessage({type:'init', data:'making sure that this content script has been injected'});
 
@@ -10,15 +11,11 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
   	// console.log("ab aya")
   	if(request.type == "fromBg"){
-  		console.log(request.msg);
 
-  		//do processing on data
-  		// survey.showProgressBar = "top";
-  		console.log(survey.getQuestionByName("dyn1", true));
-  		var x = survey.getQuestionByName("dyn1", true)
-  		x.title = "are you interested in Shopping?";
-  		x.visible = true;
-      survey.render();	
+  		if(Object.keys(request.msg).length === 6){
+	  		console.log(request.msg);
+	  		dynamicQs(request.msg);
+	  	}
   	}
 
     if(request.type == "logStatus"){
@@ -45,6 +42,123 @@ function myfunc(val){
       chrome.runtime.sendMessage({type:'dataCollection'}); 
   }
 }
+
+function dynamicQs(data){
+  console.log("here");
+  var num = 0;
+  var questions = [];
+  var sub = [];
+//exelate
+  for(var i=0; i<data['exelate'].length; i++){
+    if(num === 4){break;}
+    num++;
+    questions.push(data['exelate'][i]);
+    // console.log(data['exelate'][i]);
+  }
+//fb interests
+  var fbin = data['FBinterests'];
+  if(fbin['removed_interests'].length > 0){
+    num++;
+    // console.log("h1");
+    //construct q
+    questions.push(fbin['removed_interests'][0]);
+  }
+  if(fbin['suggested_interests'].length > 0){
+    num++;
+    // console.log("h2");
+    //construct q
+    questions.push(fbin['suggested_interests'][0]);
+  }  
+  var topics = [];
+  for(var i=0; i<fbin['interests'].length; i++){
+    if(num === 10){break;}
+    // console.log(fbin['interests'][i]['topic']);
+    if( topics.indexOf(fbin['interests'][i]['topic']) === -1){
+      num++;
+      // console.log(fbin['interests'][i]);
+      // console.log(fbin['interests'][i]['name']);
+      questions.push(fbin['interests'][i]['name']);
+      topics.push(fbin['interests'][i]['topic']);
+    }
+  }
+ 
+//google interests
+  var x = data['googleAdSettings'].length;
+  var y = Math.floor(x/10);
+  for(var i=0; i<x; i=i+y){
+    if(num === 20){break;}
+    num++;
+    questions.push(data['googleAdSettings'][i]);
+  }
+
+//fb advertisers
+  var fbad = data['FBadvertisers']['advertisers'];
+  for(var i=0; i<fbad['clicked'].length; i++){
+    if(num === 23){break;}
+    num++;
+    // console.log(fbad['clicked'][i]['name']);
+    sub.push(fbad['clicked'][i]['name']);
+  }
+  if(fbad['hidden'].length > 0){
+    num++;
+    // console.log("h5");
+    sub.push(fbad['hidden'][0]['name']);
+  }
+  if(fbad['store_visit'].length > 0){
+    num++;
+    // console.log("h6");
+    sub.push(fbad['store_visit'][0]['name']);
+  }
+  for(var i=0; i<fbad['website_app'].length; i++){
+    if(num === 26){break;}
+    num++;
+    // console.log(fbad['website_app'][i]['name']);
+    sub.push(fbad['website_app'][i]['name']);
+  }
+  
+// sub string matching
+  for(var i=0; i<questions.length ; i++){
+      var substring = questions[i];
+    for(var j=0; j<questions.length ; j++){
+      if(i!==j && questions[j].indexOf(substring) !== -1){
+        // console.log(questions[i]);
+        questions.splice(i,1);
+        // console.log(questions[j]);  
+      };
+    }
+  }
+  for(var i=0; i<sub.length ; i++){
+      var substring = sub[i];
+    for(var j=0; j<sub.length ; j++){
+      if(i!==j && sub[j].indexOf(substring) !== -1){
+        // console.log(sub[i]);
+        sub.splice(i,1);
+        // console.log(sub[j]);  
+      };
+    }
+  }
+  console.log(sub);
+  console.log(questions);
+  console.log("enddd again and again")
+
+  
+  for(var i=0; i<dynamic.length; i++){
+    var tmp = survey.getQuestionByName(dynamic[i], true);
+    console.log(i);
+    if(i<= 15){
+      tmp.title = "Are you interested in ".concat(questions[i]);
+      tmp.name = tmp.title;
+    } else {
+      // console.log(i);
+      tmp.title = "Have you ever visited ".concat(sub[i-16]);
+      tmp.name = tmp.title;
+      // tmp.name = sub[i];
+    }
+    tmp.visible = true;   
+  }
+  survey.render();
+}
+
 
 function alterSurvey(){
   var gg = survey.getQuestionByName("gg", true);
@@ -975,9 +1089,7 @@ window.survey = new Survey.Model({
      "title": "Your Interests"
     },
     {
-     "type": "rating",
-     "isRequired": true,
-     "name": "dyn",
+     "type": "rating","isRequired": true,"name": "dyn0",
      "rateValues": [
       {
        "value": "1",
@@ -1000,17 +1112,523 @@ window.survey = new Survey.Model({
        "text": "Extremely"
       }
      ],
+     "isRequired": true, "visible": false,
      "title": "How interested are you in Sports?"
     },
     {
-     "type": "rating",
-     "isRequired": true,
-     "maxRateDescription": "(very much)",
-     "minRateDescription": "(not at all)",
-     "name": "dyn1",
-     "title": "How interested are you in shopping?",
-     "visible": false
-    }
+     "type": "rating","isRequired": true,"name": "dyn1",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn2",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn3",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn4",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn5",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn6",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn7",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn8",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn9",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn10",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn11",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn12",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn13",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn14",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn15",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Not at all"
+      },
+      {
+       "value": "2",
+       "text": "A tiny amount"
+      },
+      {
+       "value": "3",
+       "text": "Somewhat"
+      },
+      {
+       "value": "4",
+       "text": "Very much"
+      },
+      {
+       "value": "5",
+       "text": "Extremely"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn16",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Never"
+      },
+      {
+       "value": "2",
+       "text": "Yearly"
+      },
+      {
+       "value": "3",
+       "text": "Monthly"
+      },
+      {
+       "value": "4",
+       "text": "Weekly"
+      },
+      {
+       "value": "5",
+       "text": "Daily"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn17",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Never"
+      },
+      {
+       "value": "2",
+       "text": "Yearly"
+      },
+      {
+       "value": "3",
+       "text": "Monthly"
+      },
+      {
+       "value": "4",
+       "text": "Weekly"
+      },
+      {
+       "value": "5",
+       "text": "Daily"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn18",
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Never"
+      },
+      {
+       "value": "2",
+       "text": "Yearly"
+      },
+      {
+       "value": "3",
+       "text": "Monthly"
+      },
+      {
+       "value": "4",
+       "text": "Weekly"
+      },
+      {
+       "value": "5",
+       "text": "Daily"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
+    {
+     "type": "rating","isRequired": true,"name": "dyn19",
+     // Never; Monthly; Weekly; Daily; Multiple times a day
+     "rateValues": [
+      {
+       "value": "1",
+       "text": " Never"
+      },
+      {
+       "value": "2",
+       "text": "Yearly"
+      },
+      {
+       "value": "3",
+       "text": "Monthly"
+      },
+      {
+       "value": "4",
+       "text": "Weekly"
+      },
+      {
+       "value": "5",
+       "text": "Daily"
+      }
+     ],
+     "isRequired": true, "visible": false,
+     "title": "How interested are you in Sports?"
+    },
    ],
    "name": "page12"
   },
@@ -1040,20 +1658,6 @@ window.survey = new Survey.Model({
    "name": "terms"
   }
  ]
-    //     { 
-    //       questions: [
-    //          { type: "radiogroup",  name: "gender", title: "Please select your gender:", choices: ["Male", "Female", "other"], isRequired: true},
-    //          { type: "radiogroup",  name: "age", title: "Please select your age range:", choices: ["1-10", "11-20", "21-30", "30-40", "40 above"], isRequired: true},
-    //          { type:"text", name:"loc", title: "Please enter the country you currently reside in:", placeHolder:"Oman", isRequired: true},
-    //          { type: "radiogroup",  name: "income", title: "Please select you income:", choices: ["no income", "$1-$100", "$100-$10,000", "$10,000 above"], isRequired: true},
-    //          { type: "radiogroup",  name: "ed", title: "Please select your level of education:", choices: ["High School", "Bachelors", "Masters", "PhD", "post-doctorate"], isRequired: true}
-    //     ]},
-    //      {questions: [
-    //      	{ type: "radiogroup",  name: "dyn", title: "kuch bhi", choices: ["yes", "no"]},
-    //       { type: "radiogroup",  name: "dyn1", title: "kuch bhi", choices: ["yes", "no"], visible: false}
-    //     ]}
-    // ],
-    // completedHtml: "<p>Your anwers are:</p><p>When was the Civil War?: <b>{civilwar}</b>. The correct is: <b>1850-1900</b></p><p>Who said 'Give me liberty or give me death?': <b>{libertyordeath}</b>. The correct is: <b>Patrick Henry</b></p><p>What is the Magna Carta?: <b>{magnacarta}</b>. The correct is: <b>The foundation of the British parliamentary system</b></p>"
 });
 
 survey.onComplete.add(function(result) {
