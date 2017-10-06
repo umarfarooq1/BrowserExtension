@@ -141,10 +141,11 @@ function dynamicQs(data){
   console.log(questions);
   console.log("enddd again and again")
 
+  var smallest = Math.min(dynamic.length, questions.length+sub.length);
   
-  for(var i=0; i<dynamic.length; i++){
+  for(var i=0; i<smallest; i++){
     var tmp = survey.getQuestionByName(dynamic[i], true);
-    console.log(i);
+    // console.log(i);
     if(i<= 15){
       tmp.title = "Are you interested in ".concat(questions[i]);
       tmp.name = tmp.title;
@@ -247,7 +248,7 @@ Survey.JsonObject.metaData.addClass("mytextvalidator", [], function () { return 
 
 window.survey = new Survey.Model({
 
-  title: "Our Survey", showProgressBar: "top", goNextPageAutomatic: false, showNavigationButtons: true,
+  title: "Our Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true,
     
    "pages": [
   {
@@ -1086,6 +1087,13 @@ window.survey = new Survey.Model({
     {
      "type": "panel",
      "name": "panel12",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We have a few questions about things your interests.\n",
+       "name": "notaq"
+      }
+     ],
      "title": "Your Interests"
     },
     {
