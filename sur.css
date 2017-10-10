@@ -52,3 +52,35 @@ body {
 	color: #fff;
   padding: 2px 2px 2px 2px;
 }
+/*---------------------------------------------------------------*/
+.sq-root {
+  border: 1px solid gray;
+  border-left: 4px solid #31776b;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.sq-title {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.sq-label {
+  margin-left: 30px;
+}
+/*
+
+.sq-root-cb {
+  border-left: 4px solid orange;
+}
+
+.sq-title-required {
+  color: red;
+}
+
+
+.sq-item:nth-child(1) {
+  margin-bottom: 5px;
+}
+*/

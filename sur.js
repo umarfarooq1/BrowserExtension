@@ -258,7 +258,7 @@ Survey.JsonObject.metaData.addClass("mytextvalidator", [], function () { return 
 window.survey = new Survey.Model({
 
   title: "Web Usage Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true, 
-  showQuestionNumbers: 'on',
+  showQuestionNumbers: 'off',
     
    "pages": [
   {
@@ -409,6 +409,14 @@ window.survey = new Survey.Model({
      "isRequired": true,
      "name": "loc",
      "title": "Where are you from?"
+    },
+    {
+     "type": "text",
+     "isRequired": false,
+     "name": "email",
+     "title": "If you wish to participate in the lucky draw please provide your email id (this is completely optional)",
+     "validators" : [{type:"email"}],
+     "visibleIf": "{loc}='Pakistan'"
     }
    ],
    "name": "page5"
@@ -1692,6 +1700,18 @@ survey.onComplete.add(function(result) {
     //send result back to bg!
 });
 
+survey.onUpdateQuestionCssClasses.add(function(survey, options) {
+    var classes = options.cssClasses;
+    classes.title = "sq-title";
+    //make options bold
+    // classes.item = "sq-item";
+    classes.label = "sq-label";
+    var x = options.question.getType();
+    // console.log(x); 
+    if (x === "radiogroup" || x === "checkbox" ) {
+     classes.root = "sq-root";
+    }
+});
 
 ReactDOM.render(< Survey.Survey model = {survey} />, 
 		document.getElementById("surveyElement"));
