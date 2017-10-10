@@ -11,7 +11,6 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
   	// console.log("ab aya")
   	if(request.type == "fromBg"){
-      var y = Math.floor(x/10);
 
   		if(Object.keys(request.msg).length === 6){
 	  		console.log(request.msg);
@@ -52,82 +51,88 @@ function dynamicQs(data){
   var questions = [];
   var sub = [];
 //exelate
-  
-  for(var i=0; i<data['exelate'].length; i++){
-    if(num === 4){break;}
-    num++;
-    questions.push(data['exelate'][i]);
-    // console.log(data['exelate'][i]);
-  }
+	if(data['exelate']['Error'] === undefined){
+	  for(var i=0; i<data['exelate'].length; i++){
+	    if(num === 4){break;}
+	    num++;
+	    questions.push(data['exelate'][i]);
+	  }
+	} else {
+		console.log("NoDataExelate")
+	}
 //fb interests
-  var fbin = data['FBinterests'];
-  if(fbin['removed_interests'].length > 0){
-    num++;
-    // console.log("h1");
-    //construct q
-    questions.push(fbin['removed_interests'][0]);
-  }
-  if(fbin['suggested_interests'].length > 0){
-    num++;
-    // console.log("h2");
-    //construct q
-    questions.push(fbin['suggested_interests'][0]);
-  }  
-  var topics = [];
-  for(var i=0; i<fbin['interests'].length; i++){
-    if(num === 10){break;}
-    // console.log(fbin['interests'][i]['topic']);
-    if( topics.indexOf(fbin['interests'][i]['topic']) === -1){
-      num++;
-      // console.log(fbin['interests'][i]);
-      // console.log(fbin['interests'][i]['name']);
-      questions.push(fbin['interests'][i]['name']);
-      topics.push(fbin['interests'][i]['topic']);
-    }
-  }
+	if(data['FBinterests']['Error'] === undefined){
+
+	  var fbin = data['FBinterests'];
+	  if(fbin['removed_interests'].length > 0){
+	    num++;
+	    questions.push(fbin['removed_interests'][0]);
+	  }
+	  if(fbin['suggested_interests'].length > 0){
+	    num++;
+	    questions.push(fbin['suggested_interests'][0]);
+	  }  
+	  var topics = [];
+	  for(var i=0; i<fbin['interests'].length; i++){
+	    if(num === 10){break;}
+	    // console.log(fbin['interests'][i]['topic']);
+	    if( topics.indexOf(fbin['interests'][i]['topic']) === -1){
+	      num++;
+	      questions.push(fbin['interests'][i]['name']);
+	      topics.push(fbin['interests'][i]['topic']);
+	    }
+	  }
+	} else {
+		console.log("NoDataFbInterests")
+	}
  
 //google interests
-  var x = data['googleAdSettings'].length;
-  var y = Math.floor(x/10);
-  for(var i=0; i<x; i=i+y){
-    if(num === 20){break;}
-    num++;
-    questions.push(data['googleAdSettings'][i]);
-  }
+	if(data['FBinterests']['Error'] === undefined){
+
+		var x = data['googleAdSettings'].length;
+		var y = Math.floor(x/10);
+		for(var i=0; i<x; i=i+y){
+			if(num === 20){break;}
+			num++;
+			questions.push(data['googleAdSettings'][i]);
+		}
+	} else {
+		console.log("NoDataGGinterests")
+	}
 
 //fb advertisers
-  var fbad = data['FBadvertisers']['advertisers'];
-  for(var i=0; i<fbad['clicked'].length; i++){
-    if(num === 23){break;}
-    num++;
-    // console.log(fbad['clicked'][i]['name']);
-    sub.push(fbad['clicked'][i]['name']);
-  }
-  if(fbad['hidden'].length > 0){
-    num++;
-    // console.log("h5");
-    sub.push(fbad['hidden'][0]['name']);
-  }
-  if(fbad['store_visit'].length > 0){
-    num++;
-    // console.log("h6");
-    sub.push(fbad['store_visit'][0]['name']);
-  }
-  for(var i=0; i<fbad['website_app'].length; i++){
-    if(num === 26){break;}
-    num++;
-    // console.log(fbad['website_app'][i]['name']);
-    sub.push(fbad['website_app'][i]['name']);
-  }
+	if(data['FBinterests']['Error'] === undefined){
+
+		var fbad = data['FBadvertisers']['advertisers'];
+		for(var i=0; i<fbad['clicked'].length; i++){
+			if(num === 23){break;}
+			num++;
+			sub.push(fbad['clicked'][i]['name']);
+		}
+
+		if(fbad['hidden'].length > 0){
+			num++;
+			sub.push(fbad['hidden'][0]['name']);
+		}
+		if(fbad['store_visit'].length > 0){
+			num++;
+			sub.push(fbad['store_visit'][0]['name']);
+		}
+		for(var i=0; i<fbad['website_app'].length; i++){
+			if(num === 26){break;}
+			num++;
+			sub.push(fbad['website_app'][i]['name']);
+		}
+	} else {
+		console.log("NoDataFBadverts")
+	}
   
 // sub string matching
   for(var i=0; i<questions.length ; i++){
       var substring = questions[i];
     for(var j=0; j<questions.length ; j++){
       if(i!==j && questions[j].indexOf(substring) !== -1){
-        // console.log(questions[i]);
         questions.splice(i,1);
-        // console.log(questions[j]);  
       };
     }
   }
@@ -135,9 +140,7 @@ function dynamicQs(data){
       var substring = sub[i];
     for(var j=0; j<sub.length ; j++){
       if(i!==j && sub[j].indexOf(substring) !== -1){
-        // console.log(sub[i]);
         sub.splice(i,1);
-        // console.log(sub[j]);  
       };
     }
   }
@@ -145,25 +148,25 @@ function dynamicQs(data){
   console.log(questions);
   console.log("enddd again and again")
 
-  var pg = survey.getPageByName("pageDYN");
-  pg.visible = "true"; 
+  	if(questions.length > 0 || sub.length > 0){
+	  var pg = survey.getPageByName("pageDYN");
+	  pg.visible = "true"; 
+	}
 
   var smallest = Math.min(dynamic.length, questions.length+sub.length);
   
   for(var i=0; i<smallest; i++){
     var tmp = survey.getQuestionByName(dynamic[i], true);
-    // console.log(i);
     if(i<= 15){
       tmp.title = "Are you interested in ".concat(questions[i]);
       tmp.name = tmp.title;
     } else {
-      // console.log(i);
       tmp.title = "Have you ever visited ".concat(sub[i-16]);
       tmp.name = tmp.title;
-      // tmp.name = sub[i];
     }
     tmp.visible = true;   
   }
+
   survey.render();
 }
 
@@ -242,7 +245,6 @@ var MyTextValidator = (function (_super) {
         if(name === "fb"){
           return "I'm afraid you haven't logged into Facebook";
         } 
-
     }
     return MyTextValidator;
 })(Survey.SurveyValidator);
@@ -255,7 +257,8 @@ Survey.JsonObject.metaData.addClass("mytextvalidator", [], function () { return 
 
 window.survey = new Survey.Model({
 
-  title: "Web Usage Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true,
+  title: "Web Usage Survey", showProgressBar: "bottom", goNextPageAutomatic: false, showNavigationButtons: true, 
+  showQuestionNumbers: 'on',
     
    "pages": [
   {
@@ -298,6 +301,9 @@ window.survey = new Survey.Model({
        "colCount": 2,
        "isRequired": true,
        "name": "terms",
+       // "indent": 3,
+       // "size": 55,
+       // "rightIndent" : 10,
        "title": "Do you agree to the terms and Conditions",
        validators: [{type: "mytextvalidator"}]
       }
@@ -339,7 +345,7 @@ window.survey = new Survey.Model({
       "Yes",
       "No"
      ],
-     "colCount": 2,
+     // "colCount": 2,
      "isRequired": true,
      "name": "gg",
      "title": "Have you signed in to Google?",
@@ -381,7 +387,7 @@ window.survey = new Survey.Model({
       "Yes!",
       "No"
      ],
-     "colCount": 2,
+     // "colCount": 2,
      "isRequired": true,
      "name": "fb",
      "title": "Have you signed in to Facebook?",
@@ -391,6 +397,7 @@ window.survey = new Survey.Model({
    ],
    "name": "page4"
   },
+  // 'showQuestionNumbers': 'on',
   {
    "elements": [
     {
@@ -406,692 +413,692 @@ window.survey = new Survey.Model({
    ],
    "name": "page5"
   },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "name": "panel5",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "First, we would like to know a bit about you. Remember, your answers to these questions are confidential so please be honest.\n",
-  //      "name": "question1"
-  //     }
-  //    ],
-  //    "title": "Basic Demographics"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "18-24",
-  //     "25-44",
-  //     "45-64",
-  //     "65+"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "age",
-  //    "title": "How old are you?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Male",
-  //     "Female"
-  //    ],
-  //    "hasOther": true,
-  //    "isRequired": true,
-  //    "name": "gender",
-  //    "title": "Please select your gender:"
-  //   },
-  //   {
-  //    "type": "checkbox",
-  //    "choices": [
-  //     "White/Caucasian",
-  //     "Black/African American",
-  //     "Native American/Alaska Native/Hawaii Native",
-  //     "Latino/Hispanic",
-  //     "Asian",
-  //     "Other"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "ethnicity",
-  //    "title": "What is your race or ethnicity (check all that apply)?",
-  //    "visible": false,
-  //    "visibleIf": "{loc}='United States'"
-  //   },
-  //   {
-  //    "type": "checkbox",
-  //    "choices": [
-  //     "Urdu",
-  //     "English",
-  //     "Balochi",
-  //     "Punjabi",
-  //     "Sindhi",
-  //     "Pashtu"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "ethnicity-pk",
-  //    "title": "What language do you speak (check all that apply)?",
-  //    "visible": false,
-  //    "visibleIf": "{loc}='Pakistan'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "None",
-  //     "High School",
-  //     "College",
-  //     "Some graduate school",
-  //     "Masters",
-  //     "Doctoral"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "education",
-  //    "title": "What is the highest level of education you have completed?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Never married",
-  //     "Married",
-  //     "Divorced",
-  //     "Separated",
-  //     "Widowed",
-  //     "I prefer not to say"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "marital status",
-  //    "title": "What is your current marital status? "
-  //   },
-  //   {
-  //    "type": "dropdown",
-  //    "choices": [
-  //     "0",
-  //     "1",
-  //     "2",
-  //     "3",
-  //     "4",
-  //     "5",
-  //     "6",
-  //     "7",
-  //     "8",
-  //     "9",
-  //     "10"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "children",
-  //    "title": "How many children do you care for in your household?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Yes, Full-time",
-  //     "Yes, Part-time",
-  //     "No"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "employment status",
-  //    "title": "Are you currently employed?\n"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Under $15,000",
-  //     "$15,000 to 30,000",
-  //     "$30,000 to 45,000",
-  //     "$45,000 to 60,000",
-  //     "$60,000 to 75,000",
-  //     "$75,000 to 100,000",
-  //     "$100,000 to 150,000",
-  //     "$150,000 and over",
-  //     "I prefer not to say"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "income",
-  //    "title": "What is your yearly household income? ",
-  //    "visible": false,
-  //    "visibleIf": "{loc}='United States'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Under Rs. 3,000,000",
-  //     "Rs. 3,000,000 to 6,000,000",
-  //     "Rs. 6,000,000 to 10,000,000",
-  //     "Rs. 10,000,000 to 15,000,000",
-  //     "Rs. 15,000,000 and over",
-  //     "I prefer not to say"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "income-pk",
-  //    "title": "What is your yearly household income? ",
-  //    "visible": false,
-  //    "visibleIf": "{loc}='Pakistan'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Pakistan People's Party (PPP)",
-  //     "Pakistan Muslim League (N)",
-  //     "Pakistan Tehreek-e-Insaf (PTI)",
-  //     "Awami National Party (ANP)",
-  //     "Jamaat-e-Islami Pakistan.",
-  //     "Jamiat-e-Ulema-e-Islam (F)",
-  //     "Muttahida Qaumi Movement (MQM)",
-  //     "Pakistan Awami Tehreek (PAT)",
-  //     "Other",
-  //     "Prefer not to say"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "politics-pk",
-  //    "title": "Which of the following best describes your political views?\n",
-  //    "visible": false,
-  //    "visibleIf": "loc='Pakistan'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Conservative",
-  //     "Moderate",
-  //     "Liberal",
-  //     "Other",
-  //     "Prefer not to say"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "politics",
-  //    "title": "Which of the following best describes your political views?\n",
-  //    "visible": false,
-  //    "visibleIf": "loc='United States'"
-  //   },
-  //   {
-  //    "type": "dropdown",
-  //    "choices": [
-  //     "Alabama",
-  //     "Alaska",
-  //     "Arizona",
-  //     "Arkansas",
-  //     "California",
-  //     "Colorado",
-  //     "Connecticut",
-  //     "Delaware",
-  //     "Florida",
-  //     "Georgia",
-  //     "Hawaii",
-  //     "Idaho",
-  //     "Illinois",
-  //     "Indiana",
-  //     "Iowa",
-  //     "Kansas",
-  //     "Kentucky",
-  //     "Louisiana",
-  //     "Maine",
-  //     "Maryland",
-  //     "Massachusetts",
-  //     "Michigan",
-  //     "Minnesota",
-  //     "Mississippi",
-  //     "Missouri",
-  //     "Montana",
-  //     "Nebraska",
-  //     "Nevada",
-  //     "New Hampshire",
-  //     "New Jersey",
-  //     "New Mexico",
-  //     "New York",
-  //     "North Carolina",
-  //     "North Dakota",
-  //     "Ohio",
-  //     "Oklahoma",
-  //     "Oregon",
-  //     "Pennsylvania",
-  //     "Rhode Island",
-  //     "South Carolina",
-  //     "South Dakota",
-  //     "Tennessee",
-  //     "Texas",
-  //     "Utah",
-  //     "Vermont",
-  //     "Virginia",
-  //     "Washington",
-  //     "West Virginia",
-  //     "Wisconsin",
-  //     "Wyoming",
-  //     "District of Columbia",
-  //     "Puerto Rico",
-  //     "Guam",
-  //     "American Samoa",
-  //     "U.S. Virgin Islands",
-  //     "Northern Mariana Islands"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "state",
-  //    "title": "What state do you live in? ",
-  //    "visible": false,
-  //    "visibleIf": "loc='United States'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Urban",
-  //     "Suburban",
-  //     "Rural"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "current place",
-  //    "title": "How would you describe the place where you currently live? \n"
-  //   }
-  //  ],
-  //  "name": "page6"
-  // },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "name": "panel6",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "We would like to know about your usage of the internet in general.\n",
-  //      "name": "question5"
-  //     }
-  //    ],
-  //    "title": "General internet and web usage"
-  //   },
-  //   {
-  //    "type": "text",
-  //    "inputType": "number",
-  //    "isRequired": true,
-  //    "name": "years of internet",
-  //    "title": "How many years have you been using the internet?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "30 minutes or less",
-  //     "30 minutes - 1 hour",
-  //     "1 -2 hours",
-  //     "2 - 4 hours",
-  //     "More than 4 hours"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "time spent on internet",
-  //    "title": "Approximately how much time do you spend each day browsing the web on a desktop computer or laptop? "
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Chrome",
-  //     "Firefox",
-  //     "Internet Explorer/Edge",
-  //     "Safari",
-  //     "Brave"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "internet browser",
-  //    "title": "What Internet browser do you use most often? "
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Google",
-  //     "Bing",
-  //     "DuckDuckGo",
-  //     "Yahoo",
-  //     "AOL",
-  //     "Baidu",
-  //     "Other"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "search engines",
-  //    "title": "Which search engines do you use most often? "
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "less than 10",
-  //     "10-50",
-  //     "50-100",
-  //     "100 or more"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "web searches",
-  //    "title": "Approximately how many web searches do you conduct each day?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "yes",
-  //     "no"
-  //    ],
-  //    "colCount": "2",
-  //    "isRequired": true,
-  //    "name": "phone",
-  //    "title": "Do you own a smartphone? "
-  //   },
-  //   {
-  //    "type": "text",
-  //    "inputType": "number",
-  //    "isRequired": true,
-  //    "name": "How many years have you been using smartphones? ",
-  //    "title": "How many years have you been using smartphones? ",
-  //    "visible": false,
-  //    "visibleIf": "{phone}= 'yes'"
-  //   },
-  //   {
-  //    "type": "checkbox",
-  //    "choices": [
-  //     "iPhone",
-  //     "Android",
-  //     "Other",
-  //     "I Don’t Know"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "What kind of smartphone do you have",
-  //    "title": "What kind of smartphone do you have (check all that apply)? ",
-  //    "visibleIf": "{phone}= 'yes'"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Always on smartphone",
-  //     "Mostly on smartphone",
-  //     "Slightly More on smartphone",
-  //     "Equally on both",
-  //     "Slightly more on desktop",
-  //     "Mostly on desktop",
-  //     "Always on desktop"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "What fraction of your web browsing is done on a smartphone versus a desktop computer?",
-  //    "title": "What fraction of your web browsing is done on a smartphone versus a desktop computer?"
-  //   }
-  //  ],
-  //  "name": "page7"
-  // },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "name": "panel7",
-  //    "title": "Usage of Specific Services"
-  //   },
-  //   {
-  //    "type": "matrix",
-  //    "columns": [
-  //     "Never",
-  //     "Monthly",
-  //     "Weekly",
-  //     "Daily",
-  //     "Multiple times a day"
-  //    ],
-  //    "isAllRowRequired": true,
-  //    "isRequired": true,
-  //    "name": "How frequently do you use the following services",
-  //    "rows": [
-  //     "Twitter ",
-  //     "Instagram ",
-  //     "Snapchat ",
-  //     "LinkedIn ",
-  //     "Pinterest",
-  //     "YouTube ",
-  //     "Gmail ",
-  //     "Reddit ",
-  //     "ESPN ",
-  //     "CNN ",
-  //     "New York Times ",
-  //     "CNBC ",
-  //     "Fox News ",
-  //     "Yelp ",
-  //     "Amazon ",
-  //     "Walmart ",
-  //     "Zillow ",
-  //     "WebMD ",
-  //     "Booking ",
-  //     "TripAdvisor ",
-  //     "Expedia ",
-  //     "Hotels.com",
-  //     "Kayak "
-  //    ],
-  //    "title": "How frequently do you use the following services, either via their website or via a smartphone app?\n"
-  //   }
-  //  ],
-  //  "name": "page8"
-  // },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "name": "panel5",
-  //    "title": "General Online Activities\n"
-  //   },
-  //   {
-  //    "type": "matrix",
-  //    "columns": [
-  //     "Never",
-  //     "Monthly",
-  //     "Weekly",
-  //     "Daily",
-  //     "Multiple times a day"
-  //    ],
-  //    "isAllRowRequired": true,
-  //    "isRequired": true,
-  //    "name": "How often do you perform the following activities online",
-  //    "rows": [
-  //     "Posting content on social media",
-  //     "Reading content on social media ",
-  //     "Sending and receiving email",
-  //     "Online banking and money management ",
-  //     "Researching health information",
-  //     "Reading the news",
-  //     "Booking airline flights, hotels, and/or rental cars ",
-  //     "Shopping for clothes ",
-  //     "Shopping for electronics ",
-  //     "Shopping for household items ",
-  //     "Shopping for movies, music, and/or books",
-  //     "Shopping for toys, games, or other entertainment ",
-  //     "Shopping for office products ",
-  //     "Shopping for food "
-  //    ],
-  //    "title": "How often do you perform the following activities online, either via websites or via smartphone apps?\n"
-  //   }
-  //  ],
-  //  "name": "page9"
-  // },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "We would like to know about your experiences seeing and interacting with online advertisements. \n\n",
-  //      "name": "q10a"
-  //     }
-  //    ],
-  //    "name": "panel10",
-  //    "title": "Online Advertising\n"
-  //   },
-  //   {
-  //    "type": "panel",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "For these questions, please consider advertisements that you have seen on websites and in smartphone apps. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"websiteAd.png\" alt = \"website\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on search engines.</b>\n",
-  //      "name": "question1"
-  //     },
-  //     {
-  //      "type": "matrix",
-  //      "columns": [
-  //       "Never",
-  //       "Monthly",
-  //       "Weekly",
-  //       "Daily",
-  //       "Multiple times a day"
-  //      ],
-  //      "isAllRowRequired": true,
-  //      "isRequired": true,
-  //      "name": "question4",
-  //      "rows": [
-  //       "See online advertisements ",
-  //       "See online advertisements that you find relevant",
-  //       "See online ads that you find annoying or intrusive ",
-  //       "Click on online advertisements ",
-  //       "Purchase a product after clicking an associated online advertisement "
-  //      ],
-  //      "title": "How frequently do you interact with online advertisements in the following ways?"
-  //     }
-  //    ],
-  //    "name": "panel5",
-  //    "title": "On Websites and Apps"
-  //   },
-  //   {
-  //    "type": "panel",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "For these questions, please consider advertisements that you have seen on search engines. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"engineAd.png\" alt = \"Search Engine\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on other websites or smartphone apps.</b>\n",
-  //      "name": "question10b"
-  //     },
-  //     {
-  //      "type": "matrix",
-  //      "columns": [
-  //       "Never",
-  //       "Monthly",
-  //       "Weekly",
-  //       "Daily",
-  //       "Multiple times a day"
-  //      ],
-  //      "isAllRowRequired": true,
-  //      "isRequired": true,
-  //      "name": "How frequently do you interact with search advertisements in the following ways?",
-  //      "rows": [
-  //       "See search advertisements",
-  //       "See search ads that you find relevant ",
-  //       "See search ads that you find annoying or intrusive ",
-  //       "Click on search engine ads",
-  //       "Purchase a product after clicking an associated search ad"
-  //      ],
-  //      "title": "How frequently do you interact with search advertisements in the following ways?"
-  //     }
-  //    ],
-  //    "name": "panel10b",
-  //    "title": "On Search Engines"
-  //   }
-  //  ],
-  //  "name": "page10"
-  // },
-  // {
-  //  "elements": [
-  //   {
-  //    "type": "panel",
-  //    "elements": [
-  //     {
-  //      "type": "html",
-  //      "html": "We have a few questions about things you may have done to block online advertisements or enhance your online privacy.\n",
-  //      "name": "question5"
-  //     }
-  //    ],
-  //    "name": "panel11",
-  //    "title": "Tracking and Privacy\n"
-  //   },
-  //   {
-  //    "type": "matrix",
-  //    "columns": [
-  //     "Yes",
-  //     "No ",
-  //     "I don't know"
-  //    ],
-  //    "isAllRowRequired": true,
-  //    "isRequired": true,
-  //    "name": "Do you use any of the following browser extensions?",
-  //    "rows": [
-  //     "Adblock",
-  //     "Adblock Plus",
-  //     "uBlock Origin",
-  //     "Ghostery",
-  //     "Disconnect",
-  //     "Privacy Badger"
-  //    ],
-  //    "title": "Do you use any of the following browser extensions?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Yes",
-  //     "No",
-  //     "I don't know"
-  //    ],
-  //    "colCount": 3,
-  //    "isRequired": true,
-  //    "name": "Do you have “Do Not Track” enabled in your web browser?",
-  //    "title": "Do you have “Do Not Track” enabled in your web browser?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Yes",
-  //     "No",
-  //     "I don't know"
-  //    ],
-  //    "colCount": 3,
-  //    "isRequired": true,
-  //    "name": "Have you ever opted-out of online advertising or online tracking?",
-  //    "title": "Have you ever opted-out of online advertising or online tracking?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Yes",
-  //     "No",
-  //     "I don't know"
-  //    ],
-  //    "colCount": 3,
-  //    "isRequired": true,
-  //    "name": "Do you use a proxy, virtual private network (VPN)",
-  //    "title": "Do you use a proxy, virtual private network (VPN), or other anonymous web browsing service such as Tor?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Never",
-  //     "Monthly",
-  //     "Weekly",
-  //     "Daily",
-  //     "Multiple times a day"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "How often do you browse in private mode",
-  //    "title": "How often do you browse in private mode (e.g. Incognito)?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Never",
-  //     "Monthly",
-  //     "Weekly",
-  //     "Daily",
-  //     "Multiple times a day"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "question7",
-  //    "title": "How often do you clear your cookies?"
-  //   },
-  //   {
-  //    "type": "radiogroup",
-  //    "choices": [
-  //     "Never",
-  //     "Monthly",
-  //     "Weekly",
-  //     "Daily",
-  //     "Multiple times a day"
-  //    ],
-  //    "isRequired": true,
-  //    "name": "question8",
-  //    "title": "How often do you clear your browsing history?"
-  //   }
-  //  ],
-  //  "name": "page11"
-  // },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel5",
+     "elements": [
+      {
+       "type": "html",
+       "html": "First, we would like to know a bit about you. Remember, your answers to these questions are confidential so please be honest.\n",
+       "name": "question1"
+      }
+     ],
+     "title": "Basic Demographics"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "18-24",
+      "25-44",
+      "45-64",
+      "65+"
+     ],
+     "isRequired": true,
+     "name": "age",
+     "title": "How old are you?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Male",
+      "Female"
+     ],
+     "hasOther": true,
+     "isRequired": true,
+     "name": "gender",
+     "title": "Please select your gender:"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "White/Caucasian",
+      "Black/African American",
+      "Native American/Alaska Native/Hawaii Native",
+      "Latino/Hispanic",
+      "Asian",
+      "Other"
+     ],
+     "isRequired": true,
+     "name": "ethnicity",
+     "title": "What is your race or ethnicity (check all that apply)?",
+     "visible": false,
+     "visibleIf": "{loc}='United States'"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "Urdu",
+      "English",
+      "Balochi",
+      "Punjabi",
+      "Sindhi",
+      "Pashtu"
+     ],
+     "isRequired": true,
+     "name": "ethnicity-pk",
+     "title": "What language do you speak (check all that apply)?",
+     "visible": false,
+     "visibleIf": "{loc}='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "None",
+      "High School",
+      "College",
+      "Some graduate school",
+      "Masters",
+      "Doctoral"
+     ],
+     "isRequired": true,
+     "name": "education",
+     "title": "What is the highest level of education you have completed?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never married",
+      "Married",
+      "Divorced",
+      "Separated",
+      "Widowed",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "marital status",
+     "title": "What is your current marital status? "
+    },
+    {
+     "type": "dropdown",
+     "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+     ],
+     "isRequired": true,
+     "name": "children",
+     "title": "How many children do you care for in your household?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes, Full-time",
+      "Yes, Part-time",
+      "No"
+     ],
+     "isRequired": true,
+     "name": "employment status",
+     "title": "Are you currently employed?\n"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Under $15,000",
+      "$15,000 to 30,000",
+      "$30,000 to 45,000",
+      "$45,000 to 60,000",
+      "$60,000 to 75,000",
+      "$75,000 to 100,000",
+      "$100,000 to 150,000",
+      "$150,000 and over",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "income",
+     "title": "What is your yearly household income? ",
+     "visible": false,
+     "visibleIf": "{loc}='United States'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Under Rs. 3,00,000",
+      "Rs. 300,000 to 600,000",
+      "Rs. 600,000 to 1,000,000",
+      "Rs. 1,000,000 to 15,000,000",
+      "Rs. 1,500,000 and over",
+      "I prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "income-pk",
+     "title": "What is your yearly household income? ",
+     "visible": false,
+     "visibleIf": "{loc}='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Pakistan People's Party (PPP)",
+      "Pakistan Muslim League (N)",
+      "Pakistan Tehreek-e-Insaf (PTI)",
+      "Awami National Party (ANP)",
+      "Jamaat-e-Islami Pakistan.",
+      "Jamiat-e-Ulema-e-Islam (F)",
+      "Muttahida Qaumi Movement (MQM)",
+      "Pakistan Awami Tehreek (PAT)",
+      "Other",
+      "Prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "politics-pk",
+     "title": "Which of the following best describes your political views?\n",
+     "visible": false,
+     "visibleIf": "loc='Pakistan'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Conservative",
+      "Moderate",
+      "Liberal",
+      "Other",
+      "Prefer not to say"
+     ],
+     "isRequired": true,
+     "name": "politics",
+     "title": "Which of the following best describes your political views?\n",
+     "visible": false,
+     "visibleIf": "loc='United States'"
+    },
+    {
+     "type": "dropdown",
+     "choices": [
+      "Alabama",
+      "Alaska",
+      "Arizona",
+      "Arkansas",
+      "California",
+      "Colorado",
+      "Connecticut",
+      "Delaware",
+      "Florida",
+      "Georgia",
+      "Hawaii",
+      "Idaho",
+      "Illinois",
+      "Indiana",
+      "Iowa",
+      "Kansas",
+      "Kentucky",
+      "Louisiana",
+      "Maine",
+      "Maryland",
+      "Massachusetts",
+      "Michigan",
+      "Minnesota",
+      "Mississippi",
+      "Missouri",
+      "Montana",
+      "Nebraska",
+      "Nevada",
+      "New Hampshire",
+      "New Jersey",
+      "New Mexico",
+      "New York",
+      "North Carolina",
+      "North Dakota",
+      "Ohio",
+      "Oklahoma",
+      "Oregon",
+      "Pennsylvania",
+      "Rhode Island",
+      "South Carolina",
+      "South Dakota",
+      "Tennessee",
+      "Texas",
+      "Utah",
+      "Vermont",
+      "Virginia",
+      "Washington",
+      "West Virginia",
+      "Wisconsin",
+      "Wyoming",
+      "District of Columbia",
+      "Puerto Rico",
+      "Guam",
+      "American Samoa",
+      "U.S. Virgin Islands",
+      "Northern Mariana Islands"
+     ],
+     "isRequired": true,
+     "name": "state",
+     "title": "What state do you live in? ",
+     "visible": false,
+     "visibleIf": "loc='United States'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Urban",
+      "Suburban",
+      "Rural"
+     ],
+     "isRequired": true,
+     "name": "current place",
+     "title": "How would you describe the place where you currently live? \n"
+    }
+   ],
+   "name": "page6"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel6",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We would like to know about your usage of the internet in general.\n",
+       "name": "question5"
+      }
+     ],
+     "title": "General internet and web usage"
+    },
+    {
+     "type": "text",
+     "inputType": "number",
+     "isRequired": true,
+     "name": "years of internet",
+     "title": "How many years have you been using the internet?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "30 minutes or less",
+      "30 minutes - 1 hour",
+      "1 -2 hours",
+      "2 - 4 hours",
+      "More than 4 hours"
+     ],
+     "isRequired": true,
+     "name": "time spent on internet",
+     "title": "Approximately how much time do you spend each day browsing the web on a desktop computer or laptop? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Chrome",
+      "Firefox",
+      "Internet Explorer/Edge",
+      "Safari",
+      "Brave"
+     ],
+     "isRequired": true,
+     "name": "internet browser",
+     "title": "What Internet browser do you use most often? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Google",
+      "Bing",
+      "DuckDuckGo",
+      "Yahoo",
+      "AOL",
+      "Baidu",
+      "Other"
+     ],
+     "isRequired": true,
+     "name": "search engines",
+     "title": "Which search engines do you use most often? "
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "less than 10",
+      "10-50",
+      "50-100",
+      "100 or more"
+     ],
+     "isRequired": true,
+     "name": "web searches",
+     "title": "Approximately how many web searches do you conduct each day?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "yes",
+      "no"
+     ],
+     // "colCount": "2",
+     "isRequired": true,
+     "name": "phone",
+     "title": "Do you own a smartphone? "
+    },
+    {
+     "type": "text",
+     "inputType": "number",
+     "isRequired": true,
+     "name": "How many years have you been using smartphones? ",
+     "title": "How many years have you been using smartphones? ",
+     "visible": false,
+     "visibleIf": "{phone}= 'yes'"
+    },
+    {
+     "type": "checkbox",
+     "choices": [
+      "iPhone",
+      "Android",
+      "Other",
+      "I Don’t Know"
+     ],
+     "isRequired": true,
+     "name": "What kind of smartphone do you have",
+     "title": "What kind of smartphone do you have (check all that apply)? ",
+     "visibleIf": "{phone}= 'yes'"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Always on smartphone",
+      "Mostly on smartphone",
+      "Slightly More on smartphone",
+      "Equally on both",
+      "Slightly more on desktop",
+      "Mostly on desktop",
+      "Always on desktop"
+     ],
+     "isRequired": true,
+     "name": "What fraction of your web browsing is done on a smartphone versus a desktop computer?",
+     "title": "What fraction of your web browsing is done on a smartphone versus a desktop computer?"
+    }
+   ],
+   "name": "page7"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel7",
+     "title": "Usage of Specific Services"
+    },
+    {
+     "type": "matrix",
+     "columns": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "How frequently do you use the following services",
+     "rows": [
+      "Twitter ",
+      "Instagram ",
+      "Snapchat ",
+      "LinkedIn ",
+      "Pinterest",
+      "YouTube ",
+      "Gmail ",
+      "Reddit ",
+      "ESPN ",
+      "CNN ",
+      "New York Times ",
+      "CNBC ",
+      "Fox News ",
+      "Yelp ",
+      "Amazon ",
+      "Walmart ",
+      "Zillow ",
+      "WebMD ",
+      "Booking ",
+      "TripAdvisor ",
+      "Expedia ",
+      "Hotels.com",
+      "Kayak "
+     ],
+     "title": "How frequently do you use the following services, either via their website or via a smartphone app?\n"
+    }
+   ],
+   "name": "page8"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "name": "panel5",
+     "title": "General Online Activities\n"
+    },
+    {
+     "type": "matrix",
+     "columns": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "How often do you perform the following activities online",
+     "rows": [
+      "Posting content on social media",
+      "Reading content on social media ",
+      "Sending and receiving email",
+      "Online banking and money management ",
+      "Researching health information",
+      "Reading the news",
+      "Booking airline flights, hotels, and/or rental cars ",
+      "Shopping for clothes ",
+      "Shopping for electronics ",
+      "Shopping for household items ",
+      "Shopping for movies, music, and/or books",
+      "Shopping for toys, games, or other entertainment ",
+      "Shopping for office products ",
+      "Shopping for food "
+     ],
+     "title": "How often do you perform the following activities online, either via websites or via smartphone apps?\n"
+    }
+   ],
+   "name": "page9"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We would like to know about your experiences seeing and interacting with online advertisements. \n\n",
+       "name": "q10a"
+      }
+     ],
+     "name": "panel10",
+     "title": "Online Advertising\n"
+    },
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "For these questions, please consider advertisements that you have seen on websites and in smartphone apps. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"websiteAd.png\" alt = \"website\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on search engines.</b>\n",
+       "name": "question1"
+      },
+      {
+       "type": "matrix",
+       "columns": [
+        "Never",
+        "Monthly",
+        "Weekly",
+        "Daily",
+        "Multiple times a day"
+       ],
+       "isAllRowRequired": true,
+       "isRequired": true,
+       "name": "question4",
+       "rows": [
+        "See online advertisements ",
+        "See online advertisements that you find relevant",
+        "See online ads that you find annoying or intrusive ",
+        "Click on online advertisements ",
+        "Purchase a product after clicking an associated online advertisement "
+       ],
+       "title": "How frequently do you interact with online advertisements in the following ways?"
+      }
+     ],
+     "name": "panel5",
+     "title": "On Websites and Apps"
+    },
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "For these questions, please consider advertisements that you have seen on search engines. We are referring to ads that look like this:\n<br/><br/>\n<img src = \"engineAd.png\" alt = \"Search Engine\" />\n<br/><br/>\n<b>Do not consider advertisements that you have seen on other websites or smartphone apps.</b>\n",
+       "name": "question10b"
+      },
+      {
+       "type": "matrix",
+       "columns": [
+        "Never",
+        "Monthly",
+        "Weekly",
+        "Daily",
+        "Multiple times a day"
+       ],
+       "isAllRowRequired": true,
+       "isRequired": true,
+       "name": "How frequently do you interact with search advertisements in the following ways?",
+       "rows": [
+        "See search advertisements",
+        "See search ads that you find relevant ",
+        "See search ads that you find annoying or intrusive ",
+        "Click on search engine ads",
+        "Purchase a product after clicking an associated search ad"
+       ],
+       "title": "How frequently do you interact with search advertisements in the following ways?"
+      }
+     ],
+     "name": "panel10b",
+     "title": "On Search Engines"
+    }
+   ],
+   "name": "page10"
+  },
+  {
+   "elements": [
+    {
+     "type": "panel",
+     "elements": [
+      {
+       "type": "html",
+       "html": "We have a few questions about things you may have done to block online advertisements or enhance your online privacy.\n",
+       "name": "question5"
+      }
+     ],
+     "name": "panel11",
+     "title": "Tracking and Privacy\n"
+    },
+    {
+     "type": "matrix",
+     "columns": [
+      "Yes",
+      "No ",
+      "I don't know"
+     ],
+     "isAllRowRequired": true,
+     "isRequired": true,
+     "name": "Do you use any of the following browser extensions?",
+     "rows": [
+      "Adblock",
+      "Adblock Plus",
+      "uBlock Origin",
+      "Ghostery",
+      "Disconnect",
+      "Privacy Badger"
+     ],
+     "title": "Do you use any of the following browser extensions?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No",
+      "I don't know"
+     ],
+     // "colCount": 3,
+     "isRequired": true,
+     "name": "Do you have “Do Not Track” enabled in your web browser?",
+     "title": "Do you have “Do Not Track” enabled in your web browser?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No",
+      "I don't know"
+     ],
+     // "colCount": 3,
+     "isRequired": true,
+     "name": "Have you ever opted-out of online advertising or online tracking?",
+     "title": "Have you ever opted-out of online advertising or online tracking?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Yes",
+      "No",
+      "I don't know"
+     ],
+     // "colCount": 3,
+     "isRequired": true,
+     "name": "Do you use a proxy, virtual private network (VPN)",
+     "title": "Do you use a proxy, virtual private network (VPN), or other anonymous web browsing service such as Tor?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "How often do you browse in private mode",
+     "title": "How often do you browse in private mode (e.g. Incognito)?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "question7",
+     "title": "How often do you clear your cookies?"
+    },
+    {
+     "type": "radiogroup",
+     "choices": [
+      "Never",
+      "Monthly",
+      "Weekly",
+      "Daily",
+      "Multiple times a day"
+     ],
+     "isRequired": true,
+     "name": "question8",
+     "title": "How often do you clear your browsing history?"
+    }
+   ],
+   "name": "page11"
+  },
   {
    "elements": [
     {
@@ -1131,7 +1138,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn1",
@@ -1158,7 +1165,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn2",
@@ -1185,7 +1192,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn3",
@@ -1212,7 +1219,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn4",
@@ -1239,7 +1246,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn5",
@@ -1266,7 +1273,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn6",
@@ -1293,7 +1300,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn7",
@@ -1320,7 +1327,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn8",
@@ -1347,7 +1354,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn9",
@@ -1374,7 +1381,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn10",
@@ -1401,7 +1408,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn11",
@@ -1428,7 +1435,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn12",
@@ -1455,7 +1462,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn13",
@@ -1482,7 +1489,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn14",
@@ -1509,7 +1516,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn15",
@@ -1536,7 +1543,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn16",
@@ -1563,7 +1570,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn17",
@@ -1590,7 +1597,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn18",
@@ -1617,7 +1624,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
     {
      "type": "rating","isRequired": true,"name": "dyn19",
@@ -1645,7 +1652,7 @@ window.survey = new Survey.Model({
       }
      ],
      "isRequired": true, "visible": false,
-     "title": "How interested are you in Sports?"
+     "title": "placeholder?"
     },
    ],
    "name": "pageDYN", "visible": false
