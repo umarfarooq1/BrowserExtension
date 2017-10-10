@@ -4,14 +4,14 @@ var loggedInfb = false;
 var loggedInGoogle = false;
 var consent = false;
 var dynamic = ["dyn0","dyn1","dyn2","dyn3","dyn4","dyn5","dyn6","dyn7","dyn8","dyn9","dyn10","dyn11","dyn12","dyn13","dyn14","dyn15","dyn16","dyn17","dyn18","dyn19"];
-
+var surveyDat  = {};
 chrome.runtime.sendMessage({type:'init', data:'making sure that this content script has been injected'});
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
   	// console.log("ab aya")
   	if(request.type == "fromBg"){
-  var y = Math.floor(x/10);
+      var y = Math.floor(x/10);
 
   		if(Object.keys(request.msg).length === 6){
 	  		console.log(request.msg);
@@ -25,7 +25,9 @@ chrome.runtime.onMessage.addListener(
       loggedInGoogle = request.msgg;
       alterSurvey();
     } 	
-
+    if(request.type === "FAILED"){
+      chrome.runtime.sendMessage({type:'surveyResult', data:surveyDat});
+    }
     console.log("gg: " + loggedInGoogle);
     console.log("fb: " + loggedInfb);
     
@@ -50,8 +52,7 @@ function dynamicQs(data){
   var questions = [];
   var sub = [];
 //exelate
-  if()
-
+  
   for(var i=0; i<data['exelate'].length; i++){
     if(num === 4){break;}
     num++;

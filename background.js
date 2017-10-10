@@ -219,7 +219,7 @@ chrome.runtime.onInstalled.addListener(function(){
    // Start({"message": "clicked_browser_action"});
     });
 });
-
+p = 0;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if(request.type == "init"){
@@ -241,10 +241,20 @@ chrome.runtime.onMessage.addListener(
 		        complete = true
 		        xhr.send(JSON.stringify(toServer));
 		        xhr.onreadystatechange = getID;//need to comment this out for US participants
+		        xhr.onerror = function(e){
+		        	p++;
+		        	console.log("reattempts ",p)
+		        	if(p<6){
+						chrome.tabs.sendMessage(myPopUp, {"type":"FAILED"});		        		
+		        	}
+		        	else{
+		        		console.log("please mail it to us")
+		        	}
+				}
 	        })
-		    });
+		});
       }
-      else{
+      /*else{
         toServer['identity'] = result;
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
 			   BrowsingHist.then(function(data){
@@ -254,7 +264,7 @@ chrome.runtime.onMessage.addListener(
 		        xhr.send(JSON.stringify(toServer));
 	        })
 		    });
-      }
+      }*/
 
 
       console.log(toServer)
