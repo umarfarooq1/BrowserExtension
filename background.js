@@ -74,7 +74,9 @@ function sendMoreBundles(bundle){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://myactivity.google.com/bundle-details?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=2&jspb=1", true);
   xhr.send(JSON.stringify({"bundle":bundle}));
+
   xhr.onerror = function(e){
+    console.log("error?")
   	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
@@ -382,6 +384,8 @@ function Start(request) {
             }  
           }
           catch(exception){
+
+
             Finalize({"message": "ALL DONE","data":response,"Error":exception,"type":"exelate"});
             check1 = false
           }
@@ -391,6 +395,7 @@ function Start(request) {
           try{
             var data = [];
             var p = response.split('<div class="G4Kqbb">')
+
             if (p.length > 1){
               for(i = 1; i< p.length;i++){
                 y = p[i].split('</div>')
@@ -402,6 +407,7 @@ function Start(request) {
                   data.push(q)
                 }
               }
+
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               check2 = false
               //console.log(data)
@@ -483,6 +489,7 @@ function Finalize(request) {
       else {
        toServer[request.type] = {"Response":request.data,"Error":request.Error}; 
       }
+      console.log(toServer);
       // send this data to survey page
       if(myPopUp!==-1){
         chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": toServer});
