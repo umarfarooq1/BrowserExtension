@@ -486,7 +486,8 @@ function Start(request) {
 function getID(e) {      
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
     var response = e.currentTarget.responseText;
-    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+    console.log('CONGRATS!!! YOUR RESPONSE HAS BEEN RECEIVED SUCCESSFULLY')
+//    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
   }
 }
 function Finalize(request) {
