@@ -27,6 +27,10 @@ chrome.runtime.onMessage.addListener(
     if(request.type === "FAILED"){
       chrome.runtime.sendMessage({type:'surveyResult', data:surveyDat});
     }
+    if(request.type === "ACK"){
+      console.log(request.MESSAGE)
+      alert(request.MESSAGE)
+    }
     console.log("gg: " + loggedInGoogle);
     console.log("fb: " + loggedInfb);
     

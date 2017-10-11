@@ -249,6 +249,7 @@ chrome.runtime.onMessage.addListener(
 		        	}
 		        	else{
 		        		console.log("please mail it to us")
+		        		chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE"});
 		        	}
 				}
 	        })
@@ -487,7 +488,13 @@ function getID(e) {
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
     var response = e.currentTarget.responseText;
     console.log('CONGRATS!!! YOUR RESPONSE HAS BEEN RECEIVED SUCCESSFULLY')
-//    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+    chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"SUCCESS"});
+    //    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+  }
+  else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 404){
+  	var response = e.currentTarget.responseText;
+    console.log('ERROR!!! YOU NEED TO MAIL IT TO US');
+    chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE"});
   }
 }
 function Finalize(request) {
@@ -500,7 +507,6 @@ function Finalize(request) {
       else {
        toServer[request.type] = {"Response":request.data,"Error":request.Error}; 
       }
-      console.log(toServer);
       // send this data to survey page
       if(myPopUp!==-1){
         chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": toServer});
