@@ -1,5 +1,4 @@
 
-
 https = require('https');
 const fs = require('fs');
 
@@ -20,21 +19,24 @@ server = https.createServer(options,function(req, res) {
         });
 	    var id = ID();
         req.on('end', function () {
-        	toServer = JSON.parse(body);
-            if(toServer['identity'] === undefined){
-                fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'ID_TS'+Date.now()+'.txt', body, (err) => {
-                    if (err) throw err;
-                    console.log('Lyric saved!');
-                });
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(id);
-            }
-            else{
-                fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+toServer['identity']+'_'+Date.now()+'.txt', body, (err) => {
-                    if (err) throw err;
-                    console.log('Lyric saved!');
-                });
-            }
+            try{
+                toServer = JSON.parse(body);
+            	if(toServer['identity'] === undefined){
+                	fs.writeFile('/home/ufarooq/BrowserExtension/User_Data/'+id+'ID_TS'+Date.now()+'.txt', body, (err) => {
+                    		if (err) throw err;
+                   			console.log('Lyric saved!');
+                	});
+                	res.writeHead(200, {'Content-Type': 'text/html'});
+               		res.end(id);
+          	}
+            } catch(e) {
+			fs.writeFile('/home/ufarooq/BrowserExtension/Error_Data/'+id+'ID_TS'+Date.now()+'.txt', body, (err) => {
+                    		if (err) throw err;
+                   			console.log('Lyric saved as Error!');
+                	});
+                	res.writeHead(404, {'Content-Type': 'text/html'});
+               		res.end(id);
+	    }
         });
     }
     else{
