@@ -60,10 +60,12 @@ chrome.webRequest.onBeforeSendHeaders.addListener(handler, requestFilter, extraI
       
 function update_GoogleSearchBUNDLES(all){
   var arr = [];
-  for (var i=0; i <all.length ; i++) {
-    sub = all[i][9]
-    sub.push(all[i][4]); //consider timezone, for pakistan this becomes GMT+05:00
-    GOOGLE_SEARCH.push(sub)  
+  if(all!==undefined){
+  	for (var i=0; i <all.length ; i++) {
+	    sub = all[i][9]
+	    sub.push(all[i][4]); //consider timezone, for pakistan this becomes GMT+05:00
+	    GOOGLE_SEARCH.push(sub)  
+	  }	
   }
   b++;
   if(a===b && Googlecomplete == true){
@@ -481,6 +483,7 @@ function Start(request) {
 }
 
 function getID(e) {      
+  console.log(toServer)
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
     var response = e.currentTarget.responseText;
     console.log('CONGRATS!!! YOUR RESPONSE HAS BEEN RECEIVED SUCCESSFULLY')

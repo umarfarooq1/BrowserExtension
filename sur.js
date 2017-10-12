@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener(
     if(request.type === "ACK"){
       console.log(request.MESSAGE)
       alert(request.MESSAGE)
-      if(request.MESSAGE = "FAILURE"){
+      if(request.MESSAGE === "FAILURE"){
 	      document.querySelector('#surveyResult').innerHTML = "<br/>Unfortunately we are facing a little hiccup. Your response has not been sent. Please click the link below and email it to the followig id: <a href=\"mailto:18100048@lums.edu.pk\">18100048@lums.edu.pk</a> "
 	      document.querySelector('#surveyJson').innerHTML = "<br/>\n<a href=\"result.html\" class=\"button\" target=\"_blank\">Click here to view your data</a>\n<br/><br/>"
     
@@ -1709,7 +1709,7 @@ window.survey = new Survey.Model({
 
 survey.onComplete.add(function(result) {
 
-	surveyDat = result.data;
+	  surveyDat = result.data;
     document.querySelector('#surveyResult').innerHTML = "<br/>Please wait while we process your response..."
     chrome.runtime.sendMessage({type:'surveyResult', data:result.data});
 
