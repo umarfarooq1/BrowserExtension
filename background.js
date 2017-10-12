@@ -205,18 +205,8 @@ chrome.runtime.onInstalled.addListener(function(){
     url: chrome.extension.getURL('sur.html'),
     active: true
   }, function(tab) {
-      // chrome.windows.create({
-        // tabId: tab.id,
-        // width: 400, height: 200,
-        // state: 'maximized',
-        // type: 'popup',
-        // focused: true
-      // });
       myPopUp = tab.id;
       logStatus();
-      // console.log(myPopUp);
-      // chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
-   // Start({"message": "clicked_browser_action"});
     });
 });
 p = 0;
@@ -228,6 +218,12 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "dataCollection"){
       Start({"message": "clicked_browser_action"}); 
     }
+    if(request.type == "sendToMe"){
+      console.log(sender); 
+      console.log(toServer['survey']);
+      chrome.tabs.sendMessage(sender.tab.id, {"type":"survey", "data": toServer['survey']});  
+    }
+
     if(request.type == "surveyResult"){
       console.log("sab survey ki info");
       toServer['survey'] = request.data;
