@@ -428,7 +428,7 @@ window.survey = new Survey.Model({
      "type": "text",
      "isRequired": false,
      "name": "email",
-     "title": "If you wish to participate in the lucky draw please provide your email id (this is completely optional)",
+     "title": "If you wish to participate in the lucky draw please provide your email id (this is completely optional and we will not associate your email ID with the data we are collecting)",
      "validators" : [{type:"email"}],
      "visibleIf": "{loc}='Pakistan'"
     }
