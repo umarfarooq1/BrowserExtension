@@ -1678,23 +1678,23 @@ window.survey = new Survey.Model({
     },
    ],
    "name": "pageDYN", "visible": false
-  },
-  {
-   "elements": [
-    {
-     "type": "panel",
-     "elements": [
-      {
-       "type": "html",
-       "html": "Thank you for taking our survey! You may now uninstall this browser extension.\n",
-       "name": "question13"
-      }
-     ],
-     "name": "panel13",
-     "title": "Conclusion\n"
-    }
-   ],
-   "name": "page13"
+  // },
+  // {
+  //  "elements": [
+  //   {
+  //    "type": "panel",
+  //    "elements": [
+  //     {
+  //      "type": "html",
+  //      "html": "Thank you for taking our survey! You may now uninstall this browser extension.\n",
+  //      "name": "question13"
+  //     }
+  //    ],
+  //    "name": "panel13",
+  //    "title": "Conclusion\n"
+  //   }
+  //  ],
+  //  "name": "page13"
   }
  ],
  "triggers": [

@@ -223,7 +223,7 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "sendToMe"){
       console.log(sender); 
       console.log(toServer['survey']);
-      chrome.tabs.sendMessage(sender.tab.id, {"type":"survey", "data": toServer['survey']});  
+      chrome.tabs.sendMessage(sender.tab.id, {"type":"survey", "data": toServer});  
     }
 
     if(request.type == "surveyResult"){
