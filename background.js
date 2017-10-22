@@ -80,6 +80,7 @@ function sendMoreBundles(bundle){
   	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
+  console.log(bundle)
   xhr.send(JSON.stringify({"bundle":bundle}));
 
 }
@@ -94,6 +95,8 @@ function processGoogleSearchRequestBundles(e) {
        update_GoogleSearchBUNDLES(all)
     }       
   }
+  else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 500){console.log('this is the ERORRRRRRRRR1')}
+  else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 0){console.log('this is the ERORRRRRRRRR2')}
 }
 function update_GoogleSearch(all){
   var arr = [];
