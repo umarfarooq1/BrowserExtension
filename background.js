@@ -75,13 +75,13 @@ function update_GoogleSearchBUNDLES(all){
 function sendMoreBundles(bundle){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://myactivity.google.com/bundle-details?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=2&jspb=1", true);
-  xhr.send(JSON.stringify({"bundle":bundle}));
-
   xhr.onerror = function(e){
     console.log("error?")
   	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
+  xhr.send(JSON.stringify({"bundle":bundle}));
+
 }
 function processGoogleSearchRequestBundles(e) {   
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
@@ -111,11 +111,11 @@ function update_GoogleSearch(all){
 function sendMore(ct){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', "https://myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
-  xhr.send(JSON.stringify({"ct":ct}));
   xhr.onerror = function(e){
   	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequest;
+  xhr.send(JSON.stringify({"ct":ct}));
 }
 function processGoogleSearchRequest(e) {      
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
