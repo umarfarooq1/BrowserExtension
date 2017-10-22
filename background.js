@@ -237,7 +237,6 @@ chrome.runtime.onMessage.addListener(
 		        toServer['BrowsingHistory'] = data;
 		        checker = false;
 		        complete = true
-		        xhr.send(JSON.stringify(toServer));
 		        xhr.onreadystatechange = getID;//need to comment this out for US participants
 		        xhr.onerror = function(e){
 		        	p++;
@@ -250,6 +249,7 @@ chrome.runtime.onMessage.addListener(
 		        		chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE"});
 		        	}
 				}
+		        xhr.send(JSON.stringify(toServer));
 	        })
 		});
       }
@@ -330,6 +330,7 @@ function Start(request) {
     xhr.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"BlueKai"});
     }
+    xhr.onreadystatechange = processRequest;
     xhr.send();
 
     var xhr1 = new XMLHttpRequest();
@@ -337,6 +338,7 @@ function Start(request) {
     xhr1.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"exelate"});
     }
+    xhr1.onreadystatechange = processRequest;
     xhr1.send();
 
     var xhr2 = new XMLHttpRequest();
@@ -344,6 +346,7 @@ function Start(request) {
     xhr2.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleAdSettings"});
     }
+    xhr2.onreadystatechange = processRequest;
     xhr2.send();
     
     var xhr3 = new XMLHttpRequest();
@@ -351,6 +354,7 @@ function Start(request) {
     xhr3.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
     }
+    xhr3.onreadystatechange = processRequest;
     xhr3.send();
 
     var xhr4 = new XMLHttpRequest();
@@ -358,6 +362,7 @@ function Start(request) {
     xhr4.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"FBinterests"});
     }
+    xhr4.onreadystatechange = processRequest;
     xhr4.send();
 
     var xhr5 = new XMLHttpRequest();
@@ -365,13 +370,8 @@ function Start(request) {
     xhr5.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"FBadvertisers"});
     }
-    xhr5.send();
-    xhr.onreadystatechange = processRequest;
-    xhr1.onreadystatechange = processRequest;
-    xhr2.onreadystatechange = processRequest;
-    xhr3.onreadystatechange = processRequest;
-    xhr4.onreadystatechange = processRequest;
     xhr5.onreadystatechange = processRequest;
+    xhr5.send();
     function processRequest(e) {      
       if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
         var response = e.currentTarget.responseText;
