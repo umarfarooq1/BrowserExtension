@@ -187,14 +187,56 @@ function dynamicQs(data){
 	  pg.visible = "true"; 
 	  var smallest = Math.min(dynamic.length, questions.length);
     
-    for(var i=0; i<smallest; i++){
+    // pg.addNewPanel("dyn0");
+    // pg.addNewQuestion("rating", "1");
+    // var tmp = survey.getQuestionByName("1", true);
+    // tmp.title = "Are you interested in '" + questions[0] + "'?";
+    // tmp.name = tmp.title;
+    // tmp.isRequired = true;
+    // tmp.rateValues = [
+    //   {"value": "1","text": " Not at all"},
+    //   {"value": "2","text": "A tiny amount"},
+    //   {"value": "3","text": "Somewhat"},
+    //   {"value": "4","text": "Very much"},
+    //   {"value": "5","text": "Extremely"}
+    //  ]
+    
+    // pg.addNewQuestion("radiogroup", "2");
+    // var tmp2 = survey.getQuestionByName("2", true);
+    // tmp2.title = "Have you recently seen online advertisements related to '" + questions[0] + "'?";
+    // tmp2.name = questions[0];
+    // tmp2.isRequired = true;
+    // tmp2.choices = ["yes", "no", "I don't remember"];
+    
+    // pg.addNewQuestion("radiogroup", "3");
+    // var tmp3 = survey.getQuestionByName("3", true); 
+    // tmp3.title = "Have the online ads you have seen related to '" + questions[0] + "' been relevant and useful to you (e.g. the ad introduced you to a new product that you appreciate, or reminded you to purchase a product you had intended to buy)?";
+    // tmp3.name = tmp3.title;
+    // tmp3.isRequired = true;
+    // // tmp3.visible = false;
+    // tmp3.visibleIf = "{tmp2.name}='yes'";
+    // tmp3.choices = ["yes", "maybe", "no"]; 
 
-      pg.addNewQuestion("text", "hello");
-      var tmp = survey.getQuestionByName(dynamic[i], true);
-      tmp.title = "Are you interested in ".concat(questions[i]);
-      tmp.name = tmp.title;
-      tmp.visible = true;   
-    }
+    var tmp = survey.getQuestionByName(dynamic[0], true);
+    tmp.title = "Are you interested in ".concat(questions[i]);
+    tmp.name = tmp.title;
+    tmp.visible = true; 
+    var tmp2 = survey.getQuestionByName("dyn0a", true);
+    // console.log(tmp2);
+    tmp2.title = "Have you recently seen online advertisements related to '" + questions[0] + "'?";
+    tmp2.visible = true; 
+    var tmp3 = survey.getQuestionByName("dyn0b", true); 
+    tmp3.title = "Have the online ads you have seen related to '" + questions[0] + "' been relevant and useful to you (e.g. the ad introduced you to a new product that you appreciate, or reminded you to purchase a product you had intended to buy)?";
+    tmp3.name = tmp3.title;
+
+    // for(var i=0; i<smallest; i++){
+
+    //   pg.addNewQuestion("text", "hello");
+    //   var tmp = survey.getQuestionByName(dynamic[i], true);
+    //   tmp.title = "Are you interested in ".concat(questions[i]);
+    //   tmp.name = tmp.title;
+    //   tmp.visible = true;   
+    // }
     
     survey.render();
   }
@@ -1153,29 +1195,29 @@ window.survey = new Survey.Model({
     {
      "type": "rating","isRequired": true,"name": "dyn0",
      "rateValues": [
-      {
-       "value": "1",
-       "text": " Not at all"
-      },
-      {
-       "value": "2",
-       "text": "A tiny amount"
-      },
-      {
-       "value": "3",
-       "text": "Somewhat"
-      },
-      {
-       "value": "4",
-       "text": "Very much"
-      },
-      {
-       "value": "5",
-       "text": "Extremely"
-      }
+      {"value": "1","text": " Not at all"},
+      {"value": "2","text": "A tiny amount"},
+      {"value": "3","text": "Somewhat"},
+      {"value": "4","text": "Very much"},
+      {"value": "5","text": "Extremely"}
      ],
      "isRequired": true, "visible": false,
      "title": "placeholder?"
+    },
+    {
+     "type": "radiogroup", "visible": false,
+     "choices": ["Yes", "No", "I don't remember"],
+     "isRequired": true,
+     "name": "dyn0a",
+     "title": "placeholder?"
+    },
+    {
+     "type": "radiogroup",
+     "visibleIf": "{dyn0a}='Yes'",
+     "choices": ["Yes", "Maybe", "No"],
+     "isRequired": true,
+     "name": "dyn0b",
+     "title": "How often do you clear your cookies?"
     }
     // {
     //  "type": "rating","isRequired": true,"name": "dyn1",
@@ -1842,7 +1884,11 @@ survey.onUpdateQuestionCssClasses.add(function(survey, options) {
     // classes.item = "sq-item";
     classes.label = "sq-label";
     var x = options.question.getType();
-    // console.log(x); 
+    // if(x==="panel"){
+      console.log(x); 
+    //   classes.item = "sq-item";
+    // }
+    
     if (x === "radiogroup" || x === "checkbox" ) {
      classes.root = "sq-root";
     }
