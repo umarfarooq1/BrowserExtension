@@ -97,7 +97,7 @@ function processGoogleSearchRequestBundles(e) {
 }
 function update_GoogleSearch(all){
   var arr = [];
-  if (all!==null){
+  if (all!==undefined){
     for (var i=0; i <all.length ; i++) {
       var sub = all[i][1];
       for (var x=0; x<sub.length ; x++) {
@@ -125,7 +125,7 @@ function processGoogleSearchRequest(e) {
        var tmp = response//.slice(6);
        var ar = eval(tmp);
        var all = ar[0];
-       if(all!==null){
+       if(all!==undefined){
         update_GoogleSearch(all)
          if(GetDiff(Math.floor(ar[0][0][0]/1000)) > NumberofDaysToGoBackForGoogleSearch){
            console.log("pokerface")
