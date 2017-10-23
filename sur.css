@@ -63,8 +63,9 @@ body {
 }
 
 .sq-title {
-  font-size: 20px;
+  font-size: 18px;
   margin-left: 5px;
+  color: #00463C 
 }
 
 .sq-label {
