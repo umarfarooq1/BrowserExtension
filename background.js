@@ -80,7 +80,6 @@ function sendMoreBundles(bundle){
   	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
   }
   xhr.onreadystatechange = processGoogleSearchRequestBundles;
-  console.log(bundle)
   xhr.send(JSON.stringify({"bundle":bundle}));
 
 }
@@ -95,8 +94,9 @@ function processGoogleSearchRequestBundles(e) {
        update_GoogleSearchBUNDLES(all)
     }       
   }
-  else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 500){console.log('this is the ERORRRRRRRRR1')}
-  else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 0){console.log('this is the ERORRRRRRRRR2')}
+  else if(e.currentTarget.readyState == 4 && e.currentTarget.status !== 200){
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":e.currentTarget.status, "type":"googleSearchTerms"});
+  }
 }
 function update_GoogleSearch(all){
   var arr = [];
@@ -142,6 +142,9 @@ function processGoogleSearchRequest(e) {
         Googlecomplete = true
        }
     }       
+  }
+  else if(e.currentTarget.readyState == 4 && e.currentTarget.status !== 200){
+  	Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":e.currentTarget.status, "type":"googleSearchTerms"})
   }
 }
 
@@ -444,6 +447,7 @@ function Start(request) {
           }
           catch(exception){
             Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":exception,"Response":response, "type":"googleSearchTerms"});
+            check3 = false
           }
         }
         else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
@@ -480,6 +484,33 @@ function Start(request) {
             check6 = false;
           } 
         }
+      }
+      else if(e.currentTarget.readyState == 4 && e.currentTarget.status !== 200){
+        var response = e.currentTarget.responseText;
+        if(e.currentTarget.responseURL.indexOf('segmentChoiceEx')!== -1 && check1){ //code for exelate
+          Finalize({"message": "ALL DONE","data":response,"Error":e.currentTarget.status,"type":"exelate"}); 
+          check1 = false
+        }
+        else if(e.currentTarget.responseURL.indexOf('adssettings.google.com')!== -1 && check2){
+          Finalize({"message": "ALL DONE","data":response, "Error":e.currentTarget.status,"type":"googleAdSettings"});
+          check2 = false   
+        }
+        else if(e.currentTarget.responseURL.indexOf('myactivity.google.com')!== -1 && check3){
+          Finalize({"message": "ALL DONE","data":GOOGLE_SEARCH,"Error":e.currentTarget.status,"Response":response, "type":"googleSearchTerms"});
+          check3 = false
+        }
+        else if(e.currentTarget.responseURL.indexOf('tags.bluekai.com')!== -1 && check4){
+          Finalize({"message": "ALL DONE","data":response,"Error":e.currentTarget.status, "type":"BlueKai"});  
+          check4 = false
+        }
+        else if(e.currentTarget.responseURL.indexOf('/profile/interests/')!== -1 && check5){
+          Finalize({"message": "ALL DONE","data":response,"Error":e.currentTarget.status,"type":"FBinterests"});
+          check5 = false;  
+        }
+        else if(e.currentTarget.responseURL.indexOf('/profile/advertisers/')!== -1 && check6){
+          Finalize({"message": "ALL DONE","data":response,"Error":e.currentTarget.status,"type":"FBadvertisers"});
+          check6 = false; 
+        }      	
       }
     }
   }
