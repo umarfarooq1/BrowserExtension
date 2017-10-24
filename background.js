@@ -253,7 +253,8 @@ chrome.runtime.onMessage.addListener(
 		        	}
 		        	else{
 		        		console.log("please mail it to us")
-		        		chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE"});
+		        		chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE","data":toServer});
+
 		        	}
 				}
 		        xhr.send(JSON.stringify(toServer));
