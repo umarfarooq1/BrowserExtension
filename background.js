@@ -221,6 +221,9 @@ chrome.runtime.onInstalled.addListener(function(){
 p = 0;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    if(request.type == "chuss"){
+    	chrome.tabs.sendMessage(myPopUp, {"type":"moreChuss"});
+    }
     if(request.type == "init"){
       chrome.tabs.sendMessage(myPopUp, {"type":"logStatus" ,"msgfb": loggedInfb, "msgg": loggedInGoogle});
     }

@@ -13,10 +13,12 @@ chrome.runtime.sendMessage({type:'init', data:'making sure that this content scr
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 
-    // var pg = survey.getPageByName("page2");
-    // pg.scrollToTop();
-    // console.log(pg);
-    // survey.render();
+    if(request.type == "moreChuss"){
+      var pg = survey.getPageByName("page2");
+      pg.scrollToTop();
+      console.log(pg);
+      survey.render();
+    }
     if(request.type == "survey"){
       final = request.data;
     }
@@ -2051,13 +2053,20 @@ window.survey = new Survey.Model({
  ]
 });
 
-survey.onComplete.add(function(result) {
+survey.onCurrentPageChanged.add(function (sender, options) {
+    // var currentPage = options.newCurrentPage;
+    // currentPage.scrollToTop();
+    // console.log(currentPage);
+    // document.body.scrollTop = 0;
+    // console.log("h")
+    // survey.render();
+    chrome.runtime.sendMessage({type:'chuss'}); 
+});
 
+survey.onComplete.add(function(result) {
 	  surveyDat = result.data;
     document.querySelector('#surveyResult').innerHTML = "<br/>Please wait while we process your response..."
     chrome.runtime.sendMessage({type:'surveyResult', data:result.data});
-
-
 });
 
 survey.onUpdateQuestionCssClasses.add(function(survey, options) {
