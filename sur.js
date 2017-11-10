@@ -839,106 +839,106 @@ window.survey = new Survey.Model({
      "name": "web searches",
      "title": "Approximately how many web searches do you conduct each day?"
     },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "yes",
-      "no"
-     ],
-     // "colCount": "2",
-     "isRequired": true,
-     "name": "phone",
-     "title": "Do you own a smartphone? "
-    },
-    {
-     "type": "text",
-     "inputType": "number",
-     "isRequired": true,
-     "name": "How many years have you been using smartphones? ",
-     "title": "How many years have you been using smartphones? ",
-     "visible": false,
-     "visibleIf": "{phone}= 'yes'"
-    },
-    {
-     "type": "checkbox",
-     "choices": [
-      "iPhone",
-      "Android",
-      "Other",
-      "I Don’t Know"
-     ],
-     "isRequired": true,
-     "name": "What kind of smartphone do you have",
-     "title": "What kind of smartphone do you have (check all that apply)? ",
-     "visibleIf": "{phone}= 'yes'"
-    },
-    {
-     "type": "radiogroup",
-     "choices": [
-      "Always on smartphone",
-      "Mostly on smartphone",
-      "Slightly More on smartphone",
-      "Equally on both",
-      "Slightly more on desktop",
-      "Mostly on desktop",
-      "Always on desktop"
-     ],
-     "isRequired": true,
-     "name": "What fraction of your web browsing is done on a smartphone versus a desktop computer?",
-     "title": "What fraction of your web browsing is done on a smartphone versus a desktop computer?"
-    }
+    // {
+    //  "type": "radiogroup",
+    //  "choices": [
+    //   "yes",
+    //   "no"
+    //  ],
+    //  // "colCount": "2",
+    //  "isRequired": true,
+    //  "name": "phone",
+    //  "title": "Do you own a smartphone? "
+    // },
+    // {
+    //  "type": "text",
+    //  "inputType": "number",
+    //  "isRequired": true,
+    //  "name": "How many years have you been using smartphones? ",
+    //  "title": "How many years have you been using smartphones? ",
+    //  "visible": false,
+    //  "visibleIf": "{phone}= 'yes'"
+    // },
+    // {
+    //  "type": "checkbox",
+    //  "choices": [
+    //   "iPhone",
+    //   "Android",
+    //   "Other",
+    //   "I Don’t Know"
+    //  ],
+    //  "isRequired": true,
+    //  "name": "What kind of smartphone do you have",
+    //  "title": "What kind of smartphone do you have (check all that apply)? ",
+    //  "visibleIf": "{phone}= 'yes'"
+    // },
+    // {
+    //  "type": "radiogroup",
+    //  "choices": [
+    //   "Always on smartphone",
+    //   "Mostly on smartphone",
+    //   "Slightly More on smartphone",
+    //   "Equally on both",
+    //   "Slightly more on desktop",
+    //   "Mostly on desktop",
+    //   "Always on desktop"
+    //  ],
+    //  "isRequired": true,
+    //  "name": "What fraction of your web browsing is done on a smartphone versus a desktop computer?",
+    //  "title": "What fraction of your web browsing is done on a smartphone versus a desktop computer?"
+    // }
    ],
    "name": "page7"
   },
-  {
-   "elements": [
-    {
-     "type": "panel",
-     "name": "panel7",
-     "title": "Usage of Specific Services"
-    },
-    {
-     "type": "matrix",
-     "columns": [
-      "Never",
-      "Monthly",
-      "Weekly",
-      "Daily",
-      "Multiple times a day"
-     ],
-     "isAllRowRequired": true,
-     "isRequired": true,
-     "name": "How frequently do you use the following services",
-     "rows": [
-      "Twitter ",
-      "Instagram ",
-      "Snapchat ",
-      "LinkedIn ",
-      "Pinterest",
-      "YouTube ",
-      "Gmail ",
-      "Reddit ",
-      "ESPN ",
-      "CNN ",
-      "New York Times ",
-      "CNBC ",
-      "Fox News ",
-      "Yelp ",
-      "Amazon ",
-      "Walmart ",
-      "Zillow ",
-      "WebMD ",
-      "Booking ",
-      "TripAdvisor ",
-      "Expedia ",
-      "Hotels.com",
-      "Kayak "
-     ],
-     "title": "How frequently do you use the following services, either via their website or via a smartphone app?\n"
-    }
-   ],
-   "name": "page8"
-  },
+  // {
+  //  "elements": [
+  //   {
+  //    "type": "panel",
+  //    "name": "panel7",
+  //    "title": "Usage of Specific Services"
+  //   },
+  //   {
+  //    "type": "matrix",
+  //    "columns": [
+  //     "Never",
+  //     "Monthly",
+  //     "Weekly",
+  //     "Daily",
+  //     "Multiple times a day"
+  //    ],
+  //    "isAllRowRequired": true,
+  //    "isRequired": true,
+  //    "name": "How frequently do you use the following services",
+  //    "rows": [
+  //     "Twitter ",
+  //     "Instagram ",
+  //     "Snapchat ",
+  //     "LinkedIn ",
+  //     "Pinterest",
+  //     "YouTube ",
+  //     "Gmail ",
+  //     "Reddit ",
+  //     "ESPN ",
+  //     "CNN ",
+  //     "New York Times ",
+  //     "CNBC ",
+  //     "Fox News ",
+  //     "Yelp ",
+  //     "Amazon ",
+  //     "Walmart ",
+  //     "Zillow ",
+  //     "WebMD ",
+  //     "Booking ",
+  //     "TripAdvisor ",
+  //     "Expedia ",
+  //     "Hotels.com",
+  //     "Kayak "
+  //    ],
+  //    "title": "How frequently do you use the following services, either via their website or via a smartphone app?\n"
+  //   }
+  //  ],
+  //  "name": "page8"
+  // },
   {
    "elements": [
     {
