@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "moreChuss"){
       var pg = survey.getPageByName("page2");
       pg.scrollToTop();
-      console.log(pg);
+      // console.log(pg);
       survey.render();
     }
     if(request.type == "survey"){
@@ -43,12 +43,17 @@ chrome.runtime.onMessage.addListener(
       console.log(request.MESSAGE)
       alert(request.MESSAGE)
       if(request.MESSAGE === "FAILURE"){
-	       document.querySelector('#surveyResult').innerHTML = "<br/>Unfortunately we are facing a little hiccup. Your response has not been sent. Please send the text file 'yourResponse' that will be automatically downloaded to any of the followig email ids:<br/> <a href=\"mailto:18100048@lums.edu.pk\">18100048@lums.edu.pk</a> <br/> <a href=\"mailto:18100155@lums.edu.pk\">18100155@lums.edu.pk</a> <br/> Thank you for your help!"
-	       // document.querySelector('#surveyJson').innerHTML = "<br/>\n<a href=\"result.html\" class=\"button\" target=\"_blank\">Click here to view your data</a>\n<br/><br/>"
-         //console.log(final)
-         saveText("yourResponse.txt", JSON.stringify(request.data));
+         document.querySelector('#surveyResult').innerHTML = "<br/>Unfortunately we are facing a little hiccup. Your response has not been sent. Please send the text file 'yourResponse' that will be automatically downloaded to any of the followig email ids:<br/> <a href=\"mailto:18100048@lums.edu.pk\">18100048@lums.edu.pk</a> <br/> <a href=\"mailto:18100155@lums.edu.pk\">18100155@lums.edu.pk</a> <br/> Thank you for your help!";
+         var x = JSON.stringify(request.data);
+         var compressedX = LZString.compress(x);
+         var blob = new Blob([compressedX], {
+            type: "text/plain;charset=utf-8;",
+         });
+         saveAs(blob, "yourResponse.txt");
+         //saveText("yourResponse.txt", JSON.stringify(request.data));
 
-         // document.querySelector('#surveyJson').innerHTML = "<br/>\n<a href=\"res.txt\" download=\"example.json\">Download as JSON</a>"
+         //var decompressedX = LZString.decompress(compressedX);
+         //console.log(x.length,compressedX.length,decompressedX.length);
 	     } else {
 	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience!"
 	     }
@@ -64,7 +69,7 @@ chrome.runtime.onMessage.addListener(
 
 function saveText(filename, text) {
     var tempElem = document.createElement('a');
-    tempElem.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    tempElem.setAttribute('href', 'data:text/plain,' + encodeURIComponent(text));
     tempElem.setAttribute('download', filename);
     tempElem.click();
 }
@@ -2067,6 +2072,7 @@ survey.onComplete.add(function(result) {
 	  surveyDat = result.data;
     document.querySelector('#surveyResult').innerHTML = "<br/>Please wait while we process your response..."
     chrome.runtime.sendMessage({type:'surveyResult', data:result.data});
+    // chrome.runtime.sendMessage({type:'surveyResult', data: "{}" });
 });
 
 survey.onUpdateQuestionCssClasses.add(function(survey, options) {
