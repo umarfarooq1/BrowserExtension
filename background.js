@@ -241,10 +241,13 @@ chrome.runtime.onMessage.addListener(
       toServer['survey'] = request.data;
       var xhr = new XMLHttpRequest();
       xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
+      console.log()
       if(firstTime){  	
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
 			   BrowsingHist.then(function(data){
-		        toServer['BrowsingHistory'] = data;
+			   	if(request.data.terms === "I Agree"){
+			   		toServer['BrowsingHistory'] = data;	
+			   	}
 		        checker = false;
 		        complete = true
 		        xhr.onreadystatechange = getID;//need to comment this out for US participants
