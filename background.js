@@ -3,7 +3,7 @@
 // background.js
 // Called when the user clicks on the browser action.
 var checker = true;
-var timeGap = 7; //ensure this is set to the desired value before the extension is deployed, zero corresponds to one day history of the previous day!
+var timeGap = 100; //ensure this is set to the desired value before the extension is deployed, zero corresponds to one day history of the previous day!
 var responses = 0;
 var toServer = {}
 var firstTime = false
