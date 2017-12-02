@@ -379,6 +379,13 @@ window.survey = new Survey.Model({
        "name": "terms",
        "title": "Do you agree to the terms and Conditions",
        validators: [{type: "mytextvalidator"}]
+      },
+      {
+	     "type": "text",
+	     "isRequired": false,
+	     "name": "review",
+	     "title": "Please share why you declined the survey. Your response will help us make our survey better",
+	     "visibleIf": "{terms}=' I do not Agree'"
       }
      ],
      "title": "Informed Consent"
