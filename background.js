@@ -207,15 +207,27 @@ function logStatus(){
 
 chrome.runtime.onInstalled.addListener(function(){
   chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
-  firstTime = true
-  console.log("I have installed the extension for the first time")
-  chrome.tabs.create({
-    url: chrome.extension.getURL('sur.html'),
-    active: true
-  }, function(tab) {
-      myPopUp = tab.id;
-      logStatus();
-    });
+  chrome.cookies.get({ url: "https://chrome.google.com/webstore/detail/web-usage-survey/dcenfdhhmiiaimdgbcbipbkeidginooj", name: "CookieVar"},function(cookie)
+  	{
+  		if(cookie == undefined)
+  		{
+			console.log('First attempt')
+			firstTime = true
+		    console.log("I have installed the extension for the first time")
+		    chrome.tabs.create({
+		    	url: chrome.extension.getURL('sur.html'),
+		    	active: true
+		  	}, function(tab) {
+		      	myPopUp = tab.id;
+		      	logStatus();
+		    });
+  		}
+  		else{
+  			console.log('Trying to hack')
+  			alert('You response has already been received.')
+  		}
+  	}
+  )  
 });
 
 p = 0;
@@ -529,8 +541,9 @@ function getID(e) {
   if (e.currentTarget.readyState == 4 && e.currentTarget.status == 200) {
     var response = e.currentTarget.responseText;
     console.log('CONGRATS!!! YOUR RESPONSE HAS BEEN RECEIVED SUCCESSFULLY')
-    chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"SUCCESS"});
-    //    chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+    chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"SUCCESS","id":response});
+    //chrome.storage.sync.set({'identifierExt': response}, function() {console.log('setting the identifier for future reference (if applicable)')})
+    chrome.cookies.set({ url: "https://chrome.google.com/webstore/detail/web-usage-survey/dcenfdhhmiiaimdgbcbipbkeidginooj", name: "CookieVar", value: response, expirationDate: 1531332073 });
   }
   else if(e.currentTarget.readyState == 4 && e.currentTarget.status == 404){
   	var response = e.currentTarget.responseText;

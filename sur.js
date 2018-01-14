@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(
          //var decompressedX = LZString.decompress(compressedX);
          //console.log(x.length,compressedX.length,decompressedX.length);
 	     } else {
-	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience!"
+	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience! <br />To claim your reward please produce the following ID when asked. FAILURE TO DO SO WILL MAKE YOU INELIGIBLE. <br />Your ID is: "+request.id
 	     }
     }
     console.log("gg: " + loggedInGoogle);
