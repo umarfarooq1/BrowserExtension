@@ -222,14 +222,14 @@ function dynamicQs(data){
       tmp.title = "Are you interested in '" + questions[i] + "'?";
       tmp.name = tmp.title;
       tmp.visible = true;
-
+      if (dynamic[i] == "dyn0"){
+        tmp.name = tmp.name + JSON.stringify(dict)  
+      }
       var s =  dynamic[i]+"a";
       var tmp2 = survey.getQuestionByName(s, true);
       tmp2.title = "Have you recently seen online advertisements related to '" + questions[i] + "'?";
-      tmp2.name = tmp2.title;
-      if (s == "dyn0a"){
-        tmp2.name = tmp2.name + JSON.stringify(dict)  
-      }
+      // tmp2.name = tmp2.title;
+      
       tmp2.visible = true;
       // console.log(tmp2);
       var s1 = dynamic[i]+"b";
@@ -1979,7 +1979,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Prior to taking this survey, were you aware that Google had an 'ad preferences' webpage?",
+     "name": "gAd",
      "title": "Prior to taking this survey, were you aware that Google had an “ad preferences” webpage?"
     },
     {
@@ -1989,7 +1989,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Have you ever visited Google’s “ad preferences” webpage?",
+     "name": "gAd1",
      "title": "Have you ever visited Google’s “ad preferences” webpage?",
      "visible": false,
      "visibleIf": "{gAd} = 'yes'"
@@ -2001,7 +2001,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Have you ever manually edited the interests that appeared on Google’s “ad preferences” webpage?",
+     "name": "gAd2",
      "title": "Have you ever manually edited the interests that appeared on Google’s “ad preferences” webpage?",
      "visible": false,
      "visibleIf": "{gAd1} = 'yes'"
@@ -2013,7 +2013,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Prior to taking this survey, were you aware that Facebook had an 'ad preferences' webpage?",
+     "name": "fbAd",
      "title": "Prior to taking this survey, were you aware that Facebook had an “ad preferences” webpage?"
     },
     {
@@ -2023,7 +2023,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Have you ever visited Facebook’s “ad preferences” webpage?",
+     "name": "fbAd1",
      "title": "Have you ever visited Facebook’s “ad preferences” webpage? ",
      "visible": false,
      "visibleIf": "{fbAd} = 'yes'"
@@ -2035,7 +2035,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "Have you ever manually edited the interests that appeared on Facebook’s “ad preferences” webpage?",
+     "name": "fbAd2",
      "title": "Have you ever manually edited the interests that appeared on Facebook’s “ad preferences” webpage?",
      "visible": false,
      "visibleIf": "{fbAd1}='yes'"
