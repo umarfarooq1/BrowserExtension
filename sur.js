@@ -826,7 +826,7 @@ window.survey = new Survey.Model({
       "More than 4 hours"
      ],
      "isRequired": true,
-     "name": "time spent on internet",
+     "name": "Approximately how much time do you spend each day browsing the web on a desktop computer or laptop?",
      "title": "Approximately how much time do you spend each day browsing the web on a desktop computer or laptop? "
     },
     {
@@ -839,7 +839,7 @@ window.survey = new Survey.Model({
       "Brave"
      ],
      "isRequired": true,
-     "name": "internet browser",
+     "name": "What Internet browser do you use most often?",
      "title": "What Internet browser do you use most often? "
     },
     {
@@ -854,7 +854,7 @@ window.survey = new Survey.Model({
       "Other"
      ],
      "isRequired": true,
-     "name": "search engines",
+     "name": "Which search engines do you use most often?",
      "title": "Which search engines do you use most often? "
     },
     {
@@ -866,7 +866,7 @@ window.survey = new Survey.Model({
       "100 or more"
      ],
      "isRequired": true,
-     "name": "web searches",
+     "name": "Approximately how many web searches do you conduct each day?",
      "title": "Approximately how many web searches do you conduct each day?"
     },
     // {
@@ -1042,7 +1042,7 @@ window.survey = new Survey.Model({
        ],
        "isAllRowRequired": true,
        "isRequired": true,
-       "name": "question4",
+       "name": "How frequently do you interact with online advertisements in the following ways?",
        "rows": [
         "See online advertisements ",
         "See online advertisements that you find relevant",
@@ -1185,7 +1185,7 @@ window.survey = new Survey.Model({
       "Multiple times a day"
      ],
      "isRequired": true,
-     "name": "question7",
+     "name": "How often do you clear your cookies?",
      "title": "How often do you clear your cookies?"
     },
     {
@@ -1198,7 +1198,7 @@ window.survey = new Survey.Model({
       "Multiple times a day"
      ],
      "isRequired": true,
-     "name": "question8",
+     "name": "How often do you clear your browsing history?",
      "title": "How often do you clear your browsing history?"
     }
    ],
@@ -1979,7 +1979,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "gAd",
+     "name": "Prior to taking this survey, were you aware that Google had an 'ad preferences' webpage?",
      "title": "Prior to taking this survey, were you aware that Google had an “ad preferences” webpage?"
     },
     {
@@ -1989,7 +1989,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "gAd1",
+     "name": "Have you ever visited Google’s “ad preferences” webpage?",
      "title": "Have you ever visited Google’s “ad preferences” webpage?",
      "visible": false,
      "visibleIf": "{gAd} = 'yes'"
@@ -2013,7 +2013,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "fbAd",
+     "name": "Prior to taking this survey, were you aware that Facebook had an 'ad preferences' webpage?",
      "title": "Prior to taking this survey, were you aware that Facebook had an “ad preferences” webpage?"
     },
     {
@@ -2023,7 +2023,7 @@ window.survey = new Survey.Model({
       "no"
      ],
      "isRequired": true,
-     "name": "fbAd1",
+     "name": "Have you ever visited Facebook’s “ad preferences” webpage?",
      "title": "Have you ever visited Facebook’s “ad preferences” webpage? ",
      "visible": false,
      "visibleIf": "{fbAd} = 'yes'"
