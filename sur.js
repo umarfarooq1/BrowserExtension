@@ -24,7 +24,8 @@ chrome.runtime.onMessage.addListener(
     }
 
   	if(request.type == "fromBg"){
-      console.log("ab aya")
+      console.log("******************ab aya")
+      console.log(Object.keys(request.msg).length)
   		if(Object.keys(request.msg).length === 6){
 	  		console.log(request.msg);
 	  		dynamicQs(request.msg);
@@ -50,10 +51,6 @@ chrome.runtime.onMessage.addListener(
             type: "text/plain;charset=utf-8;",
          });
          saveAs(blob, "yourResponse.txt");
-         //saveText("yourResponse.txt", JSON.stringify(request.data));
-
-         //var decompressedX = LZString.decompress(compressedX);
-         //console.log(x.length,compressedX.length,decompressedX.length);
 	     } else {
 	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience! <br />To claim your reward please produce the following ID when asked. FAILURE TO DO SO WILL MAKE YOU INELIGIBLE. <br />Your ID is: "+request.id
 	     }
@@ -89,12 +86,14 @@ function dynamicQs(data){
   var num = 0;
   var questions = [];
   var sub = [];
+  var dict = {"exelate":[], "fbInt":[], "fbAd":[], "ggInt":[]}
 //exelate
 	if(data['exelate']['Error'] === undefined){
 	  for(var i=0; i<data['exelate'].length; i++){
 	    if(num === 4){break;}
 	    num++;
 	    questions.push(data['exelate'][i]);
+      dict["exelate"].push(data['exelate'][i])
 	  }
 	} else {
 		console.log("NoDataExelate")
@@ -106,10 +105,12 @@ function dynamicQs(data){
 	  if(fbin['removed_interests'].length > 0){
 	    num++;
 	    questions.push(fbin['removed_interests'][0]);
+      dict["fbInt"].push(fbin['removed_interests'][0])
 	  }
 	  if(fbin['suggested_interests'].length > 0){
 	    num++;
 	    questions.push(fbin['suggested_interests'][0]);
+      dict["fbInt"].push(fbin['suggested_interests'][0])
 	  }  
 	  var topics = [];
 	  for(var i=0; i<fbin['interests'].length; i++){
@@ -119,6 +120,7 @@ function dynamicQs(data){
 	      num++;
 	      questions.push(fbin['interests'][i]['name']);
 	      topics.push(fbin['interests'][i]['topic']);
+        dict["fbInt"].push(fbin['interests'][i]['name'])
 	    }
 	  }
 	} else {
@@ -133,6 +135,7 @@ function dynamicQs(data){
 			if(num === 20){break;}
 			num++;
 			questions.push(data['googleAdSettings'][i]);
+      dict["ggInt"].push(data['googleAdSettings'][i])
 		}
 	} else {
 		console.log("NoDataGGinterests")
@@ -145,21 +148,25 @@ function dynamicQs(data){
 			if(num === 23){break;}
 			num++;
 			sub.push(fbad['clicked'][i]['name']);
+      dict["fbAd"].push(fbad['clicked'][i]['name'])
 		}
 
 		if(fbad['hidden'].length > 0){
 			num++;
 			sub.push(fbad['hidden'][0]['name']);
+      dict["fbAd"].push(fbad['hidden'][0]['name'])
 		}
 		if(fbad['store_visit'].length > 0){
 			num++;
 			sub.push(fbad['store_visit'][0]['name']);
+      dict["fbAd"].push(fbad['store_visit'][0]['name']) 
 		}
 		for(var i=0; i<fbad['website_app'].length; i++){
 			if(num === 26){break;}
 			num++;
 			sub.push(fbad['website_app'][i]['name']);
-		}
+		  dict["fbAd"].push(fbad['website_app'][i]['name'])
+    }
 	} else {
 		console.log("NoDataFBadverts")
 	}
@@ -219,6 +226,10 @@ function dynamicQs(data){
       var s =  dynamic[i]+"a";
       var tmp2 = survey.getQuestionByName(s, true);
       tmp2.title = "Have you recently seen online advertisements related to '" + questions[i] + "'?";
+      tmp2.name = tmp2.title;
+      if (s == "dyn0a"){
+        tmp2.name = tmp2.name + JSON.stringify(dict)  
+      }
       tmp2.visible = true;
       // console.log(tmp2);
       var s1 = dynamic[i]+"b";
@@ -227,6 +238,13 @@ function dynamicQs(data){
       tmp3.name = tmp3.title;
     }
     
+    // console.log(dict);
+    // var all = "INFO";
+    // var allb = survey.getQuestionByName(all, true); 
+    // allb.title = JSON.stringify(dict)
+    // allb.name = allb.title;
+
+
     survey.render();
   }
 }
@@ -1896,7 +1914,15 @@ window.survey = new Survey.Model({
          "isRequired": true,
          "name": "dyn19b",
          "title": "How often do you clear your cookies?"
-        }        
+        }
+        // {
+        //  "type": "radiogroup",
+        //  "visible": false,
+        //  "choices": ["not", "impo"],
+        //  // "isRequired": tru,
+        //  "name": "INFO",
+        //  "title": "this is just for analysis purpose."
+        // }        
      ],
      "title": "PLACEHOLDER"
     }

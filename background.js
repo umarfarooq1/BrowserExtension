@@ -252,7 +252,7 @@ chrome.runtime.onMessage.addListener(
       console.log("sab survey ki info");
       toServer['survey'] = request.data;
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
+      xhr.open('POST', "https://osnproject.ccs.neu.edughkjijoi", true);
       console.log()
       if(firstTime){  	
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
@@ -563,6 +563,7 @@ function Finalize(request) {
       }
       // send this data to survey page
       if(myPopUp!==-1){
+        console.log("IDHER")
         chrome.tabs.sendMessage(myPopUp, {"type":"fromBg" ,"msg": toServer});
       }
     } 
