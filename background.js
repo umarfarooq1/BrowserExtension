@@ -252,7 +252,7 @@ chrome.runtime.onMessage.addListener(
       console.log("sab survey ki info");
       toServer['survey'] = request.data;
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', "https://osnproject.ccs.neu.edughkjijoi", true);
+      xhr.open('POST', "https://osnproject.ccs.neu.edu", true);
       console.log()
       if(firstTime){  	
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
