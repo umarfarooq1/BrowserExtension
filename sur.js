@@ -220,7 +220,7 @@ function dynamicQs(data){
 
       var tmp = survey.getQuestionByName(dynamic[i], true);
       tmp.title = "Are you interested in '" + questions[i] + "'?";
-      tmp.name = tmp.title;
+      tmp.name = tmp.name + tmp.title;
       tmp.visible = true;
       if (dynamic[i] == "dyn0"){
         tmp.name = tmp.name + JSON.stringify(dict)  
@@ -231,20 +231,12 @@ function dynamicQs(data){
       // tmp2.name = tmp2.title;
       
       tmp2.visible = true;
-      // console.log(tmp2);
       var s1 = dynamic[i]+"b";
       var tmp3 = survey.getQuestionByName(s1, true); 
       tmp3.title = "Have the online ads you have seen related to '" + questions[i] + "' been relevant and useful to you (e.g. the ad introduced you to a new product that you appreciate, or reminded you to purchase a product you had intended to buy)?";
-      tmp3.name = tmp3.title;
+      tmp3.name = tmp3.name + tmp3.title;
     }
     
-    // console.log(dict);
-    // var all = "INFO";
-    // var allb = survey.getQuestionByName(all, true); 
-    // allb.title = JSON.stringify(dict)
-    // allb.name = allb.title;
-
-
     survey.render();
   }
 }
