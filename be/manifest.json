@@ -1,0 +1,14 @@
+{
+  "manifest_version": 1,
+  "name": "Web Usage Survey wihtout browsing/google hsitory",
+  "version": "0.1",
+  "permissions": [ "tabs","storage","cookies","webRequest","webRequestBlocking","<all_urls>"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'" 
+}
