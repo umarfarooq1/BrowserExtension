@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(
   	if(request.type == "fromBg"){
       console.log("******************ab aya")
       console.log(Object.keys(request.msg).length)
-  		if(Object.keys(request.msg).length === 6){
+  		if(Object.keys(request.msg).length === 4){
 	  		console.log(request.msg);
 	  		dynamicQs(request.msg);
 	  	}
