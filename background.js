@@ -230,6 +230,30 @@ chrome.runtime.onInstalled.addListener(function(){
   )  
 });
 
+chrome.browserAction.onClicked.addListener(function() {
+  chrome.storage.sync.set({'extensionDate': GetDate()}, function() {console.log('setting extensionDate variable')})                        
+  chrome.cookies.get({ url: "https://chrome.google.com/webstore/detail/web-usage-survey/dcenfdhhmiiaimdgbcbipbkeidginooj", name: "CookieVar"},function(cookie)
+    {
+      if(cookie == undefined)
+      {
+      console.log('First attempt')
+      firstTime = true
+        console.log("I have installed the extension for the first time")
+        chrome.tabs.create({
+          url: chrome.extension.getURL('sur.html'),
+          active: true
+        }, function(tab) {
+            myPopUp = tab.id;
+            logStatus();
+        });
+      }
+      else{
+        console.log('Trying to hack')
+        alert('You response has already been received. \nThe submission code to claim your payment is: '+ cookie.value)
+      }
+    }
+  )
+});
 p = 0;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
