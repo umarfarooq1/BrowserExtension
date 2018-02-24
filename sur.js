@@ -379,20 +379,7 @@ window.survey = new Survey.Model({
 <br/><br/>
 Your participation should take no longer than 15-20 minutes.
 <br/><br/>
-If you choose to participate, this browser extension will collect the interest profiles that four online advertisers have collected about you: Google, Facebook, Bluekai and eXelate. You will be asked to log in to Google and Facebook so that we may temporarily access these services. We will collect three types of information during this process:
-<br/><br/>
-
-    • The interest profiles that the four advertisers have developed about you
-    <br/>
-    • Your search history on Google Search
-    <br/>
-    • Your browsing history from your web browser
-
-<br/><br/>
-This data will be used to analyze the correlations between your online behavior and your interest profiles. We will NOT record any other information, including your username and password for any online services, or personal information like your real name, etc. 
-<br/><br/>
-Once this study is complete, you may uninstall this extension, at which point we will no longer be able to access your Google and Facebook information, or your browsing history. The data collected by our browser extension will be kept strictly confidential and will be used for research purposes only.
-<br/><br/>
+If you choose to participate, this browser extension will collect the interest profiles that four online advertisers have collected about you: Google, Facebook, Bluekai and eXelate. You will be asked to log in to Google and Facebook so that we may temporarily access these services and collect their interest profiles. We will NOT record any other information from these services, including your username, password, name, etc. Once the study is complete, you may uninstall this extension, at which point we will no longer be able to access your Google and Facebook information. The data collected by our browser extension will be kept strictly confidential and will be used for research purposes only.
 
 While we collect your online advertising interest profiles in the background, we will ask you several questions about your demographics, web usage, and interactions with online advertisements. Your responses to these questions are confidential and will be used for research purposes only. We will not share your responses with anyone who is not involved in this research. All data that is collected from the survey and from ad preferences managers will be stripped of personally identifiable information to the best of our ability. The data collected from users will only be stored on a server located within Northeastern University, in the College of Computer and Information Science. Our software is designed to upload survey and crawled data directly to our server over an encrypted connection using HTTPS. No data will be stored at LUMS or on the crowdsourcing services.
 <br/><br/>
