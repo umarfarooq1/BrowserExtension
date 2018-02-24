@@ -5,7 +5,7 @@ var loggedInGoogle = false;
 var consent = false;
 var dynamic = ["dyn0","dyn1","dyn2","dyn3","dyn4","dyn5","dyn6","dyn7","dyn8","dyn9","dyn10","dyn11","dyn12","dyn13","dyn14","dyn15","dyn16","dyn17","dyn18","dyn19"];
 var surveyDat  = {};
-//var final = {};
+//var final = {......................};
 
 
 chrome.runtime.sendMessage({type:'init', data:'making sure that this content script has been injected'});
