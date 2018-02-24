@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(
   	if(request.type == "fromBg"){
       console.log("******************ab aya")
       console.log(Object.keys(request.msg).length)
-  		if(Object.keys(request.msg).length === 4){
+  		if(Object.keys(request.msg).length === 5){
 	  		console.log(request.msg);
 	  		dynamicQs(request.msg);
 	  	}
@@ -82,6 +82,7 @@ function myfunc(val){
 }
 
 function dynamicQs(data){
+  
   console.log("here");
   var num = 0;
   var questions = [];
