@@ -281,9 +281,9 @@ chrome.runtime.onMessage.addListener(
       if(firstTime){  	
         chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
 			   BrowsingHist.then(function(data){
-			   	if(request.data.terms === "I Agree"){
-			   		toServer['BrowsingHistory'] = data;	
-			   	}
+  			   	//if(request.data.terms === "I Agree"){
+  			   		//toServer['BrowsingHistory'] = data;	
+  			   	//}
 		        checker = false;
 		        complete = true
 		        xhr.onreadystatechange = getID;//need to comment this out for US participants
@@ -291,31 +291,18 @@ chrome.runtime.onMessage.addListener(
 		        	p++;
 		        	console.log("reattempts ",p)
 		        	if(p<6){
-						chrome.tabs.sendMessage(myPopUp, {"type":"FAILED"});		        		
+					     	chrome.tabs.sendMessage(myPopUp, {"type":"FAILED"});		        		
 		        	}
 		        	else{
 		        		console.log("please mail it to us")
 		        		chrome.tabs.sendMessage(myPopUp, {"type":"ACK" ,"MESSAGE":"FAILURE","data":toServer});
 
 		        	}
-				}
-		        xhr.send(JSON.stringify(toServer));
-	        })
-		});
-      }
-      /*else{
-        toServer['identity'] = result;
-        chrome.storage.sync.set({'extensionDate': GetDate()}, function() {
-			   BrowsingHist.then(function(data){
-		        toServer['BrowsingHistory'] = data;
-		        checker = false;
-		        complete = true
+				    }
 		        xhr.send(JSON.stringify(toServer));
 	        })
 		    });
-      }*/
-
-
+      }
       console.log(toServer)
       console.log("ALL DONE. Updated collection time to "+GetDate())
       // console.log(toServer);
@@ -368,9 +355,9 @@ var BrowsingHist = new Promise (function(resolve,reject) {
   if (timeGap!==0){
     var a = b - timeGap*86400000;
   }
-  chrome.history.search({text: '', startTime: a, endTime:b,maxResults: 100000}, function(data) {
-    resolve(data)
-  });
+  //chrome.history.search({text: '', startTime: a, endTime:b,maxResults: 100000}, function(data) {
+  resolve({})
+  //});
 })
 
 function Start(request) {
@@ -399,13 +386,13 @@ function Start(request) {
     xhr2.onreadystatechange = processRequest;
     xhr2.send();
     
-    var xhr3 = new XMLHttpRequest();
+    /*var xhr3 = new XMLHttpRequest();
     xhr3.open('POST', "https://myactivity.google.com/myactivity?utm_source=my-account&utm_medium&utm_campaign=my-acct-promo&jspb=1", true);
     xhr3.onerror = function(e){
       Finalize({"message": "ALL DONE","data":"","Error":"error encountered with responseText = "+e.currentTarget.responseText, "type":"googleSearchTerms"});
     }
     xhr3.onreadystatechange = processRequest;
-    xhr3.send();
+    xhr3.send();*/
 
     var xhr4 = new XMLHttpRequest();
     xhr4.open('GET', "https://www.facebook.com/ads/profile/interests/?dpr=1&__a=1", true);
