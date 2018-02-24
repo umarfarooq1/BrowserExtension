@@ -52,7 +52,7 @@ chrome.runtime.onMessage.addListener(
          });
          saveAs(blob, "yourResponse.txt");
 	     } else {
-	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience! <br />To claim your reward please produce the following ID when asked. FAILURE TO DO SO WILL MAKE YOU INELIGIBLE. <br />Your ID is: "+request.id
+	  	    document.querySelector('#surveyResult').innerHTML = "<br/>Your response has been recieved. Thank you for your patience! <br />To claim your reward please produce the following ID when asked. <strong>FAILURE TO DO SO WILL MAKE YOU INELIGIBLE.</strong> <br />Your ID is: <strong>"+request.id+"<strong>"
 	     }
     }
     console.log("gg: " + loggedInGoogle);
@@ -533,14 +533,6 @@ By checking the “I agree” box below, you agree that you have read and unders
      "isRequired": true,
      "name": "loc",
      "title": "Where are you from?"
-    },
-    {
-     "type": "text",
-     "isRequired": false,
-     "name": "email",
-     "title": "If you wish to participate in the lucky draw please provide your email id (this is completely optional and we will not associate your email ID with the data we are collecting)",
-     "validators" : [{type:"email"}],
-     "visibleIf": "{loc}='Pakistan'"
     }
    ],
    "name": "page5"
