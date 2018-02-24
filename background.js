@@ -224,7 +224,7 @@ chrome.runtime.onInstalled.addListener(function(){
   		}
   		else{
   			console.log('Trying to hack')
-  			alert('You response has already been received.')
+  			alert('You response has already been received. \nThe submission code to claim your payment is: '+ cookie.value)
   		}
   	}
   )  
