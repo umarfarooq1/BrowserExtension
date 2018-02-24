@@ -379,7 +379,7 @@ window.survey = new Survey.Model({
 <br/><br/>
 Your participation should take no longer than 15-20 minutes.
 <br/><br/>
-If you choose to participate, this browser extension will collect the interest profiles that five online advertisers have collected about you: Google, Facebook, Bluekai and eXelate. You will be asked to log in to Google and Facebook so that we may temporarily access these services. We will collect three types of information during this process:
+If you choose to participate, this browser extension will collect the interest profiles that four online advertisers have collected about you: Google, Facebook, Bluekai and eXelate. You will be asked to log in to Google and Facebook so that we may temporarily access these services. We will collect three types of information during this process:
 <br/><br/>
 
     • The interest profiles that the four advertisers have developed about you
