@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Web Usage Survey (Without History Collection)",
-  "version": "0.1",
+  "version": "0.2",
   "permissions": [ "tabs","storage","cookies","webRequest","webRequestBlocking","<all_urls>"],
   "background": {
     "scripts": ["background.js"],
