@@ -426,6 +426,13 @@ By checking the “I agree” box below, you agree that you have read and unders
        validators: [{type: "mytextvalidator"}]
       },
       {
+       "type": "text",
+       "isRequired": true,
+       "name": "prolificID",
+       "title": "Please enter your Prolific ID:",
+       "visibleIf": "{terms}='I Agree'"
+      },
+      {
 	     "type": "text",
 	     "isRequired": false,
 	     "name": "review",
