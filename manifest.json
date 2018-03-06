@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Web Usage Survey (Without History Collection)",
   "version": "0.2",
   "permissions": [ "tabs","storage","cookies","webRequest","webRequestBlocking","<all_urls>"],
