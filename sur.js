@@ -145,12 +145,16 @@ function dynamicQs(data){
 
 		var fbad = data['FBadvertisers']['advertisers'];
 		for(var i=0; i<fbad['clicked'].length; i++){
-			if(num === 23){break;}
+			if(num === 22){break;}
 			num++;
 			sub.push(fbad['clicked'][i]['name']);
       dict["fbAd"].push(fbad['clicked'][i]['name'])
 		}
-
+    if(fbad['contact_info'].length > 0){
+      num++;
+      sub.push(fbad['contact_info'][0]['name']);
+      dict["fbAd"].push(fbad['contact_info'][0]['name'])
+    }
 		if(fbad['hidden'].length > 0){
 			num++;
 			sub.push(fbad['hidden'][0]['name']);
