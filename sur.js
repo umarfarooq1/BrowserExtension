@@ -128,7 +128,7 @@ function dynamicQs(data){
 		console.log("NoDataFbInterests")
 	}
 //google interests
-	if(data['FBinterests']['Error'] === undefined){
+	if(data['googleAdSettings']['Error'] === undefined){
 
 		var x = data['googleAdSettings'].length;
 		var y = Math.floor(x/10);
@@ -142,7 +142,7 @@ function dynamicQs(data){
 		console.log("NoDataGGinterests")
 	}
 //fb advertisers
-	if(data['FBinterests']['Error'] === undefined){
+	if(data['FBadvertisers']['Error'] === undefined){
 
 		var fbad = data['FBadvertisers']['advertisers'];
 		for(var i=0; i<fbad['clicked'].length; i++){
@@ -416,7 +416,7 @@ By checking the “I agree” box below, you agree that you have read and unders
       {
        "type": "text",
        "isRequired": true,
-       "name": "prolificID",
+       "name": "prolificID - without history",
        "title": "Please enter your Prolific ID:",
        "visibleIf": "{terms}='I Agree'"
       },
