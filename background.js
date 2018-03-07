@@ -457,7 +457,11 @@ function Start(request) {
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               check2 = false
               //console.log(data)
-            }  
+            } 
+            else{
+              Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
+              check2 = false
+            }   
           }
           catch(exception){
             console.log(data)
