@@ -127,7 +127,7 @@ function dynamicQs(data){
 		console.log("NoDataFbInterests")
 	}
 //google interests
-	if(data['FBinterests']['Error'] === undefined){
+	if(data['googleAdSettings']['Error'] === undefined){
 
 		var x = data['googleAdSettings'].length;
 		var y = Math.floor(x/10);
@@ -141,7 +141,7 @@ function dynamicQs(data){
 		console.log("NoDataGGinterests")
 	}
 //fb advertisers
-	if(data['FBinterests']['Error'] === undefined){
+	if(data['FBadvertisers']['Error'] === undefined){
 
 		var fbad = data['FBadvertisers']['advertisers'];
 		for(var i=0; i<fbad['clicked'].length; i++){
