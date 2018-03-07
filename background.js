@@ -427,11 +427,13 @@ function Start(request) {
               }
               Finalize({"message": "ALL DONE","data":data, "type":"exelate"});
               check1 = false
+            }
+            else{
+              Finalize({"message": "ALL DONE","data":data, "type":"exelate"});
+              check1 = false
             }  
           }
           catch(exception){
-
-
             Finalize({"message": "ALL DONE","data":response,"Error":exception,"type":"exelate"});
             check1 = false
           }
@@ -453,10 +455,8 @@ function Start(request) {
                   data.push(q)
                 }
               }
-
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
               check2 = false
-              //console.log(data)
             } 
             else{
               Finalize({"message": "ALL DONE","data":data, "type":"googleAdSettings"});
