@@ -88,127 +88,154 @@ function dynamicQs(data){
   var sub = [];
   var dict = {"exelate":[], "fbInt":[], "fbAd":[], "ggInt":[]}
 //exelate
-	if(data['exelate']['Error'] === undefined){
-	  for(var i=0; i<data['exelate'].length; i++){
-	    if(num === 4){break;}
-	    num++;
-	    questions.push(data['exelate'][i]);
-      dict["exelate"].push(data['exelate'][i])
-	  }
-	} else {
-		console.log("NoDataExelate")
-	}
+  try{
+    // console.log(data['exelate'].indexOf('r'))
+  	if(data['exelate']['Error'] === undefined){
+  	  for(var i=0; i<data['exelate'].length; i++){
+  	    if(num === 4){break;}
+  	    num++;
+  	    questions.push(data['exelate'][i]);
+        dict["exelate"].push(data['exelate'][i])
+  	  }
+  	} else {
+  		console.log("NoDataExelate")
+  	}
+  }
+  catch(err){
+    console.log("err in exelate")
+  }
 //fb interests
-	if(data['FBinterests']['Error'] === undefined){
+  try{
+  	if(data['FBinterests']['Error'] === undefined){
 
-	  var fbin = data['FBinterests'];
-	  if(fbin['removed_interests'].length > 0){
-	    num++;
-	    questions.push(fbin['removed_interests'][0]);
-      dict["fbInt"].push(fbin['removed_interests'][0])
-	  }
-	  if(fbin['suggested_interests'].length > 0){
-	    num++;
-	    questions.push(fbin['suggested_interests'][0]);
-      dict["fbInt"].push(fbin['suggested_interests'][0])
-	  }  
-	  var topics = [];
-	  for(var i=0; i<fbin['interests'].length; i++){
-	    if(num === 10){break;}
-	    // console.log(fbin['interests'][i]['topic']);
-	    if( topics.indexOf(fbin['interests'][i]['topic']) === -1){
-	      num++;
-	      questions.push(fbin['interests'][i]['name']);
-	      topics.push(fbin['interests'][i]['topic']);
-        dict["fbInt"].push(fbin['interests'][i]['name'])
-	    }
-	  }
-	} else {
-		console.log("NoDataFbInterests")
-	}
+  	  var fbin = data['FBinterests'];
+  	  if(fbin['removed_interests'].length > 0){
+  	    num++;
+  	    questions.push(fbin['removed_interests'][0]);
+        dict["fbInt"].push(fbin['removed_interests'][0])
+  	  }
+  	  if(fbin['suggested_interests'].length > 0){
+  	    num++;
+  	    questions.push(fbin['suggested_interests'][0]);
+        dict["fbInt"].push(fbin['suggested_interests'][0])
+  	  }  
+  	  var topics = [];
+  	  for(var i=0; i<fbin['interests'].length; i++){
+  	    if(num === 10){break;}
+  	    // console.log(fbin['interests'][i]['topic']);
+  	    if( topics.indexOf(fbin['interests'][i]['topic']) === -1){
+  	      num++;
+  	      questions.push(fbin['interests'][i]['name']);
+  	      topics.push(fbin['interests'][i]['topic']);
+          dict["fbInt"].push(fbin['interests'][i]['name'])
+  	    }
+  	  }
+  	} else {
+  		console.log("NoDataFbInterests")
+  	}
+  }
+  catch(err){
+    console.log("err in fbin")
+  }
 //google interests
-	if(data['googleAdSettings']['Error'] === undefined){
+  try{
+  	if(data['googleAdSettings']['Error'] === undefined){
 
-		var x = data['googleAdSettings'].length;
-		var y = Math.floor(x/10);
-		for(var i=0; i<x; i=i+y){
-			if(num === 20){break;}
-			num++;
-			questions.push(data['googleAdSettings'][i]);
-      dict["ggInt"].push(data['googleAdSettings'][i])
-		}
-	} else {
-		console.log("NoDataGGinterests")
-	}
+  		var x = data['googleAdSettings'].length;
+  		var y = Math.floor(x/10);
+  		for(var i=0; i<x; i=i+y){
+  			if(num === 20){break;}
+  			num++;
+  			questions.push(data['googleAdSettings'][i]);
+        dict["ggInt"].push(data['googleAdSettings'][i])
+  		}
+  	} else {
+  		console.log("NoDataGGinterests")
+  	}
+  }
+  catch(err){
+    console.log("err in gg")
+  }
 //fb advertisers
-	if(data['FBadvertisers']['Error'] === undefined){
+  try{
+  	if(data['FBadvertisers']['Error'] === undefined){
 
-		var fbad = data['FBadvertisers']['advertisers'];
-		for(var i=0; i<fbad['clicked'].length; i++){
-			if(num === 22){break;}
-			num++;
-			sub.push(fbad['clicked'][i]['name']);
-      dict["fbAd"].push(fbad['clicked'][i]['name'])
-		}
-    if(fbad['contact_info'].length > 0){
-      num++;
-      sub.push(fbad['contact_info'][0]['name']);
-      dict["fbAd"].push(fbad['contact_info'][0]['name'])
-    }
-		if(fbad['hidden'].length > 0){
-			num++;
-			sub.push(fbad['hidden'][0]['name']);
-      dict["fbAd"].push(fbad['hidden'][0]['name'])
-		}
-		if(fbad['store_visit'].length > 0){
-			num++;
-			sub.push(fbad['store_visit'][0]['name']);
-      dict["fbAd"].push(fbad['store_visit'][0]['name']) 
-		}
-		for(var i=0; i<fbad['website_app'].length; i++){
-			if(num === 26){break;}
-			num++;
-			sub.push(fbad['website_app'][i]['name']);
-		  dict["fbAd"].push(fbad['website_app'][i]['name'])
-    }
-	} else {
-		console.log("NoDataFBadverts")
-	}
+  		var fbad = data['FBadvertisers']['advertisers'];
+  		for(var i=0; i<fbad['clicked'].length; i++){
+  			if(num === 22){break;}
+  			num++;
+  			sub.push(fbad['clicked'][i]['name']);
+        dict["fbAd"].push(fbad['clicked'][i]['name'])
+  		}
+      if(fbad['contact_info'].length > 0){
+        num++;
+        sub.push(fbad['contact_info'][0]['name']);
+        dict["fbAd"].push(fbad['contact_info'][0]['name'])
+      }
+  		if(fbad['hidden'].length > 0){
+  			num++;
+  			sub.push(fbad['hidden'][0]['name']);
+        dict["fbAd"].push(fbad['hidden'][0]['name'])
+  		}
+  		if(fbad['store_visit'].length > 0){
+  			num++;
+  			sub.push(fbad['store_visit'][0]['name']);
+        dict["fbAd"].push(fbad['store_visit'][0]['name']) 
+  		}
+  		for(var i=0; i<fbad['website_app'].length; i++){
+  			if(num === 26){break;}
+  			num++;
+  			sub.push(fbad['website_app'][i]['name']);
+  		  dict["fbAd"].push(fbad['website_app'][i]['name'])
+      }
+  	} else {
+  		console.log("NoDataFBadverts")
+  	}
+  }
+  catch(err){
+    console.log("err in fbad")
+  }
 // sub string matching
-  for(var i=0; i<questions.length ; i++){
-      var substring = questions[i];
-    for(var j=0; j<questions.length ; j++){
-      if(i!==j && questions[j].indexOf(substring) !== -1){
-        questions.splice(i,1);
-      };
+  try{
+    for(var i=0; i<questions.length ; i++){
+        var substring = questions[i];
+      for(var j=0; j<questions.length ; j++){
+        if(i!==j && questions[j].indexOf(substring) !== -1){
+          questions.splice(i,1);
+        };
+      }
+    }
+    for(var i=0; i<sub.length ; i++){
+        var substring = sub[i];
+      for(var j=0; j<sub.length ; j++){
+        if(i!==j && sub[j].indexOf(substring) !== -1){
+          sub.splice(i,1);
+        };
+      }
+    }
+
+    if(questions.length > 15){
+      if(sub.length>0){
+        var tmp1 = questions.splice(0,15);
+        if(sub.length>5){
+          tmp1 = tmp1.concat(sub.splice(0,5));
+        } else {
+          tmp1 = tmp1.concat(sub);
+        } 
+        tmp1 = tmp1.concat(questions);
+        questions = tmp1; 
+      }
+    }
+    else {
+      if(sub.length > 0){
+        questions = questions.concat(sub);
+      }
     }
   }
-  for(var i=0; i<sub.length ; i++){
-      var substring = sub[i];
-    for(var j=0; j<sub.length ; j++){
-      if(i!==j && sub[j].indexOf(substring) !== -1){
-        sub.splice(i,1);
-      };
-    }
+  catch(err){
+    console.log("err in sub-string")
   }
 
-  if(questions.length > 15){
-    if(sub.length>0){
-      var tmp1 = questions.splice(0,15);
-      if(sub.length>5){
-        tmp1 = tmp1.concat(sub.splice(0,5));
-      } else {
-        tmp1 = tmp1.concat(sub);
-      } 
-      tmp1 = tmp1.concat(questions);
-      questions = tmp1; 
-    }
-  }
-  else {
-    if(sub.length > 0){
-      questions = questions.concat(sub);
-    }
-  }
   console.log("xoxox");
   console.log(questions);
 
