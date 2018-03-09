@@ -16,7 +16,6 @@ chrome.runtime.onMessage.addListener(
     if(request.type == "moreChuss"){
       var pg = survey.getPageByName("page2");
       pg.scrollToTop();
-      // console.log(pg);
       survey.render();
     }
     if(request.type == "survey"){
@@ -111,13 +110,13 @@ function dynamicQs(data){
   	  var fbin = data['FBinterests'];
   	  if(fbin['removed_interests'].length > 0){
   	    num++;
-  	    questions.push(fbin['removed_interests'][0]);
-        dict["fbInt"].push(fbin['removed_interests'][0])
+  	    questions.push(fbin['removed_interests'][0]['name']);
+        dict["fbInt"].push(fbin['removed_interests'][0]['name'])
   	  }
   	  if(fbin['suggested_interests'].length > 0){
   	    num++;
-  	    questions.push(fbin['suggested_interests'][0]);
-        dict["fbInt"].push(fbin['suggested_interests'][0])
+  	    questions.push(fbin['suggested_interests'][0]['name']);
+        dict["fbInt"].push(fbin['suggested_interests'][0]['name'])
   	  }  
   	  var topics = [];
   	  for(var i=0; i<fbin['interests'].length; i++){
@@ -2149,12 +2148,6 @@ By checking the “I agree” box below, you agree that you have read and unders
 });
 
 survey.onCurrentPageChanged.add(function (sender, options) {
-    // var currentPage = options.newCurrentPage;
-    // currentPage.scrollToTop();
-    // console.log(currentPage);
-    // document.body.scrollTop = 0;
-    // console.log("h")
-    // survey.render();
     chrome.runtime.sendMessage({type:'chuss'}); 
 });
 
