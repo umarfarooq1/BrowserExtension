@@ -111,13 +111,13 @@ function dynamicQs(data){
       var fbin = data['FBinterests'];
       if(fbin['removed_interests'].length > 0){
         num++;
-        questions.push(fbin['removed_interests'][0]);
-        dict["fbInt"].push(fbin['removed_interests'][0])
+        questions.push(fbin['removed_interests'][0]['name']);
+        dict["fbInt"].push(fbin['removed_interests'][0]['name'])
       }
       if(fbin['suggested_interests'].length > 0){
         num++;
-        questions.push(fbin['suggested_interests'][0]);
-        dict["fbInt"].push(fbin['suggested_interests'][0])
+        questions.push(fbin['suggested_interests'][0]['name']);
+        dict["fbInt"].push(fbin['suggested_interests'][0]['name'])
       }  
       var topics = [];
       for(var i=0; i<fbin['interests'].length; i++){
