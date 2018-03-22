@@ -41,14 +41,11 @@ chrome.runtime.onMessage.addListener(
     }
     if(request.type === "ACK"){
       console.log(request.MESSAGE)
-      alert(request.MESSAGE + `\n
-      Your response has been recieved.
-      To claim your reward please produce the following ID when asked.
-      Your ID is: ${request.id}`)
+      alert(request.MESSAGE)
       if(request.MESSAGE === "FAILURE"){
          document.querySelector('#surveyResult').innerHTML = "<br/>Unfortunately we are facing a little hiccup. Your response has not been sent. Please send the text file 'yourResponse' that will be automatically downloaded to any of the followig email ids:<br/> <a href=\"mailto:18100048@lums.edu.pk\">18100048@lums.edu.pk</a> <br/> <a href=\"mailto:18100155@lums.edu.pk\">18100155@lums.edu.pk</a> <br/> Thank you for your help!";
          var x = JSON.stringify(request.data);
-         var compressedX = LZString.compress(x);
+         var compressedX = x;//LZString.compress(x);
          var blob = new Blob([compressedX], {
             type: "text/plain;charset=utf-8;",
          });
